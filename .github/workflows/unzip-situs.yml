@@ -1,8 +1,6 @@
 name: Ekstrak zip situs
 on:
   push:
-    paths:
-      - '*.zip'
   workflow_dispatch:
 permissions:
   contents: write
@@ -15,6 +13,7 @@ jobs:
         run: |
           shopt -s nullglob
           for z in *.zip; do
+            echo "Mengekstrak $z"
             unzip -o -q "$z"
             rm "$z"
           done
