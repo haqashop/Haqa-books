@@ -29,12 +29,12 @@ input,select,textarea{font:inherit;width:100%;padding:15px 16px;border:1.5px sol
 .hide{display:none}.empty{text-align:center;padding:40px 0}
 @media print{.noprint,.top,.btn,.cp{display:none!important}body{background:#fff;color:#000}.card{border:0}}
 </style></head><body>
-<div class="top noprint">HAQA BOOKS</div>
+<div class="top noprint" style="justify-content:space-between"><a href="index.html" style="color:inherit;text-decoration:none;font:500 .9rem DM Sans,sans-serif">‹ Katalog</a><span>HAQA BOOKS</span><button class="cp" id="acc">Masuk</button></div>
 <div class="w"><div id="app"></div></div><div id="toast"></div>
 <script>
 /* ===== PENGATURAN TOKO (ubah di sini) ===== */
 var CFG={wa:'6285846189815',store:'HAQA Books',
- bank:{nama:'Bank Jago',no:'ISI-NOMOR-REKENING',an:'ISI-NAMA-PEMILIK'},
+ banks:[{id:'bca',nama:'BCA',no:'6640361016',an:'Meiga Kurniawati'},{id:'jago',nama:'Jago Syariah',no:'506444796754',an:'Meiga Kurniawati'}],
  /* tarif per kg (perkiraan, sesuaikan dengan tarif kurir ke daerah Anda) */
  kurir:[{id:'jne',nama:'JNE REG',sub:'Reguler',est:'1–3 hari',tarif:10000,c:'#1d4f9c'},
         {id:'jnt',nama:'J&T Express',sub:'EZ',est:'2–4 hari',tarif:10000,c:'#d4272e'},
@@ -59,8 +59,8 @@ function gq(b,q,cart){var P=(b.pid&&B[b.pid])||b;if(!b.mg||!P.vr)return q;var n=
 function unit(b,q,cart){var u=PO_D(b,q);if(isMem()&&b.st!=='habis'){var t=mtiers(b),r=0,g=gq(b,q,cart);t.forEach(function(x){if(g>=x[0])r=x[1]/100});var m=r?Math.round(b.pr*(1-r)):0;if(m&&m<u)u=m}return u}
 function wg(b){var m=/([\d.,]+)\s*(kg|g)/i.exec(b.w||'');if(!m)return 250;var n=parseFloat(m[1].replace(',','.'));return m[2].toLowerCase()==='kg'?n*1000:n}
 /* state */
-var cart=ls('hq_cart',{}),addrs=ls('hq_addr',[]),st=ls('hq_co',{}),view=ls('hq_order',null)?'pay':'addr',tab=addrs.length?'saved':'new';
-var ord=ls('hq_order',null);
+var cart=ls('hq_cart',{}),addrs=[],st=ls('hq_co',{}),view='addr',tab='new';
+var ord=null;
 function lines(){return Object.keys(cart).filter(function(k){return B[k]&&cart[k]>0}).map(function(k){var b=B[k],q=cart[k];return{b:b,q:q,u:unit(b,q,cart)}})}
 function sub(){return lines().reduce(function(a,l){return a+l.u*l.q},0)}
 function kg(){var g=lines().reduce(function(a,l){return a+wg(l.b)*l.q},0);return Math.max(1,Math.ceil(g/1000))}
@@ -70,11 +70,12 @@ function head(step){var n=['Keranjang','Checkout','Pembayaran'],h='<div class="c
 function summary(o){var L=o?o.lines:lines().map(function(l){return{t:l.b.t,q:l.q,u:l.u,im:img(l.b)}});var s=L.reduce(function(a,l){return a+l.u*l.q},0),ok=o?o.ong:(st.kurir?ong(st.kurir):0),kode=o?o.kode:0;
  var h='<div class="card"><div class="row"><h3>Ringkasan pesanan</h3><span class="mut">'+L.length+' judul</span></div>';
  L.forEach(function(l){h+='<div class="it"><img src="'+esc(l.im)+'" alt=""><div><b>'+esc(l.t)+'</b><div class="mut">'+l.q+' × '+rp(l.u)+'</div><b>'+rp(l.u*l.q)+'</b></div></div>'});
- h+='<hr style="border:0;border-top:1px solid var(--ln)"><div class="row mut"><span>Subtotal barang</span><b style="color:var(--ink)">'+rp(s)+'</b></div><div class="row mut"><span>Ongkos kirim</span><b style="color:var(--ink)">'+(ok?rp(ok):'–')+'</b></div>'+(o?'<div class="row mut"><span>Kode unik</span><b style="color:var(--ink)">'+rp(kode)+'</b></div>':'')+'<div class="row tot"><span style="font-size:1rem">Total pembayaran</span><span>'+rp(s+ok+kode)+'</span></div>'+(isMem()&&!o?'<p class="mut" style="margin:0;font-size:.85rem">Harga member aktif.</p>':'')+'</div>';return h}
+ h+='<hr style="border:0;border-top:1px solid var(--ln)"><div class="row mut"><span>Subtotal barang</span><b style="color:var(--ink)">'+rp(s)+'</b></div><div class="row mut"><span>Ongkos kirim</span><b style="color:var(--ink)">'+(ok?rp(ok):'–')+'</b></div>'+(o?'<div class="row mut"><span>Kode unik</span><b style="color:var(--ink)">'+rp(kode)+'</b></div>':'')+'<div class="row tot"><span style="font-size:1rem">Total pembayaran</span><span>'+rp(s+ok+kode)+'</span></div>'+(!o?(isMem()?'<p class="mut" style="margin:0;font-size:.85rem">✓ Harga member aktif. <button class="cp" id="mboff" style="margin-left:8px">Nonaktifkan</button></p>':'<label style="margin-top:14px">Kode member <small>(opsional)</small></label><div style="display:flex;gap:8px"><input id="mbk" placeholder="Masukkan kode member"><button class="cp" id="mbon">Aktifkan</button></div>'):'')+'</div>';return h}
+function bk(){return CFG.banks.filter(function(x){return x.id===st.bank})[0]||CFG.banks[0]}
 function selAddr(){return addrs.filter(function(a){return a.id===st.addr})[0]}
 function addrTxt(a){return esc(a.alamat)+', '+esc(a.kel)+', '+esc(a.kec)+', '+esc(a.kab)+', '+esc(a.prov)+' '+esc(a.pos)}
 /* tampilan */
-function render(){var h='',a=$('app');
+function render1(){var h='',a=$('app');
  if(view==='pay'&&ord){return renderPay()}
  if(!lines().length){a.innerHTML='<div class="empty"><h1>Keranjang kosong</h1><p class="mut">Pilih buku dulu di katalog.</p><a class="btn" href="index.html">Kembali ke katalog</a></div>';return}
  h+='<div class="ey">Checkout pesanan</div><h1>Selesaikan pesanan Anda.</h1><p class="mut">Lengkapi alamat, lalu pilih pengiriman dan cara pembayaran.</p><a class="bk" href="index.html">← Kembali ke keranjang</a>'+head(1);
@@ -82,9 +83,9 @@ function render(){var h='',a=$('app');
  h+=view==='addr'?addrHTML():shipHTML();
  a.innerHTML=h+'</div>'+summary();
  if(view==='addr')bindAddr()}
-function addrHTML(){var h='<p class="ey mut" style="margin-top:18px">Langkah 1 dari 2</p><h2>Ke mana pesanan dikirim?</h2><div class="tabs"><button data-t="new" class="'+(tab==='new'?'on':'')+'">Tambah alamat</button><button data-t="saved" class="'+(tab==='saved'?'on':'')+'">Alamat tersimpan'+(addrs.length?' ('+addrs.length+')':'')+'</button></div>';
- if(tab==='saved'){if(!addrs.length)h+='<p class="mut">Belum ada alamat tersimpan.</p>';addrs.forEach(function(x){h+='<div class="ad" style="'+(st.addr===x.id?'border:2px solid var(--ink)':'')+'"><b>'+esc(x.nama)+'</b><p class="mut">'+esc(x.hp)+(x.email?' · '+esc(x.email):'')+'</p><p>'+addrTxt(x)+'</p><div class="r"><button data-pick="'+x.id+'">'+(st.addr===x.id?'✓ Dipilih':'Pilih alamat ini')+'</button><button class="del" data-del="'+x.id+'">Hapus</button></div></div>'});
-  return h+'<button class="btn" id="nx" '+(selAddr()?'':'disabled')+'>Lanjut ke pengiriman</button>'+(selAddr()?'':'<p class="mut">Pilih alamat dulu untuk melanjutkan.</p>')}
+function addrHTML(){var h=(manage?'<h2>Alamat saya</h2>':'<p class="ey mut" style="margin-top:18px">Langkah 1 dari 2</p><h2>Ke mana pesanan dikirim?</h2>')+'<div class="tabs"><button data-t="new" class="'+(tab==='new'?'on':'')+'">Tambah alamat</button><button data-t="saved" class="'+(tab==='saved'?'on':'')+'">Alamat tersimpan'+(addrs.length?' ('+addrs.length+')':'')+'</button></div>';
+ if(tab==='saved'){if(!addrs.length)h+='<p class="mut">Belum ada alamat tersimpan.</p>';addrs.forEach(function(x){h+='<div class="ad" style="'+(st.addr===x.id?'border:2px solid var(--ink)':'')+'"><b>'+esc(x.nama)+'</b><p class="mut">'+esc(x.hp)+(x.email?' · '+esc(x.email):'')+'</p><p>'+addrTxt(x)+'</p><div class="r">'+(manage?'':'<button data-pick="'+x.id+'">'+(st.addr===x.id?'✓ Dipilih':'Pilih alamat ini')+'</button>')+'<button class="del" data-del="'+x.id+'">Hapus</button></div></div>'});
+  if(manage)return h;return h+'<button class="btn" id="nx" '+(selAddr()?'':'disabled')+'>Lanjut ke pengiriman</button>'+(selAddr()?'':'<p class="mut">Pilih alamat dulu untuk melanjutkan.</p>')}
  var d=window.draft||{};function f(k){return esc(d[k]||'')}
  h+='<p class="mut">Tambahkan alamat pengiriman. Kolom bertanda <i style="color:var(--rd)">*</i> wajib diisi.</p><form id="af" novalidate>'
  +'<label>Nama penerima <i>*</i></label><input name="nama" autocomplete="name" value="'+f('nama')+'">'
@@ -100,39 +101,90 @@ function addrHTML(){var h='<p class="ey mut" style="margin-top:18px">Langkah 1 d
  +'<p id="er" class="note hide" style="color:var(--rd)"></p><button class="btn" type="submit">Simpan &amp; lanjut ke pengiriman</button></form>';return h}
 function bindAddr(){document.querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){keep();tab=b.dataset.t;render()}});
  document.querySelectorAll('[data-pick]').forEach(function(b){b.onclick=function(){st.addr=b.dataset.pick;sv('hq_co',st);render()}});
- document.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){if(!confirm('Hapus alamat ini?'))return;addrs=addrs.filter(function(x){return x.id!==b.dataset.del});if(st.addr===b.dataset.del)delete st.addr;sv('hq_addr',addrs);sv('hq_co',st);render()}});
+ document.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){if(!confirm('Hapus alamat ini?'))return;addrs=addrs.filter(function(x){return x.id!==b.dataset.del});if(st.addr===b.dataset.del)delete st.addr;saveAddrs();sv('hq_co',st);render()}});
  var n=$('nx');if(n)n.onclick=function(){view='ship';render();scrollTo(0,0)};
  var f=$('af');if(f)f.onsubmit=function(e){e.preventDefault();var d=read(),m=[];
   if(!d.nama.trim())m.push('nama penerima');if(!/^(\+?62|0)8\d{7,12}$/.test(d.hp.replace(/[\s-]/g,'')))m.push('nomor HP yang valid');['prov','kab','kec','kel','alamat'].forEach(function(k){if(!String(d[k]).trim())m.push(k==='kab'?'kabupaten/kota':k==='kel'?'kelurahan/desa':k)});if(!/^\d{5}$/.test(d.pos))m.push('kode pos 5 digit');
   if(m.length){var r=$('er');r.textContent='Lengkapi: '+m.join(', ')+'.';r.className='note';return}
-  d.id='a'+Date.now();if(d.simpan){addrs.push(d);sv('hq_addr',addrs)}else{window.tmpA=d}
-  st.addr=d.id;st.tmp=d.simpan?null:d;sv('hq_co',st);window.draft=null;view='ship';render();scrollTo(0,0)}}
+  d.id='a'+Date.now();if(manage)d.simpan=true;if(d.simpan){addrs.push(d);saveAddrs()}else{window.tmpA=d}
+  st.addr=d.id;st.tmp=d.simpan?null:d;sv('hq_co',st);window.draft=null;if(manage){tab='saved';toast('Alamat tersimpan');render();return}view='ship';render();scrollTo(0,0)}}
 function read(){var f=$('af'),o={};if(!f)return o;['nama','hp','email','prov','kab','kec','kel','alamat','pos'].forEach(function(k){o[k]=f.elements[k].value});o.simpan=f.elements.simpan.checked;return o}
 function keep(){if($('af'))window.draft=read()}
 function shipHTML(){var a=selAddr()||st.tmp;if(!a){view='addr';return addrHTML()}var h='<p class="ey mut" style="margin-top:18px">Langkah 2 dari 2</p><h2>Pengiriman &amp; pembayaran</h2><div class="ad" style="margin-top:16px"><b>'+esc(a.nama)+'</b> · '+esc(a.hp)+'<p>'+addrTxt(a)+'</p><button id="ch" style="background:none;border:0;font:700 .95rem inherit;font-family:inherit;cursor:pointer;padding:6px 0">Ubah alamat</button></div>'
  +'<label>Pengiriman <i>*</i></label><p class="mut" style="margin:0">Berat paket '+kg()+' kg. Ongkir dihitung per kilogram.</p>';
  CFG.kurir.forEach(function(k){h+='<label class="opt"><input type="radio" name="k" value="'+k.id+'" '+(st.kurir===k.id?'checked':'')+'><span style="width:44px;height:44px;border-radius:10px;background:'+k.c+';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex:none">'+k.nama.split(' ')[0]+'</span><div><b>'+k.nama+'</b><span class="mut">'+k.sub+' · Estimasi '+k.est+'</span></div><b>'+rp(k.tarif*kg())+'</b></label>'});
  h+='<label>Metode pembayaran <i>*</i></label><label class="opt"><input type="radio" checked><div><b>Transfer Bank</b><span class="mut">Instruksi pembayaran tampil setelah pesanan dibuat.</span></div></label>'
- +'<label>Rekening tujuan transfer <i>*</i></label><p class="mut" style="margin:0">Nomor rekening dan nominal transfer (dengan kode unik) tampil setelah pesanan dibuat.</p><label class="opt"><input type="radio" checked><b>'+esc(CFG.bank.nama)+'</b></label>'
- +'<label>Catatan untuk toko <small>(opsional)</small></label><input id="cat" value="'+esc(st.cat||'')+'">'
+ +'<label>Rekening tujuan transfer <i>*</i></label><p class="mut" style="margin:0">Nomor rekening dan nominal transfer (dengan kode unik) tampil setelah pesanan dibuat.</p>'+CFG.banks.map(function(x){return'<label class="opt"><input type="radio" name="rb" value="'+x.id+'" '+(bk().id===x.id?'checked':'')+'><div><b>'+x.nama+'</b><span class="mut">a.n. '+x.an+'</span></div></label>'}).join('')
+ +(isMem()?'<label class="opt" style="margin-top:18px"><input type="checkbox" id="ds" '+(st.ds?'checked':'')+'><div><b>Pakai data pengirim sendiri (dropship)</b><span class="mut">Khusus member. Nama &amp; alamat pengirim di paket memakai data di bawah.</span></div></label>'+(st.ds?'<label>Nama pengirim <i>*</i></label><input id="sn" value="'+esc(st.sn||'')+'"><label>No. HP pengirim <i>*</i></label><input id="sh" type="tel" value="'+esc(st.sh||'')+'"><label>Alamat pengirim <i>*</i></label><textarea id="sa">'+esc(st.sa||'')+'</textarea><p class="mut" style="margin:6px 0 0">Data pengirim tersimpan untuk pesanan berikutnya.</p>':''):'')+'<label>Catatan untuk toko <small>(opsional)</small></label><input id="cat" value="'+esc(st.cat||'')+'">'
  +'<button class="btn" id="mk" '+(st.kurir?'':'disabled')+'>Buat pesanan →</button><button class="btn o" id="bk">Kembali ke alamat</button>';return h}
-document.addEventListener('change',function(e){if(e.target.name==='k'){st.kurir=e.target.value;sv('hq_co',st);var c=$('cat');if(c)st.cat=c.value;render()}});
+document.addEventListener('change',function(e){if(e.target.name==='k'){st.kurir=e.target.value;sv('hq_co',st);keepShip();render()}});
+document.addEventListener('change',function(e){if(e.target.name==='rb'){keepShip();st.bank=e.target.value;sv('hq_co',st);render()}if(e.target.id==='ds'){keepShip();st.ds=e.target.checked;sv('hq_co',st);render()}});
 document.addEventListener('click',function(e){var i=e.target.id;
  if(i==='bk'||i==='ch'){view='addr';tab=addrs.length?'saved':'new';render()}
- if(i==='mk'&&st.kurir){st.cat=$('cat').value;var a=selAddr()||st.tmp,L=lines(),s=sub(),o=ong(st.kurir),k=CFG.kurir.filter(function(x){return x.id===st.kurir})[0],no=String(Date.now()).slice(-10),d=new Date(),kode=100+Math.floor(Math.random()*900);
-  ord={no:no,inv:'INV/HQ/'+d.getFullYear()+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+no.slice(-4),tgl:d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}),addr:a,kurir:k.nama,ong:o,kode:kode,sub:s,total:s+o+kode,cat:st.cat,lines:L.map(function(l){return{t:l.b.t,q:l.q,u:l.u,im:img(l.b)}})};
-  sv('hq_order',ord);view='pay';render();scrollTo(0,0)}
+ if(i==='mk'&&st.kurir){keepShip();if(isMem()&&st.ds&&!(st.sn&&st.sh&&st.sa)){toast('Lengkapi nama, HP, dan alamat pengirim.');return}var a=selAddr()||st.tmp,L=lines(),s=sub(),o=ong(st.kurir),k=CFG.kurir.filter(function(x){return x.id===st.kurir})[0],no=String(Date.now()).slice(-10),d=new Date(),kode=100+Math.floor(Math.random()*900);
+  ord={no:no,inv:'INV/HQ/'+d.getFullYear()+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+no.slice(-4),tgl:d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}),addr:a,kurir:k.nama,ong:o,kode:kode,sub:s,total:s+o+kode,cat:st.cat,bank:bk(),sender:(isMem()&&st.ds)?{nama:st.sn,hp:st.sh,alamat:st.sa}:null,member:isMem(),status:'Menunggu pembayaran',lines:L.map(function(l){return{t:l.b.t,q:l.q,u:l.u,im:img(l.b)}})};
+  var os=ls(uk('hq_orders'),[]);os.unshift(ord);sv(uk('hq_orders'),os);if(!buyNow){cart={};sv('hq_cart',{})}view='pay';render();scrollTo(0,0)}
  var c=e.target.closest&&e.target.closest('[data-cp]');if(c){var v=c.dataset.cp;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(function(){toast('Disalin: '+v)},function(){toast('Salin manual: '+v)})}
- if(i==='wa'){var o2=ord,m='Assalamu’alaikum, saya sudah transfer untuk pesanan #'+o2.no+' ('+o2.inv+').\nTotal: '+rp(o2.total)+'\n\n'+o2.lines.map(function(l,j){return(j+1)+'. '+l.t+' ('+l.q+'x)'}).join('\n')+'\n\nPengiriman: '+o2.kurir+'\nPenerima: '+o2.addr.nama+' ('+o2.addr.hp+')\n'+o2.addr.alamat+', '+o2.addr.kel+', '+o2.addr.kec+', '+o2.addr.kab+', '+o2.addr.prov+' '+o2.addr.pos+(o2.cat?'\nCatatan: '+o2.cat:'')+'\n\nBukti transfer saya lampirkan di chat ini.';window.open('https://wa.me/'+CFG.wa+'?text='+encodeURIComponent(m),'_blank')}
+ if(i==='wa'){var o2=ord,m='Assalamu’alaikum, saya sudah transfer untuk pesanan #'+o2.no+' ('+o2.inv+').\nTotal: '+rp(o2.total)+'\n\n'+o2.lines.map(function(l,j){return(j+1)+'. '+l.t+' ('+l.q+'x)'}).join('\n')+'\n\nPengiriman: '+o2.kurir+'\nPenerima: '+o2.addr.nama+' ('+o2.addr.hp+')\n'+o2.addr.alamat+', '+o2.addr.kel+', '+o2.addr.kec+', '+o2.addr.kab+', '+o2.addr.prov+' '+o2.addr.pos+(o2.sender?'\nPengirim (dropship): '+o2.sender.nama+' ('+o2.sender.hp+'), '+o2.sender.alamat:'')+(o2.cat?'\nCatatan: '+o2.cat:'')+'\n\nBukti transfer saya lampirkan di chat ini.';window.open('https://wa.me/'+CFG.wa+'?text='+encodeURIComponent(m),'_blank')}
  if(i==='pr')window.print();
  if(i==='nw'){if(!confirm('Mulai pesanan baru? Keranjang akan dikosongkan.'))return;try{localStorage.removeItem('hq_order');localStorage.setItem('hq_cart','{}')}catch(x){}cart={};ord=null;view='addr';render()}});
 function renderPay(){var o=ord,a=o.addr,h='<div class="ey noprint">Pembayaran pesanan</div><h1 class="noprint">Satu langkah lagi.</h1><p class="mut noprint">Selesaikan pembayaran agar pesanan Anda bisa segera diproses.</p><p>Nomor pesanan <b>#'+o.no+'</b> · '+esc(o.inv)+' · '+o.tgl+'</p>'
  +'<div class="card steps noprint"><div class="ok"><b>✓</b>Pesanan dibuat</div><div class="on"><b>2</b>Pembayaran</div><div><b>3</b>Pesanan diproses</div></div>'
  +'<div class="card"><h3>Menunggu pembayaran</h3><p class="mut">Pesanan diproses setelah pembayaran diterima.</p><hr style="border:0;border-top:1px solid var(--ln)"><p class="mut">Total yang harus ditransfer</p><div class="row"><span class="big">'+rp(o.total)+'</span><button class="cp" data-cp="'+o.total+'">Salin</button></div><div class="note">Bayar sesuai nominal hingga digit terakhir. Kode unik <b>'+o.kode+'</b> sudah termasuk dalam total pembayaran.</div>'
- +'<h3>Rekening tujuan</h3><p class="mut">Transfer Bank · '+esc(CFG.bank.nama)+'</p><div class="rk"><span class="mut">Nomor rekening</span><div class="row"><span class="n">'+esc(CFG.bank.no)+'</span><button class="cp" data-cp="'+esc(CFG.bank.no)+'">Salin</button></div><span class="mut">Atas nama</span> <b>'+esc(CFG.bank.an)+'</b></div>'
+ +'<h3>Rekening tujuan</h3><p class="mut">Transfer Bank · '+esc((o.bank||CFG.banks[0]).nama)+'</p><div class="rk"><span class="mut">Nomor rekening</span><div class="row"><span class="n">'+esc((o.bank||CFG.banks[0]).no)+'</span><button class="cp" data-cp="'+esc((o.bank||CFG.banks[0]).no)+'">Salin</button></div><span class="mut">Atas nama</span> <b>'+esc((o.bank||CFG.banks[0]).an)+'</b></div>'
  +'<div class="noprint"><h3 style="margin-top:20px">Kirim bukti transfer</h3><p class="mut">Sudah transfer? Kirim bukti beserta detail pesanan lewat WhatsApp agar toko bisa memverifikasi lebih cepat.</p><button class="btn" id="wa">Kirim bukti via WhatsApp</button></div></div>'
- +'<div class="card"><h3>Dikirim ke</h3><p><b>'+esc(a.nama)+'</b><br>'+esc(a.hp)+(a.email?' · '+esc(a.email):'')+'<br>'+addrTxt(a)+'</p><p class="mut">Pengiriman: '+esc(o.kurir)+' · Pembayaran: Transfer Bank'+(o.cat?'<br>Catatan: '+esc(o.cat):'')+'</p></div>'
+ +'<div class="card"><h3>Dikirim ke</h3><p><b>'+esc(a.nama)+'</b><br>'+esc(a.hp)+(a.email?' · '+esc(a.email):'')+'<br>'+addrTxt(a)+'</p><p class="mut">Pengiriman: '+esc(o.kurir)+' · Pembayaran: Transfer Bank'+(o.sender?'<br>Pengirim (dropship): '+esc(o.sender.nama)+' · '+esc(o.sender.hp)+', '+esc(o.sender.alamat):'')+(o.cat?'<br>Catatan: '+esc(o.cat):'')+'</p></div>'
  +'<div class="card noprint"><h3>Cara menyelesaikan pembayaran</h3><p><b>1. Buka aplikasi bank atau ATM</b><br><span class="mut">Pilih transfer ke bank tujuan di atas.</span></p><p><b>2. Masukkan rekening dan nominal</b><br><span class="mut">Gunakan tombol salin, pastikan nama penerima dan jumlah sudah sesuai.</span></p><p><b>3. Kirim bukti transfer</b><br><span class="mut">Lewat tombol WhatsApp di atas, lalu tunggu verifikasi toko.</span></p></div>'
- +summary(o)+'<button class="btn o noprint" id="pr">Cetak / Simpan PDF</button><a class="btn o noprint" href="index.html">Kembali ke katalog</a><button class="btn o noprint" id="nw">Buat pesanan baru</button>';$('app').innerHTML=h}
+ +summary(o)+'<button class="btn o noprint" id="pr">Cetak / Simpan PDF</button><a class="btn o noprint" href="index.html">Kembali ke katalog</a><button class="btn o noprint" id="mo">Pesanan saya</button>';$('app').innerHTML=h}
+/* ===== AKUN, LOGIN, DASHBOARD ===== */
+function mbHash(t){t=String(t||'').trim().toUpperCase();var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0,c;i<t.length;i++){c=t.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return(4294967296*(2097151&h2)+(h1>>>0)).toString(36)}
+var user=ls('hq_user',null),manage=false,atab='akun',ofil='all',buyNow=false,gate=false;
+var by=new URLSearchParams(location.search).get('buy');if(by&&B[by]){buyNow=true;cart={};cart[by]=1}
+function uk(k){return k+'_'+(user?user.id:'x')}
+function saveAddrs(){if(user)sv(uk('hq_addr'),addrs)}
+function loadU(){addrs=user?ls(uk('hq_addr'),[]):[];tab=addrs.length?'saved':'new'}
+function keepShip(){['cat','sn','sh','sa'].forEach(function(k){var e=$(k);if(e)st[k]=e.value});sv('hq_co',st)}
+function pub(u){return{id:u.id,nama:u.nama,email:u.email,hp:u.hp||'',foto:u.foto||''}}
+function sha(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return('0'+x.toString(16)).slice(-2)}).join('')})}
+function doLogin(u){user=pub(u);sv('hq_user',user);delete st.addr;sv('hq_co',st);loadU();if(gate&&lines().length){view='addr'}else{view='akun';atab='akun'}gate=false;render();scrollTo(0,0)}
+function render(){render0();var b=$('acc');if(b)b.textContent=user?'Akun':'Masuk'}
+function render0(){
+ if(view==='login'||view==='daftar')return renderAuth(view);
+ if(!user){gate=view!=='akun';view='login';return renderAuth('login')}
+ manage=view==='akun'&&atab==='alamat';
+ if(view==='akun')return renderAkun();
+ render1()}
+function renderAuth(m){var r=m==='daftar',h='<div class="ey">'+(r?'Buat akun':'Masuk')+'</div><h1>'+(r?'Daftar akun baru.':'Masuk untuk lanjut.')+'</h1><p class="mut">'+(gate?'Anda perlu masuk dulu sebelum checkout.':'Kelola pesanan dan alamat Anda.')+'</p><div class="card"><form id="lf" novalidate>'+(r?'<label>Nama lengkap <i>*</i></label><input name="nama" autocomplete="name"><label>No. HP <small>(opsional)</small></label><input name="hp" type="tel">':'')+'<label>Email <i>*</i></label><input name="email" type="email" autocomplete="email"><label>Kata sandi <i>*</i></label><input name="pw" type="password" autocomplete="'+(r?'new':'current')+'-password" placeholder="Minimal 6 karakter"><p id="er" class="note hide" style="color:var(--rd)"></p><button class="btn" type="submit">'+(r?'Daftar':'Masuk')+'</button></form><p style="text-align:center;margin-bottom:0">'+(r?'Sudah punya akun? <a href="#" data-go="login">Masuk</a>':'Belum punya akun? <a href="#" data-go="daftar">Buat akun</a>')+'</p></div>';
+ $('app').innerHTML=h;
+ $('lf').onsubmit=function(e){e.preventDefault();var f=e.target.elements,em=f.email.value.trim().toLowerCase(),pw=f.pw.value,er=$('er');function bad(t){er.textContent=t;er.className='note'}
+  if(!/^\S+@\S+\.\S+$/.test(em))return bad('Email tidak valid.');if(pw.length<6)return bad('Kata sandi minimal 6 karakter.');
+  var us=ls('hq_users',[]),ex=us.filter(function(x){return x.email===em})[0];
+  if(r){if(!f.nama.value.trim())return bad('Nama wajib diisi.');if(ex)return bad('Email sudah terdaftar. Silakan masuk.');var salt=String(Date.now());sha(salt+pw).then(function(h){var u={id:'u'+Date.now(),nama:f.nama.value.trim(),email:em,hp:f.hp.value.trim(),salt:salt,h:h};us.push(u);sv('hq_users',us);doLogin(u)})}
+  else{if(!ex||!ex.h)return bad('Akun belum terdaftar. Silakan buat akun.');sha(ex.salt+pw).then(function(h){h===ex.h?doLogin(ex):bad('Kata sandi salah.')})}}}
+function renderAkun(){var u=user,os=ls(uk('hq_orders'),[]);
+ var h='<div class="row" style="justify-content:flex-start;gap:14px;align-items:center">'+(u.foto?'<img src="'+esc(u.foto)+'" alt="" style="width:60px;height:60px;border-radius:50%;object-fit:cover">':'<span style="width:60px;height:60px;border-radius:50%;background:var(--sel);display:flex;align-items:center;justify-content:center;font:700 1.5rem Fraunces,Georgia,serif">'+esc((u.nama||'?').charAt(0).toUpperCase())+'</span>')+'<div style="flex:1"><b>'+esc(u.nama)+'</b><div class="mut">'+esc(u.email)+'</div></div><button class="cp" id="lo">Keluar</button></div>'
+ +'<div class="tabs" style="grid-template-columns:repeat(3,1fr)">'+[['akun','Akun Saya'],['pesanan','Pesanan Saya'],['alamat','Alamat']].map(function(t){return'<button data-at="'+t[0]+'" class="'+(atab===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>';
+ if(atab==='akun'){h+='<div class="card"><h2>Akun Saya</h2><label>Nama lengkap</label><input id="pn" value="'+esc(u.nama)+'"><label>No. HP</label><input id="ph" type="tel" value="'+esc(u.hp)+'"><label>Email</label><input value="'+esc(u.email)+'" disabled><button class="btn" id="svp">Simpan perubahan</button></div><div class="card"><h3>Keanggotaan</h3>'+(isMem()?'<p>✓ Member aktif. Harga member dipakai di checkout.</p><button class="cp" id="mboff">Nonaktifkan</button>':'<p class="mut">Punya kode member? Masukkan untuk mengaktifkan harga member.</p><div style="display:flex;gap:8px"><input id="mbk" placeholder="Kode member"><button class="cp" id="mbon">Aktifkan</button></div>')+'</div><a class="btn o" href="index.html">Lanjut belanja</a>'}
+ if(atab==='pesanan'){var F=[['all','Semua',null],['b','Belum bayar','Menunggu pembayaran'],['p','Diproses','Diproses'],['k','Dikirim','Dikirim'],['s','Selesai','Selesai']];
+  h+='<h2>Pesanan Saya</h2><div style="display:flex;gap:18px;overflow-x:auto;border-bottom:1px solid var(--ln);margin:14px 0">'+F.map(function(f){return'<button data-of="'+f[0]+'" style="white-space:nowrap;background:none;border:0;border-bottom:2px solid '+(ofil===f[0]?'var(--ink)':'transparent')+';padding:10px 0;font:'+(ofil===f[0]?'700':'500')+' 1rem DM Sans,sans-serif;color:'+(ofil===f[0]?'var(--ink)':'var(--mut)')+';cursor:pointer">'+f[1]+'</button>'}).join('')+'</div>';
+  var fs=F.filter(function(f){return f[0]===ofil})[0][2],L=os.filter(function(o){return!fs||o.status===fs});
+  if(!L.length)h+='<p class="mut empty">Belum ada pesanan.</p>';
+  L.forEach(function(o){h+='<div class="card" style="padding:0;border-radius:6px;overflow:hidden"><div class="row" style="padding:14px 16px;margin:0;border-bottom:1px solid var(--ln);gap:10px;align-items:center"><span class="mut">Pesanan #'+o.no+' · '+o.tgl+'</span><span style="background:var(--amb);color:var(--am);padding:6px 10px;font-weight:700;font-size:.85rem;white-space:nowrap">'+esc(o.status)+'</span></div><div style="padding:0 16px">'+o.lines.slice(0,3).map(function(l){return'<div class="it"><img src="'+esc(l.im)+'" alt=""><div><b>'+esc(l.t)+'</b><div class="mut">'+l.q+' barang</div></div></div>'}).join('')+(o.lines.length>3?'<p class="mut">+'+(o.lines.length-3)+' judul lainnya</p>':'')+'<div class="row" style="border-top:1px solid var(--ln);padding-top:12px"><span class="mut">Total</span><b style="font-size:1.2rem">'+rp(o.total)+'</b></div><button class="btn o" style="margin:0 0 16px" data-vo="'+o.no+'">'+(o.status==='Menunggu pembayaran'?'Lihat pembayaran':'Lihat detail')+'</button></div></div>'});
+  h+='<p class="mut" style="font-size:.85rem">Status diperbarui toko setelah pembayaran diverifikasi.</p>'}
+ if(atab==='alamat')h+=addrHTML();
+ $('app').innerHTML=h;if(atab==='alamat')bindAddr()}
+document.addEventListener('click',function(e){var t=e.target,i=t.id,g;function c(q){return t.closest?t.closest(q):null}
+ if(g=c('[data-go]')){e.preventDefault();view=g.dataset.go;render()}
+ if(g=c('[data-at]')){atab=g.dataset.at;view='akun';render()}
+ if(g=c('[data-of]')){ofil=g.dataset.of;render()}
+ if(g=c('[data-vo]')){ord=ls(uk('hq_orders'),[]).filter(function(o){return o.no===g.dataset.vo})[0];if(ord){view='pay';render();scrollTo(0,0)}}
+ if(i==='acc'){if(user){view='akun';atab='akun'}else{gate=false;view='login'}render()}
+ if(i==='lo'){user=null;st={};try{localStorage.removeItem('hq_user');localStorage.removeItem('hq_co')}catch(x){}addrs=[];view='login';render()}
+ if(i==='mo'){view='akun';atab='pesanan';render();scrollTo(0,0)}
+ if(i==='mbon'){if(mbHash($('mbk').value)===MB_H){try{localStorage.setItem('hq_member_v2',MB_H)}catch(x){}toast('Member aktif. Harga member dipakai.');render()}else toast('Kode member salah. Cek pesan sematan di grup WhatsApp.')}
+ if(i==='mboff'){try{localStorage.removeItem('hq_member_v2')}catch(x){}toast('Mode member dinonaktifkan.');render()}
+ if(i==='svp'){user.nama=$('pn').value.trim()||user.nama;user.hp=$('ph').value.trim();sv('hq_user',user);var us=ls('hq_users',[]);us.forEach(function(x){if(x.id===user.id){x.nama=user.nama;x.hp=user.hp}});sv('hq_users',us);toast('Perubahan tersimpan');render()}});
+if(location.hash==='#akun')view='akun';
+loadU();
 render();
 </script></body></html>

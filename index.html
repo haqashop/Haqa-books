@@ -454,7 +454,7 @@ function fixCart(){var ch=false,pop=null;Object.keys(cart).forEach(function(k){v
 function save(){var p=fixCart();try{localStorage.setItem('hq_cart',JSON.stringify(cart))}catch(e){}bar();if(p)qpop(p)}
 function cartMsg(){fixCart();var L=items(),n=0,t=0;var r=L.map(function(b,k){var q=cart[b.i],u=unit(b,q);n+=q;t+=u*q;return(k+1)+'. '+line(b)+'\n   '+q+' x '+money(u)+' = '+money(u*q)}).join('\n');return'Assalamu\u2019alaikum, saya ingin pesan'+(isMem()?' (member)':'')+':\n'+r+'\n\nTotal ('+n+' buku): '+money(t)+(isMem()?'\n\nHarga member, mohon cek nomor ini di grup member.':'')}
 function buyMsg(b,q){q=q||1;var u=unit(b,q);return'Assalamu\u2019alaikum, saya ingin pesan'+(isMem()?' (member)':'')+':\n'+line(b)+'\nJumlah: '+q+' pcs\nHarga: '+(b.pr?money(u)+'/pcs':'(mohon info harga)')+(q>1&&b.pr?'\nSubtotal: '+money(u*q):'')+(isMem()?'\n\nHarga member, mohon cek nomor ini di grup member.':'')}
-function bar(){fixCart();var n=0,t=0;items().forEach(function(b){var q=cart[b.i];n+=q;t+=unit(b,q)*q});$('cb').textContent='\uD83D\uDED2 '+n+' buku'+(n?' \u00B7 '+money(t):'');var w=$('cw');w.textContent=n?'Pesan via WA':'Chat WA';w.href=waUrl(n?cartMsg():'');cs.forEach(function(c){var a=c.querySelector('.add');if(a){var on=!!cart[c.dataset.i];a.classList.toggle('in',on);a.innerHTML=addLbl(on)}})}
+function bar(){fixCart();var n=0,t=0;items().forEach(function(b){var q=cart[b.i];n+=q;t+=unit(b,q)*q});$('cb').textContent='\uD83D\uDED2 '+n+' buku'+(n?' \u00B7 '+money(t):'');var w=$('cw');w.textContent=n?'Checkout':'Chat WA';w.href=n?'checkout.html':waUrl('');w.target=n?'_self':'_blank';cs.forEach(function(c){var a=c.querySelector('.add');if(a){var on=!!cart[c.dataset.i];a.classList.toggle('in',on);a.innerHTML=addLbl(on)}})}
 
 /* ---------- link produk & pesan WhatsApp ---------- */
 function baseUrl(){return'https://haqabooks.my.id/'}
@@ -554,7 +554,7 @@ function selVar(pid,vid){var x=B[vid];if(x.vg){document.querySelectorAll('.vg').
 function askLink(b,short){var P=b.pid?B[b.pid]:b,cl=poClosed(P);return'<a class="ask'+(cl?' pm':'')+'" target="_blank" rel="noopener" href="'+esc(waUrl(askMsg(b)))+'">'+ICON.chat+(cl?'Tanya Admin untuk pemesanan':(short?'Tanya Admin':'Tanya Admin tentang buku ini'))+'</a>'}
 function fillAct(i,el,short){var b=B[i],ask=askLink(b,short);
  if(!purch(b)){el.innerHTML='<div class="ac">'+ask+'<button class="buy" disabled>'+(b.st==='poon'?(b.ps==='PO Closed'?'PO Closed':'Belum dibuka'):({habis:'Habis',closed:'PO Closed',kirim:'Dalam pengiriman'}[b.st]||'Tidak tersedia'))+'</button></div>';return}
- el.innerHTML='<div class="ac">'+ask+'<a class="buy" target="_blank" rel="noopener" href="'+esc(waUrl(buyMsg(b,1)))+'">'+ICON.bag+(short?'Beli':'Beli via WhatsApp')+'</a><button type="button" class="add" data-a="addc" data-i="'+i+'">'+addLbl(!!cart[i])+'</button></div>'}
+ el.innerHTML='<div class="ac">'+ask+'<a class="buy" href="checkout.html?buy='+i+'">'+ICON.bag+'Beli sekarang</a><button type="button" class="add" data-a="addc" data-i="'+i+'">'+addLbl(!!cart[i])+'</button></div>'}
 function initCards(){cs.forEach(function(c){var i=+c.dataset.i,b=B[i],a=c.querySelector('.act');if(!a||!b)return;
  if(isV(b)){a.innerHTML=lkHtml(i)+'<div class="ac"><button type="button" class="buy" data-a="fd" data-i="'+i+'">Pilih varian</button>'+askLink(b,1)+'</div>';return}
  a.innerHTML=lkHtml(i)+'<span class="cx" style="display:contents"></span>';fillAct(i,a.querySelector('.cx'),1)})}
