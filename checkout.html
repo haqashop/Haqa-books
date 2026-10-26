@@ -26,14 +26,14 @@ input,select,textarea{font:inherit;width:100%;padding:15px 16px;border:1.5px sol
 .rk{border:1.5px solid var(--ln);border-radius:20px;padding:16px;margin:14px 0}.rk .n{font:700 1.5rem monospace;letter-spacing:.05em}
 .chk{display:flex;gap:10px;align-items:center;margin-top:14px}.chk input{width:20px;height:20px;padding:0}
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:999px;opacity:0;transition:.2s;pointer-events:none}#toast.on{opacity:1}
-.hide{display:none}.empty{text-align:center;padding:40px 0}
+.hide{display:none}.lg{width:64px;height:44px;border-radius:8px;background:#fff;border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}.lg img{max-width:100%;max-height:100%;object-fit:contain}.fb{font:700 .7rem sans-serif;color:#333}.fb[hidden],.lg img[hidden]{display:none}.empty{text-align:center;padding:40px 0}
 @media print{.noprint,.top,.btn,.cp{display:none!important}body{background:#fff;color:#000}.card{border:0}}
 </style></head><body>
 <div class="top noprint" style="justify-content:space-between"><a href="index.html" style="color:inherit;text-decoration:none;font:500 .9rem DM Sans,sans-serif">‹ Katalog</a><span>HAQA BOOKS</span><button class="cp" id="acc">Masuk</button></div>
 <div class="w"><div id="app"></div></div><div id="toast"></div>
 <script>
 /* ===== PENGATURAN TOKO (ubah di sini) ===== */
-var CFG={wa:'6285846189815',store:'HAQA Books',
+var CFG={wa:'6285846189815',ongkirUrl:'' /* endpoint tarif kurir (lihat catatan) */,store:'HAQA Books',
  banks:[{id:'bca',nama:'BCA',no:'6640361016',an:'Meiga Kurniawati'},{id:'jago',nama:'Jago Syariah',no:'506444796754',an:'Meiga Kurniawati'}],
  /* tarif per kg (perkiraan, sesuaikan dengan tarif kurir ke daerah Anda) */
  kurir:[{id:'jne',nama:'JNE REG',sub:'Reguler',est:'1–3 hari',tarif:10000,c:'#1d4f9c'},
@@ -64,7 +64,7 @@ var ord=null;
 function lines(){return Object.keys(cart).filter(function(k){return B[k]&&cart[k]>0}).map(function(k){var b=B[k],q=cart[k];return{b:b,q:q,u:unit(b,q,cart)}})}
 function sub(){return lines().reduce(function(a,l){return a+l.u*l.q},0)}
 function kg(){var g=lines().reduce(function(a,l){return a+wg(l.b)*l.q},0);return Math.max(1,Math.ceil(g/1000))}
-function ong(id){var k=CFG.kurir.filter(function(x){return x.id===id})[0];return k?k.tarif*kg():0}
+function ong(id){if(RT&&RT[id]&&RT[id].harga!=null)return RT[id].harga;var k=CFG.kurir.filter(function(x){return x.id===id})[0];return k?k.tarif*kg():0}
 function img(b){var p=b.im||'';return p.indexOf('images/')===0?p.replace('images/','images/t/'):p}
 function head(step){var n=['Keranjang','Checkout','Pembayaran'],h='<div class="card steps">';n.forEach(function(x,i){h+='<div class="'+(i<step?'ok':i===step?'on':'')+'"><b>'+(i<step?'✓':i+1)+'</b>'+x+'</div>'});return h+'</div>'}
 function summary(o){var L=o?o.lines:lines().map(function(l){return{t:l.b.t,q:l.q,u:l.u,im:img(l.b)}});var s=L.reduce(function(a,l){return a+l.u*l.q},0),ok=o?o.ong:(st.kurir?ong(st.kurir):0),kode=o?o.kode:0;
@@ -91,10 +91,10 @@ function addrHTML(){var h=(manage?'<h2>Alamat saya</h2>':'<p class="ey mut" styl
  +'<label>Nama penerima <i>*</i></label><input name="nama" autocomplete="name" value="'+f('nama')+'">'
  +'<label>No. WhatsApp / HP <i>*</i></label><input name="hp" type="tel" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxxxx" value="'+f('hp')+'">'
  +'<label>Email <small>(opsional)</small></label><input name="email" type="email" autocomplete="email" value="'+f('email')+'">'
- +'<label>Provinsi <i>*</i></label><select name="prov"><option value="">Pilih provinsi</option>'+PROV.map(function(p){return'<option'+(d.prov===p?' selected':'')+'>'+p+'</option>'}).join('')+'</select>'
- +'<label>Kabupaten / Kota <i>*</i></label><input name="kab" value="'+f('kab')+'">'
- +'<label>Kecamatan <i>*</i></label><input name="kec" value="'+f('kec')+'">'
- +'<label>Kelurahan / Desa <i>*</i></label><input name="kel" value="'+f('kel')+'">'
+ +'<label>Provinsi <i>*</i></label><input name="prov" list="dl_prov" autocomplete="off" placeholder="Pilih atau ketik provinsi" value="'+f('prov')+'"><datalist id="dl_prov"></datalist>'
+ +'<label>Kabupaten / Kota <i>*</i></label><input name="kab" list="dl_kab" autocomplete="off" placeholder="Pilih atau ketik kabupaten / kota" value="'+f('kab')+'"><datalist id="dl_kab"></datalist>'
+ +'<label>Kecamatan <i>*</i></label><input name="kec" list="dl_kec" autocomplete="off" placeholder="Pilih atau ketik kecamatan" value="'+f('kec')+'"><datalist id="dl_kec"></datalist>'
+ +'<label>Kelurahan / Desa <i>*</i></label><input name="kel" list="dl_kel" autocomplete="off" placeholder="Pilih atau ketik kelurahan / desa" value="'+f('kel')+'"><datalist id="dl_kel"></datalist>'
  +'<label>Alamat lengkap <i>*</i></label><textarea name="alamat" placeholder="Nama jalan, nomor rumah, RT/RW, dan patokan">'+f('alamat')+'</textarea>'
  +'<label>Kode pos <i>*</i></label><input name="pos" inputmode="numeric" maxlength="5" value="'+f('pos')+'">'
  +'<label class="chk" style="font-weight:400"><input type="checkbox" name="simpan" checked> Simpan alamat ini untuk pesanan berikutnya</label>'
@@ -102,7 +102,7 @@ function addrHTML(){var h=(manage?'<h2>Alamat saya</h2>':'<p class="ey mut" styl
 function bindAddr(){document.querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){keep();tab=b.dataset.t;render()}});
  document.querySelectorAll('[data-pick]').forEach(function(b){b.onclick=function(){st.addr=b.dataset.pick;sv('hq_co',st);render()}});
  document.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){if(!confirm('Hapus alamat ini?'))return;addrs=addrs.filter(function(x){return x.id!==b.dataset.del});if(st.addr===b.dataset.del)delete st.addr;saveAddrs();sv('hq_co',st);render()}});
- var n=$('nx');if(n)n.onclick=function(){view='ship';render();scrollTo(0,0)};
+ regInit();var n=$('nx');if(n)n.onclick=function(){view='ship';render();scrollTo(0,0)};
  var f=$('af');if(f)f.onsubmit=function(e){e.preventDefault();var d=read(),m=[];
   if(!d.nama.trim())m.push('nama penerima');if(!/^(\+?62|0)8\d{7,12}$/.test(d.hp.replace(/[\s-]/g,'')))m.push('nomor HP yang valid');['prov','kab','kec','kel','alamat'].forEach(function(k){if(!String(d[k]).trim())m.push(k==='kab'?'kabupaten/kota':k==='kel'?'kelurahan/desa':k)});if(!/^\d{5}$/.test(d.pos))m.push('kode pos 5 digit');
   if(m.length){var r=$('er');r.textContent='Lengkapi: '+m.join(', ')+'.';r.className='note';return}
@@ -110,12 +110,12 @@ function bindAddr(){document.querySelectorAll('[data-t]').forEach(function(b){b.
   st.addr=d.id;st.tmp=d.simpan?null:d;sv('hq_co',st);window.draft=null;if(manage){tab='saved';toast('Alamat tersimpan');render();return}view='ship';render();scrollTo(0,0)}}
 function read(){var f=$('af'),o={};if(!f)return o;['nama','hp','email','prov','kab','kec','kel','alamat','pos'].forEach(function(k){o[k]=f.elements[k].value});o.simpan=f.elements.simpan.checked;return o}
 function keep(){if($('af'))window.draft=read()}
-function shipHTML(){var a=selAddr()||st.tmp;if(!a){view='addr';return addrHTML()}var h='<p class="ey mut" style="margin-top:18px">Langkah 2 dari 2</p><h2>Pengiriman &amp; pembayaran</h2><div class="ad" style="margin-top:16px"><b>'+esc(a.nama)+'</b> · '+esc(a.hp)+'<p>'+addrTxt(a)+'</p><button id="ch" style="background:none;border:0;font:700 .95rem inherit;font-family:inherit;cursor:pointer;padding:6px 0">Ubah alamat</button></div>'
- +'<label>Pengiriman <i>*</i></label><p class="mut" style="margin:0">Berat paket '+kg()+' kg. Ongkir dihitung per kilogram.</p>';
- CFG.kurir.forEach(function(k){h+='<label class="opt"><input type="radio" name="k" value="'+k.id+'" '+(st.kurir===k.id?'checked':'')+'><span style="width:44px;height:44px;border-radius:10px;background:'+k.c+';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex:none">'+k.nama.split(' ')[0]+'</span><div><b>'+k.nama+'</b><span class="mut">'+k.sub+' · Estimasi '+k.est+'</span></div><b>'+rp(k.tarif*kg())+'</b></label>'});
+function shipHTML(){rates();var a=selAddr()||st.tmp;if(!a){view='addr';return addrHTML()}var h='<p class="ey mut" style="margin-top:18px">Langkah 2 dari 2</p><h2>Pengiriman &amp; pembayaran</h2><div class="ad" style="margin-top:16px"><b>'+esc(a.nama)+'</b> · '+esc(a.hp)+'<p>'+addrTxt(a)+'</p><button id="ch" style="background:none;border:0;font:700 .95rem inherit;font-family:inherit;cursor:pointer;padding:6px 0">Ubah alamat</button></div>'
+ +'<label>Pengiriman <i>*</i></label><p class="mut" style="margin:0">Berat paket '+kg()+' kg. '+(CFG.ongkirUrl?(RT?'Tarif sesuai kurir.':'Menghitung tarif kurir…'):'Ongkir masih perkiraan dan akan dikonfirmasi admin.')+'</p>';
+ CFG.kurir.forEach(function(k){h+='<label class="opt"><input type="radio" name="k" value="'+k.id+'" '+(st.kurir===k.id?'checked':'')+'><span class="lg"><img src="images/kurir/'+k.id+'.png" alt="'+k.nama+'" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="fb" hidden>'+k.nama.split(' ')[0]+'</span></span><div><b>'+k.nama+'</b><span class="mut">'+((RT&&RT[k.id]&&RT[k.id].layanan)||k.sub)+' · Estimasi '+((RT&&RT[k.id]&&RT[k.id].est)||k.est)+'</span></div><b>'+rp(ong(k.id))+(RT&&RT[k.id]?'':'<br><small class="mut">perkiraan</small>')+'</b></label>'});
  h+='<label>Metode pembayaran <i>*</i></label><label class="opt"><input type="radio" checked><div><b>Transfer Bank</b><span class="mut">Instruksi pembayaran tampil setelah pesanan dibuat.</span></div></label>'
  +'<label>Rekening tujuan transfer <i>*</i></label><p class="mut" style="margin:0">Nomor rekening dan nominal transfer (dengan kode unik) tampil setelah pesanan dibuat.</p>'+CFG.banks.map(function(x){return'<label class="opt"><input type="radio" name="rb" value="'+x.id+'" '+(bk().id===x.id?'checked':'')+'><div><b>'+x.nama+'</b><span class="mut">a.n. '+x.an+'</span></div></label>'}).join('')
- +(isMem()?'<label class="opt" style="margin-top:18px"><input type="checkbox" id="ds" '+(st.ds?'checked':'')+'><div><b>Pakai data pengirim sendiri (dropship)</b><span class="mut">Khusus member. Nama &amp; alamat pengirim di paket memakai data di bawah.</span></div></label>'+(st.ds?'<label>Nama pengirim <i>*</i></label><input id="sn" value="'+esc(st.sn||'')+'"><label>No. HP pengirim <i>*</i></label><input id="sh" type="tel" value="'+esc(st.sh||'')+'"><label>Alamat pengirim <i>*</i></label><textarea id="sa">'+esc(st.sa||'')+'</textarea><p class="mut" style="margin:6px 0 0">Data pengirim tersimpan untuk pesanan berikutnya.</p>':''):'')+'<label>Catatan untuk toko <small>(opsional)</small></label><input id="cat" value="'+esc(st.cat||'')+'">'
+ +(!isMem()?'<label class="opt" style="margin-top:18px;opacity:.55;cursor:not-allowed"><input type="checkbox" disabled><div><b>Pakai data pengirim sendiri (dropship)</b><span class="mut">Masukkan kode member untuk mengaktifkan.</span></div></label>':'')+(isMem()?'<label class="opt" style="margin-top:18px"><input type="checkbox" id="ds" '+(st.ds?'checked':'')+'><div><b>Pakai data pengirim sendiri (dropship)</b><span class="mut">Khusus member. Nama &amp; alamat pengirim di paket memakai data di bawah.</span></div></label>'+(st.ds?'<label>Nama pengirim <i>*</i></label><input id="sn" value="'+esc(st.sn||'')+'"><label>No. HP pengirim <i>*</i></label><input id="sh" type="tel" value="'+esc(st.sh||'')+'"><label>Alamat pengirim <i>*</i></label><textarea id="sa">'+esc(st.sa||'')+'</textarea><p class="mut" style="margin:6px 0 0">Data pengirim tersimpan untuk pesanan berikutnya.</p>':''):'')+'<label>Catatan untuk toko <small>(opsional)</small></label><input id="cat" value="'+esc(st.cat||'')+'">'
  +'<button class="btn" id="mk" '+(st.kurir?'':'disabled')+'>Buat pesanan →</button><button class="btn o" id="bk">Kembali ke alamat</button>';return h}
 document.addEventListener('change',function(e){if(e.target.name==='k'){st.kurir=e.target.value;sv('hq_co',st);keepShip();render()}});
 document.addEventListener('change',function(e){if(e.target.name==='rb'){keepShip();st.bank=e.target.value;sv('hq_co',st);render()}if(e.target.id==='ds'){keepShip();st.ds=e.target.checked;sv('hq_co',st);render()}});
@@ -136,6 +136,20 @@ function renderPay(){var o=ord,a=o.addr,h='<div class="ey noprint">Pembayaran pe
  +'<div class="card"><h3>Dikirim ke</h3><p><b>'+esc(a.nama)+'</b><br>'+esc(a.hp)+(a.email?' · '+esc(a.email):'')+'<br>'+addrTxt(a)+'</p><p class="mut">Pengiriman: '+esc(o.kurir)+' · Pembayaran: Transfer Bank'+(o.sender?'<br>Pengirim (dropship): '+esc(o.sender.nama)+' · '+esc(o.sender.hp)+', '+esc(o.sender.alamat):'')+(o.cat?'<br>Catatan: '+esc(o.cat):'')+'</p></div>'
  +'<div class="card noprint"><h3>Cara menyelesaikan pembayaran</h3><p><b>1. Buka aplikasi bank atau ATM</b><br><span class="mut">Pilih transfer ke bank tujuan di atas.</span></p><p><b>2. Masukkan rekening dan nominal</b><br><span class="mut">Gunakan tombol salin, pastikan nama penerima dan jumlah sudah sesuai.</span></p><p><b>3. Kirim bukti transfer</b><br><span class="mut">Lewat tombol WhatsApp di atas, lalu tunggu verifikasi toko.</span></p></div>'
  +summary(o)+'<button class="btn o noprint" id="pr">Cetak / Simpan PDF</button><a class="btn o noprint" href="index.html">Kembali ke katalog</a><button class="btn o noprint" id="mo">Pesanan saya</button>';$('app').innerHTML=h}
+/* ===== WILAYAH (api.datawilayah.com) & TARIF ===== */
+var RT=null,RTK='',RG={},RC={};
+function tc(s){s=String(s);return s===s.toUpperCase()?s.toLowerCase().replace(/(^|[\s.(-])([a-z])/g,function(m,a,b){return a+b.toUpperCase()}):s}
+function rget(p){if(RC[p])return Promise.resolve(RC[p]);return fetch('https://api.datawilayah.com/api/'+p+'.json').then(function(r){return r.json()}).then(function(j){return RC[p]=j.data.map(function(x){return{n:x.nama_wilayah,c:x.kode_wilayah}})})}
+function dl(id,L){var e=$(id);if(e)e.innerHTML=L.map(function(x){return'<option value="'+esc(tc(x.n))+'">'}).join('')}
+function find(L,v){v=String(v).trim().toLowerCase();return L.filter(function(x){return tc(x.n).toLowerCase()===v||x.n.toLowerCase()===v})[0]}
+function regInit(){var f=$('af');if(!f)return;var E=f.elements,K=['prov','kab','kec','kel'],P=['provinsi','kabupaten_kota','kecamatan','desa_kelurahan'];
+ function load(i){return rget(i?P[i]+'/'+RG[K[i-1]]:P[0]).then(function(L){RG['L'+K[i]]=L;dl('dl_'+K[i],L)}).catch(function(){})}
+ function pick(i,clr){var k=K[i],L=RG['L'+k],x=L&&find(L,E[k].value),old=RG[k];RG[k]=x?x.c:null;
+  if(i<3&&old!==RG[k]){for(var j=i+1;j<4;j++){if(clr)E[K[j]].value='';RG[K[j]]=null;RG['L'+K[j]]=null;dl('dl_'+K[j],[])}if(x)return load(i+1)}return Promise.resolve()}
+ K.forEach(function(k,i){E[k].oninput=function(){pick(i,true)}});
+ load(0).then(function(){return pick(0,false)}).then(function(){return pick(1,false)}).then(function(){return pick(2,false)})}
+function rates(){var a=selAddr()||st.tmp;if(!CFG.ongkirUrl||!a)return;var g=Math.max(1000,Math.round(lines().reduce(function(x,l){return x+wg(l.b)*l.q},0))),key=a.pos+'|'+g;if(RTK===key)return;RTK=key;RT=null;
+ fetch(CFG.ongkirUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tujuan:{provinsi:a.prov,kabupaten:a.kab,kecamatan:a.kec,kelurahan:a.kel,kode_pos:a.pos},berat_gram:g,kurir:CFG.kurir.map(function(k){return k.id})})}).then(function(r){return r.json()}).then(function(j){RT=j.tarif||{};render()}).catch(function(){RT={};render()})}
 /* ===== AKUN, LOGIN, DASHBOARD ===== */
 function mbHash(t){t=String(t||'').trim().toUpperCase();var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0,c;i<t.length;i++){c=t.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return(4294967296*(2097151&h2)+(h1>>>0)).toString(36)}
 var user=ls('hq_user',null),manage=false,atab='akun',ofil='all',buyNow=false,gate=false;
