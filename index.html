@@ -554,7 +554,7 @@ function selVar(pid,vid){var x=B[vid];if(x.vg){document.querySelectorAll('.vg').
 function askLink(b,short){var P=b.pid?B[b.pid]:b,cl=poClosed(P);return'<a class="ask'+(cl?' pm':'')+'" target="_blank" rel="noopener" href="'+esc(waUrl(askMsg(b)))+'">'+ICON.chat+(cl?'Tanya Admin untuk pemesanan':(short?'Tanya Admin':'Tanya Admin tentang buku ini'))+'</a>'}
 function fillAct(i,el,short){var b=B[i],ask=askLink(b,short);
  if(!purch(b)){el.innerHTML='<div class="ac">'+ask+'<button class="buy" disabled>'+(b.st==='poon'?(b.ps==='PO Closed'?'PO Closed':'Belum dibuka'):({habis:'Habis',closed:'PO Closed',kirim:'Dalam pengiriman'}[b.st]||'Tidak tersedia'))+'</button></div>';return}
- el.innerHTML='<div class="ac">'+ask+'<a class="buy" href="checkout.html?buy='+i+'">'+ICON.bag+'Beli sekarang</a><button type="button" class="add" data-a="addc" data-i="'+i+'">'+addLbl(!!cart[i])+'</button></div>'}
+ el.innerHTML='<div class="ac">'+ask+'<a class="buy" href="checkout.html?buy='+i+'">'+ICON.bag+(B[i]&&B[i].st==='poon'?'Pesan sekarang':'Beli sekarang')+'</a><button type="button" class="add" data-a="addc" data-i="'+i+'">'+addLbl(!!cart[i])+'</button></div>'}
 function initCards(){cs.forEach(function(c){var i=+c.dataset.i,b=B[i],a=c.querySelector('.act');if(!a||!b)return;
  if(isV(b)){a.innerHTML=lkHtml(i)+'<div class="ac"><button type="button" class="buy" data-a="fd" data-i="'+i+'">Pilih varian</button>'+askLink(b,1)+'</div>';return}
  a.innerHTML=lkHtml(i)+'<span class="cx" style="display:contents"></span>';fillAct(i,a.querySelector('.cx'),1)})}
@@ -607,7 +607,7 @@ function set(k,v){S[k]=v;pg=1;render()}
 
 /* ---------- event ---------- */
 document.addEventListener('click',function(e){if(e.target.closest('#g .c.sold'))return;var t=e.target.closest('button,a');if(!t){var cc=e.target.closest('#g .c');if(cc)detail(+cc.dataset.i);return}
- if(t.tagName==='A'&&(t.id==='cw'||t.classList.contains('cw'))){var pp=fixCart();t.href=waUrl(cartMsg());if(pp)qpop(pp);return}
+ if(t.tagName==='A'&&(t.id==='cw'||t.classList.contains('cw'))){var pp=fixCart();t.href=Object.keys(cart).length?'checkout.html':waUrl('');if(pp)qpop(pp);return}
  var a=t.dataset&&t.dataset.a,i=t.dataset&&t.dataset.i,b=i!==undefined?B[i]:null;
  if(t.id==='x')return close_();
  if(t.id==='qx'){S.q='';$('q').value='';pg=1;render();$('q').focus();return}
@@ -675,4 +675,5 @@ document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='vse
 initCards();Object.keys(likes).forEach(lkSync);favCount();
 var _pp=fixCart();render();bar();if(_pp)qpop(_pp);openFromHash();
 if('serviceWorker' in navigator&&!window.HAQA_SINGLE&&/^https?:$/.test(location.protocol)){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}}
+setTimeout(function(){if(location.hash==='#keranjang'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}cartView()}},0);
 </script></body></html>
