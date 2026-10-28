@@ -77,7 +77,7 @@ input,select,textarea{padding:10px 14px;font-size:.8125rem;border-radius:12px}te
 .it.ie .ir .mut{font-size:.75rem}.it.ie .sb{font:700 .875rem "DM Sans",sans-serif;color:var(--ink)}
 .tr{width:30px;height:30px;border:1px solid var(--ln);border-radius:10px;background:var(--card);color:var(--rd);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
 </style><style>/* kotak harga member & reseller (sama dengan katalog; dibatasi di #cmb) + harga coret */
-#cmb .mbx{margin:14px 0 4px;padding:14px;border:1.5px solid #efd9a0;border-radius:18px;background:#fff6dc;color:#3b2a05;text-align:left}
+#cmb .mbx{margin:0 0 14px;padding:14px;border:1.5px solid #efd9a0;border-radius:18px;background:#fff6dc;color:#3b2a05;text-align:left}
 #cmb button,#cmb a{font-family:inherit}
 #cmb .mbhd{all:unset;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:10px;width:100%;cursor:pointer}
 #cmb .mbhd[disabled]{cursor:default}
@@ -205,9 +205,9 @@ function cmBox(){var E=lines().map(function(l){return{b:l.b,q:l.q,reg:PO_D(l.b,l
 function cmRefresh(){var x=$('cmb');if(!x)return;var k=$('mbk'),v=k?k.value:'';x.outerHTML=cmBox();k=$('mbk');if(k&&v)k.value=v}
 document.addEventListener('click',function(e){var g=e.target.closest&&e.target.closest('[data-cm]');if(!g)return;var a=g.dataset.cm;if(a==='mt')MB_OPEN=MB_OPEN?0:1;else if(a==='rt')RS_OPEN=RS_OPEN?0:1;else if(a==='tc')TC_OPEN=TC_OPEN?0:1;else return;cmRefresh()});
 function summary(o){var L=o?o.lines:lines().map(function(l){return{t:l.b.t,q:l.q,u:l.u,im:img(l.b),b:l.b}});var s=L.reduce(function(a,l){return a+l.u*l.q},0),regS=o?0:L.reduce(function(a,l){return a+(l.b?PO_D(l.b,l.q):l.u)*l.q},0),ok=o?o.ong:(st.kurir?ong(st.kurir):0),kode=o?o.kode:0;
- var h='<div class="card"><div class="row"><h3>Ringkasan pesanan</h3><span class="mut">'+L.length+' judul</span></div>';
+ var h=(!o?cmBox():'')+'<div class="card"><div class="row"><h3>Ringkasan pesanan</h3><span class="mut">'+L.length+' judul</span></div>';
  L.forEach(function(l){h+=l.b?itemRow(l):'<div class="it"><img src="'+esc(l.im)+'" alt=""><div><b>'+esc(l.t)+'</b><div class="mut">'+l.q+' × '+rp(l.u)+'</div><b>'+rp(l.u*l.q)+'</b></div></div>'});
- h+='<hr style="border:0;border-top:1px solid var(--ln)"><div class="row mut"><span>Subtotal barang</span><b style="color:var(--ink)">'+(regS>s?'<s class="rg">'+rp(regS)+'</s> ':'')+rp(s)+'</b></div><div class="row mut"><span>Ongkos kirim</span><b style="color:var(--ink)">'+(ok?rp(ok):'–')+'</b></div>'+(o?'<div class="row mut"><span>Kode unik</span><b style="color:var(--ink)">'+rp(kode)+'</b></div>':'')+'<div class="row tot"><span style="font-size:1rem">'+((o?o.tipe==='po':poMode())?'Total perkiraan':'Total pembayaran')+'</span><span>'+rp(s+ok+kode)+'</span></div>'+(!o?cmBox():'')+'</div>';return h}
+ h+='<hr style="border:0;border-top:1px solid var(--ln)"><div class="row mut"><span>Subtotal barang</span><b style="color:var(--ink)">'+(regS>s?'<s class="rg">'+rp(regS)+'</s> ':'')+rp(s)+'</b></div><div class="row mut"><span>Ongkos kirim</span><b style="color:var(--ink)">'+(ok?rp(ok):'–')+'</b></div>'+(o?'<div class="row mut"><span>Kode unik</span><b style="color:var(--ink)">'+rp(kode)+'</b></div>':'')+'<div class="row tot"><span style="font-size:1rem">'+((o?o.tipe==='po':poMode())?'Total perkiraan':'Total pembayaran')+'</span><span>'+rp(s+ok+kode)+'</span></div>'+'</div>';return h}
 function bk(){return CFG.banks.filter(function(x){return x.id===st.bank})[0]||CFG.banks[0]}
 function selAddr(){return addrs.filter(function(a){return a.id===st.addr})[0]}
 function addrTxt(a){return esc(a.alamat)+', '+esc(a.kel)+', '+esc(a.kec)+', '+esc(a.kab)+', '+esc(a.prov)+' '+esc(a.pos)}
