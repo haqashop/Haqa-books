@@ -106,20 +106,20 @@ article .d,article .m,article .n,.chips button,.st{font-size:14px}
 #g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
 @media(min-width:720px){#g{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
 @media(min-width:1000px){#g{grid-template-columns:repeat(4,minmax(0,1fr))}}
-#g .c{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;gap:10px;padding:10px;border-radius:18px;height:100%}
-#g .c img,#g .c .ph{grid-area:1/1;width:100%;height:auto;aspect-ratio:1/1.08;object-fit:contain;background:var(--ac2);border-radius:12px}
-#g .c .sv{grid-area:1/1;position:static;align-self:end;justify-self:start;margin:8px;z-index:1;font-size:.72rem;padding:3px 8px}
-#g .c .t{grid-area:2/1;display:flex;flex-direction:column;min-width:0}
-#g .c .tags{position:absolute;top:18px;left:18px;z-index:2;flex-direction:column;align-items:flex-start;gap:4px;max-width:62%}
-#g .c .tags .tag{display:none}#g .c .tags .b{font-size:.72rem;padding:3px 10px}
-#g .c h2{font:700 1.0625rem/1.35 "DM Sans",sans-serif;color:var(--ink);margin:2px 0 2px}
-#g .c .ttl{font:inherit;color:inherit;text-align:left;padding:0;background:none;border:0;cursor:pointer}
-#g .c p.m{font-size:.875rem;font-weight:500;color:var(--mut);margin:0 0 6px}
-#g .c .d,#g .c .n{display:none}
-#g .c .now{font:800 1.25rem "DM Sans",sans-serif;color:var(--ink)}#g .c s{font-size:.85rem;color:var(--mut)}
-#g .c .act{margin-top:auto;padding-top:8px;gap:6px}
-#g .c .act .buy,#g .c .act .add{flex:1 1 100%;text-align:center;font-size:.85rem}
-#g .c .act .lk{position:absolute;top:18px;right:18px;z-index:2;width:34px;height:34px;background:rgba(255,253,250,.92)}
+:is(#g,#hm) .c{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;gap:10px;padding:10px;border-radius:18px;height:100%}
+:is(#g,#hm) .c img,:is(#g,#hm) .c .ph{grid-area:1/1;width:100%;height:auto;aspect-ratio:1/1.08;object-fit:contain;background:var(--ac2);border-radius:12px}
+:is(#g,#hm) .c .sv{grid-area:1/1;position:static;align-self:end;justify-self:start;margin:8px;z-index:1;font-size:.72rem;padding:3px 8px}
+:is(#g,#hm) .c .t{grid-area:2/1;display:flex;flex-direction:column;min-width:0}
+:is(#g,#hm) .c .tags{position:absolute;top:18px;left:18px;z-index:2;flex-direction:column;align-items:flex-start;gap:4px;max-width:62%}
+:is(#g,#hm) .c .tags .tag{display:none}:is(#g,#hm) .c .tags .b{font-size:.72rem;padding:3px 10px}
+:is(#g,#hm) .c h2{font:700 1.0625rem/1.35 "DM Sans",sans-serif;color:var(--ink);margin:2px 0 2px}
+:is(#g,#hm) .c .ttl{font:inherit;color:inherit;text-align:left;padding:0;background:none;border:0;cursor:pointer}
+:is(#g,#hm) .c p.m{font-size:.875rem;font-weight:500;color:var(--mut);margin:0 0 6px}
+:is(#g,#hm) .c .d,:is(#g,#hm) .c .n{display:none}
+:is(#g,#hm) .c .now{font:800 1.25rem "DM Sans",sans-serif;color:var(--ink)}:is(#g,#hm) .c s{font-size:.85rem;color:var(--mut)}
+:is(#g,#hm) .c .act{margin-top:auto;padding-top:8px;gap:6px}
+:is(#g,#hm) .c .act .buy,:is(#g,#hm) .c .act .add{flex:1 1 100%;text-align:center;font-size:.85rem}
+:is(#g,#hm) .c .act .lk{position:absolute;top:18px;right:18px;z-index:2;width:34px;height:34px;background:rgba(255,253,250,.92)}
 </style><style>
 /* ===== tema sesuai contoh ===== */
 :root{--pill:#f8d2c4;--pillink:#8a2f14;--cv:#efe6d6;--t1:#e4ebf6;--t2:#f3e5df;--t3:#e2eee8;--t4:#f2e3e6;--t5:#e5e8f3;--t6:#f1e7d9}
@@ -154,22 +154,22 @@ body{background:var(--bg);color:var(--ink)}
 .ph2 #fa svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}.ph2 #fa .fbd{position:absolute;top:-6px;right:-6px}
 .info{margin:8px 0}
 /* kartu produk (contoh) */
-#g .c{background:var(--card);border-color:var(--ln)}
-#g .c img,#g .c .ph{background:var(--cv)}
-#g .c .sv,#g .c .tags .b.po,#g .c .tags .b.low,#g .c .tags .b.pm,#g .c .tags .b.bl{background:var(--pill);color:var(--pillink);font-weight:700;border-radius:999px;box-shadow:none}
-#g .c .sv{position:absolute;grid-area:auto;top:18px;left:18px;margin:0;font-size:.75rem;padding:4px 11px;z-index:2}
-#g .c:has(.sv) .tags{top:50px}
-#g .c .tags .b{font-size:.75rem;padding:4px 11px}
-#g .c h2{font:700 1.0625rem/1.35 "DM Sans",sans-serif;color:var(--ink)}
-#g .c p.m{font-size:.875rem;color:var(--mut)}
-#g .c .now{font:800 1.25rem "DM Sans",sans-serif;color:var(--ink)}
+:is(#g,#hm) .c{background:var(--card);border-color:var(--ln)}
+:is(#g,#hm) .c img,:is(#g,#hm) .c .ph{background:var(--cv)}
+:is(#g,#hm) .c .sv,:is(#g,#hm) .c .tags .b.po,:is(#g,#hm) .c .tags .b.low,:is(#g,#hm) .c .tags .b.pm,:is(#g,#hm) .c .tags .b.bl{background:var(--pill);color:var(--pillink);font-weight:700;border-radius:999px;box-shadow:none}
+:is(#g,#hm) .c .sv{position:absolute;grid-area:auto;top:18px;left:18px;margin:0;font-size:.75rem;padding:4px 11px;z-index:2}
+:is(#g,#hm) .c:has(.sv) .tags{top:50px}
+:is(#g,#hm) .c .tags .b{font-size:.75rem;padding:4px 11px}
+:is(#g,#hm) .c h2{font:700 1.0625rem/1.35 "DM Sans",sans-serif;color:var(--ink)}
+:is(#g,#hm) .c p.m{font-size:.875rem;color:var(--mut)}
+:is(#g,#hm) .c .now{font:800 1.25rem "DM Sans",sans-serif;color:var(--ink)}
 .mbp{display:inline-flex;align-items:center;gap:6px;background:#fbe7a8;color:#5c4300;border-radius:12px;padding:6px 12px;font:600 .8125rem "DM Sans",sans-serif;margin:6px 0 2px}.mbp b{font-weight:800}
-#g .c .ac{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:6px}
-#g .c .ask{border:0;background:none;height:auto;padding:0;justify-content:flex-start;color:var(--ac);font:600 .9375rem "DM Sans",sans-serif;display:inline-flex;align-items:center;gap:8px}
-#g .c .ask svg{width:22px;height:22px}
-#g .c .buy,#g .c .add{width:100%;height:46px;border-radius:999px;font:700 1rem "DM Sans",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
-#g .c .buy{background:var(--ac);border:1.5px solid var(--ac);color:var(--on)}#g .c .add{background:transparent;border:1.5px solid var(--ac);color:var(--ac)}
-#g .c .buy svg,#g .c .add svg{width:22px;height:22px}
+:is(#g,#hm) .c .ac{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:6px}
+:is(#g,#hm) .c .ask{border:0;background:none;height:auto;padding:0;justify-content:flex-start;color:var(--ac);font:600 .9375rem "DM Sans",sans-serif;display:inline-flex;align-items:center;gap:8px}
+:is(#g,#hm) .c .ask svg{width:22px;height:22px}
+:is(#g,#hm) .c .buy,:is(#g,#hm) .c .add{width:100%;height:46px;border-radius:999px;font:700 1rem "DM Sans",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+:is(#g,#hm) .c .buy{background:var(--ac);border:1.5px solid var(--ac);color:var(--on)}:is(#g,#hm) .c .add{background:transparent;border:1.5px solid var(--ac);color:var(--ac)}
+:is(#g,#hm) .c .buy svg,:is(#g,#hm) .c .add svg{width:22px;height:22px}
 /* bar bawah */
 .cbar{background:var(--card);border-top:1px solid var(--ln)}
 .cbtn{display:flex;align-items:center;gap:12px}.cbtn svg{flex:none}.cbt{display:flex;flex-direction:column;line-height:1.25}.cbt b{font:800 1.125rem "DM Sans",sans-serif}.cbt small{font:500 .8125rem "DM Sans",sans-serif;color:var(--mut)}
@@ -194,15 +194,15 @@ input,select{padding:10px 14px;font-size:.8125rem}
 .kg{gap:8px}.kc{width:64px;font-size:.6875rem}.kc .ci{width:50px;height:50px;margin-bottom:6px}.kc svg{width:24px;height:24px}
 .ph2{padding-top:12px;gap:8px}.st2{font-size:1rem}.cnt2{font-size:.75rem}
 .ph2 #fa{width:36px;height:36px;border-radius:12px}.ph2 #fa svg{width:18px;height:18px}
-#g{gap:10px}#g .c{padding:8px;gap:8px;border-radius:14px}#g .c img,#g .c .ph{border-radius:10px}
-#g .c .sv{top:14px;left:14px;font-size:.625rem;padding:3px 8px}#g .c .tags{top:14px;left:14px}#g .c:has(.sv) .tags{top:38px}
-#g .c .tags .b{font-size:.625rem;padding:3px 8px}
-#g .c h2{font-size:.8125rem;line-height:1.35}#g .c p.m{font-size:.6875rem}
-#g .c .now{font-size:1rem}#g .c s{font-size:.6875rem}
+#g{gap:10px}:is(#g,#hm) .c{padding:8px;gap:8px;border-radius:14px}:is(#g,#hm) .c img,:is(#g,#hm) .c .ph{border-radius:10px}
+:is(#g,#hm) .c .sv{top:14px;left:14px;font-size:.625rem;padding:3px 8px}:is(#g,#hm) .c .tags{top:14px;left:14px}:is(#g,#hm) .c:has(.sv) .tags{top:38px}
+:is(#g,#hm) .c .tags .b{font-size:.625rem;padding:3px 8px}
+:is(#g,#hm) .c h2{font-size:.8125rem;line-height:1.35}:is(#g,#hm) .c p.m{font-size:.6875rem}
+:is(#g,#hm) .c .now{font-size:1rem}:is(#g,#hm) .c s{font-size:.6875rem}
 .mbp{font-size:.6875rem;padding:4px 9px;border-radius:9px;gap:4px}.mbp svg{width:14px;height:14px}
-#g .c .ask{font-size:.75rem;gap:6px}#g .c .ask svg{width:18px;height:18px}
-#g .c .buy,#g .c .add{height:36px;font-size:.8125rem;gap:6px}#g .c .buy svg,#g .c .add svg{width:18px;height:18px}
-#g .c .act .lk{top:14px;right:14px;width:28px;height:28px}
+:is(#g,#hm) .c .ask{font-size:.75rem;gap:6px}:is(#g,#hm) .c .ask svg{width:18px;height:18px}
+:is(#g,#hm) .c .buy,:is(#g,#hm) .c .add{height:36px;font-size:.8125rem;gap:6px}:is(#g,#hm) .c .buy svg,:is(#g,#hm) .c .add svg{width:18px;height:18px}
+:is(#g,#hm) .c .act .lk{top:14px;right:14px;width:28px;height:28px}
 .cbar{padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));gap:8px}
 .cbtn svg{width:26px;height:26px}.cbt b{font-size:.875rem}.cbt small{font-size:.6875rem}
 .fbtn{padding:8px 12px;font-size:.8125rem}.fbtn svg{width:16px;height:16px}
@@ -226,17 +226,17 @@ button,a,select,input{touch-action:manipulation;-webkit-tap-highlight-color:tran
 .adv select{padding:6px 10px;font-size:.75rem;height:32px;border-radius:10px;width:100%}.adv #so,.adv .pr2,.adv .prl{grid-column:1/-1}
 .prl{font-size:.6875rem;color:var(--mut);margin-top:2px}.pr2{display:flex;align-items:center;gap:6px}.pr2 input{padding:6px 10px;border-radius:10px;height:32px}.pr2 span{color:var(--mut)}
 /* badge: di bawah gambar, di atas judul, 1 baris */
-#g .c .tags{position:static;display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px;max-width:none}
-#g .c .tags:not(:has(.b,.sv)){display:none}
-#g .c .sv,#g .c .tags .b{position:static;margin:0;font-size:.5625rem;line-height:1.2;padding:2px 7px;white-space:nowrap;border-radius:999px;box-shadow:none}
-#g .c:has(.sv) .tags{top:auto}
+:is(#g,#hm) .c .tags{position:static;display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px;max-width:none}
+:is(#g,#hm) .c .tags:not(:has(.b,.sv)){display:none}
+:is(#g,#hm) .c .sv,:is(#g,#hm) .c .tags .b{position:static;margin:0;font-size:.5625rem;line-height:1.2;padding:2px 7px;white-space:nowrap;border-radius:999px;box-shadow:none}
+:is(#g,#hm) .c:has(.sv) .tags{top:auto}
 /* tombol hati: bulatan solid agar tidak tersamar sampul */
-#g .c .act .lk{position:absolute;top:12px;right:12px;width:30px;height:30px;z-index:3;background:var(--card);border:1px solid var(--ln);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.28)}
-#g .c .act .lk svg{width:16px;height:16px}
-#g .c .act .lk.on{background:var(--card)!important;border:1px solid #f43f5e!important;color:#f43f5e!important}
+:is(#g,#hm) .c .act .lk{position:absolute;top:12px;right:12px;width:30px;height:30px;z-index:3;background:var(--card);border:1px solid var(--ln);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.28)}
+:is(#g,#hm) .c .act .lk svg{width:16px;height:16px}
+:is(#g,#hm) .c .act .lk.on{background:var(--card)!important;border:1px solid #f43f5e!important;color:#f43f5e!important}
 </style><style>
 /* ===== v6 ===== */
-#g .c.hide,#g .c[hidden]{display:none!important}
+:is(#g,#hm) .c.hide,:is(#g,#hm) .c[hidden]{display:none!important}
 .emp{padding:28px 8px;text-align:center;color:var(--mut);font-size:.8125rem}
 .rng{grid-column:1/-1}.rng .rh{display:flex;justify-content:space-between;font-size:.6875rem;color:var(--mut);margin-bottom:2px}.rng .rh b{color:var(--ink);font-weight:600}
 .rs{position:relative;height:26px}.rs .rt,.rs .rf{position:absolute;top:12px;height:3px;border-radius:2px}.rs .rt{left:0;right:0;background:var(--ln)}.rf{background:var(--ac)}
@@ -256,29 +256,29 @@ button,a,select,input{touch-action:manipulation;-webkit-tap-highlight-color:tran
 .brand .wa svg,.brand .shb svg{width:17px;height:17px}.brand .cbd{background:var(--ac);color:var(--on)}
 </style><style>
 /* ===== layout tombol kartu sesuai saran ===== */
-#g .c .act .ac{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:8px;align-items:stretch;margin-top:6px}
-#g .c .act .ask{grid-column:1/-1;order:-1;justify-content:center;height:36px;border:1.5px solid var(--ac);border-radius:12px;background:transparent;color:var(--ac);font:600 .8125rem "DM Sans",sans-serif;gap:6px;padding:0 10px;text-decoration:none}
-#g .c .act .ask svg{width:16px;height:16px}
-#g .c .act .buy{grid-column:1;height:44px;border-radius:12px;font-size:.8125rem;white-space:nowrap}#g .c .act .buy svg{display:none}
-#g .c .act .add{grid-column:2;width:44px;height:44px;padding:0;border-radius:12px;font-size:0;gap:0;flex:none}#g .c .act .add svg{width:22px;height:22px}
+:is(#g,#hm) .c .act .ac{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:8px;align-items:stretch;margin-top:6px}
+:is(#g,#hm) .c .act .ask{grid-column:1/-1;order:-1;justify-content:center;height:36px;border:1.5px solid var(--ac);border-radius:12px;background:transparent;color:var(--ac);font:600 .8125rem "DM Sans",sans-serif;gap:6px;padding:0 10px;text-decoration:none}
+:is(#g,#hm) .c .act .ask svg{width:16px;height:16px}
+:is(#g,#hm) .c .act .buy{grid-column:1;height:44px;border-radius:12px;font-size:.8125rem;white-space:nowrap}:is(#g,#hm) .c .act .buy svg{display:none}
+:is(#g,#hm) .c .act .add{grid-column:2;width:44px;height:44px;padding:0;border-radius:12px;font-size:0;gap:0;flex:none}:is(#g,#hm) .c .act .add svg{width:22px;height:22px}
 </style><style>/* keranjang: baris tidak menyempit di samping tombol tutup */#mb .ci.cx{clear:both}</style><style>
 /* ===== v7: badge di atas gambar, Hemat di bawah harga, countdown di samping badge ===== */
-#g .c{grid-template-rows:auto auto 1fr;gap:6px}
-#g .c>.tags{grid-area:1/1;position:static;display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-height:30px;margin:0;padding-right:36px;max-width:none}
-#g .c>.tags .tag{display:none}
-#g .c img,#g .c .ph{grid-area:2/1}
-#g .c .t{grid-area:3/1}
-#g .c .tags .b{position:static;font-size:.5625rem;line-height:1.2;padding:3px 8px;white-space:nowrap;border-radius:999px;box-shadow:none;font-weight:700}
-#g .c .tags .b.ok{background:var(--ac2);color:var(--ac);border:0}
-#g .c .tags .b.low{background:#fdebc8;color:#8a5a00;border:0}
-#g .c .tags .b.pm{background:#fde1e1;color:#b3261e}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #g .c .tags .b.low{background:#4a3a14;color:#f3c969}:root:not([data-theme="light"]) #g .c .tags .b.pm{background:#4a2325;color:#f5a8a5}}
-#g .c .tags .cdw{margin:0;display:inline-flex}
-#g .c .tags .cd{font:700 .5625rem/1.2 "DM Sans",sans-serif;white-space:nowrap;background:#fde1e1;color:#b3261e;padding:3px 7px;border-radius:999px}
-#g .c .tags .cd.u{background:rgba(192,57,43,.2)}
-#g .c .act .lk{top:8px;right:8px}
-#g .c .t>.sv{align-self:flex-start;margin:4px 0 0;font-size:.6875rem;padding:3px 10px;border-radius:999px;background:var(--pill);color:var(--pillink);font-weight:700;order:1}
-#g .c .t>.mbp{order:2}#g .c .t>.cdw{order:3}#g .c .t>.act{order:9}
+:is(#g,#hm) .c{grid-template-rows:auto auto 1fr;gap:6px}
+:is(#g,#hm) .c>.tags{grid-area:1/1;position:static;display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-height:30px;margin:0;padding-right:36px;max-width:none}
+:is(#g,#hm) .c>.tags .tag{display:none}
+:is(#g,#hm) .c img,:is(#g,#hm) .c .ph{grid-area:2/1}
+:is(#g,#hm) .c .t{grid-area:3/1}
+:is(#g,#hm) .c .tags .b{position:static;font-size:.5625rem;line-height:1.2;padding:3px 8px;white-space:nowrap;border-radius:999px;box-shadow:none;font-weight:700}
+:is(#g,#hm) .c .tags .b.ok{background:var(--ac2);color:var(--ac);border:0}
+:is(#g,#hm) .c .tags .b.low{background:#fdebc8;color:#8a5a00;border:0}
+:is(#g,#hm) .c .tags .b.pm{background:#fde1e1;color:#b3261e}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) :is(#g,#hm) .c .tags .b.low{background:#4a3a14;color:#f3c969}:root:not([data-theme="light"]) :is(#g,#hm) .c .tags .b.pm{background:#4a2325;color:#f5a8a5}}
+:is(#g,#hm) .c .tags .cdw{margin:0;display:inline-flex}
+:is(#g,#hm) .c .tags .cd{font:700 .5625rem/1.2 "DM Sans",sans-serif;white-space:nowrap;background:#fde1e1;color:#b3261e;padding:3px 7px;border-radius:999px}
+:is(#g,#hm) .c .tags .cd.u{background:rgba(192,57,43,.2)}
+:is(#g,#hm) .c .act .lk{top:8px;right:8px}
+:is(#g,#hm) .c .t>.sv{align-self:flex-start;margin:4px 0 0;font-size:.6875rem;padding:3px 10px;border-radius:999px;background:var(--pill);color:var(--pillink);font-weight:700;order:1}
+:is(#g,#hm) .c .t>.mbp{order:2}:is(#g,#hm) .c .t>.cdw{order:3}:is(#g,#hm) .c .t>.act{order:9}
 /* Bantu Aku Pilih sejajar filter */
 .sel{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:center}
 .sel #bp{height:34px;padding:0 10px;border-radius:12px;border:1px solid var(--ln);background:var(--card);color:var(--ink);font:600 .6875rem "DM Sans",sans-serif;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;cursor:pointer}
@@ -296,25 +296,25 @@ button,a,select,input{touch-action:manipulation;-webkit-tap-highlight-color:tran
 .sel .sw select{font-size:.65rem;font-weight:600;padding:7px 12px 7px 26px;text-overflow:ellipsis;background-position:right 5px center;background-size:10px}.sel .sw .l{left:8px;width:14px;height:14px}
 .sel #bp{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 8px;border:1px solid var(--ln);border-radius:12px;background:var(--card);color:var(--ink);font:600 .65rem "DM Sans",sans-serif;white-space:nowrap;cursor:pointer}
 .sel #bp svg{width:14px;height:14px;fill:none;stroke:var(--ac);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-#g .c{grid-template-rows:auto auto 1fr}
-#g .c>.tags{grid-area:auto;grid-row:1;grid-column:1;position:static;display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-height:30px;padding-right:36px;margin:0}
-#g .c>img,#g .c>.ph{grid-area:auto;grid-row:2;grid-column:1}
-#g .c>.t{grid-area:auto;grid-row:3;grid-column:1}
-#g .c .act .lk{top:7px;right:7px}
-#g .c .tags .b{font-size:.625rem;padding:3px 8px;font-weight:700;border-radius:999px;white-space:nowrap}
-#g .c .tags .b.ok{background:#e1efe7;color:#2d6a3e}
-#g .c .tags .b.pm{background:#fde1e1;color:#b3261e}
-#g .c .tags .b.low{background:#fdecc8;color:#8a5a1f}
-#g .c .tags .b.po{background:#e1ebfb;color:#274a8a}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #g .c .tags .b.ok{background:#1d3a33;color:#9be3b0}:root:not([data-theme="light"]) #g .c .tags .b.pm{background:#4a2a2a;color:#f4b4ab}:root:not([data-theme="light"]) #g .c .tags .b.low{background:#4a3d1a;color:#f2d48a}:root:not([data-theme="light"]) #g .c .tags .b.po{background:#233a63;color:#b9cdf5}}
-#g .c .t .sv{position:static;display:inline-block;align-self:flex-start;margin:2px 0 4px;font-size:.625rem;line-height:1.2;padding:3px 9px;border-radius:999px;font-weight:700;background:var(--pill);color:var(--pillink);white-space:nowrap}
+:is(#g,#hm) .c{grid-template-rows:auto auto 1fr}
+:is(#g,#hm) .c>.tags{grid-area:auto;grid-row:1;grid-column:1;position:static;display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-height:30px;padding-right:36px;margin:0}
+:is(#g,#hm) .c>img,:is(#g,#hm) .c>.ph{grid-area:auto;grid-row:2;grid-column:1}
+:is(#g,#hm) .c>.t{grid-area:auto;grid-row:3;grid-column:1}
+:is(#g,#hm) .c .act .lk{top:7px;right:7px}
+:is(#g,#hm) .c .tags .b{font-size:.625rem;padding:3px 8px;font-weight:700;border-radius:999px;white-space:nowrap}
+:is(#g,#hm) .c .tags .b.ok{background:#e1efe7;color:#2d6a3e}
+:is(#g,#hm) .c .tags .b.pm{background:#fde1e1;color:#b3261e}
+:is(#g,#hm) .c .tags .b.low{background:#fdecc8;color:#8a5a1f}
+:is(#g,#hm) .c .tags .b.po{background:#e1ebfb;color:#274a8a}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) :is(#g,#hm) .c .tags .b.ok{background:#1d3a33;color:#9be3b0}:root:not([data-theme="light"]) :is(#g,#hm) .c .tags .b.pm{background:#4a2a2a;color:#f4b4ab}:root:not([data-theme="light"]) :is(#g,#hm) .c .tags .b.low{background:#4a3d1a;color:#f2d48a}:root:not([data-theme="light"]) :is(#g,#hm) .c .tags .b.po{background:#233a63;color:#b9cdf5}}
+:is(#g,#hm) .c .t .sv{position:static;display:inline-block;align-self:flex-start;margin:2px 0 4px;font-size:.625rem;line-height:1.2;padding:3px 9px;border-radius:999px;font-weight:700;background:var(--pill);color:var(--pillink);white-space:nowrap}
 </style><style>.sel .sw select#su,.sel .sw select#sc{font-size:.65rem!important;font-weight:600!important;padding:7px 12px 7px 26px!important;height:34px!important;min-width:0!important}.sel .sw{min-width:0}</style><style>.sel{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) auto!important;overflow:visible!important;gap:6px}.sel>.sw,.sel>#bp{min-width:0}</style><style>
 /* v7b: baris badge rata kiri, hati di atas sampul, kartu lebih rapi */
-#g .c>.tags{flex-direction:row!important;max-width:none!important;justify-content:flex-start!important;flex-wrap:wrap;align-items:center;min-height:22px;padding:0;gap:4px;margin:0}
-#g .c .act .lk{top:44px;right:14px}
-#g .c .mbp{flex-wrap:nowrap;white-space:nowrap;justify-content:flex-start}
-#g .c .t .cdw .cd{display:inline-block;font-size:.625rem;line-height:1.3;padding:4px 9px;border-radius:10px}
-#g .c .t .cdn{font-size:.625rem;line-height:1.35}
+:is(#g,#hm) .c>.tags{flex-direction:row!important;max-width:none!important;justify-content:flex-start!important;flex-wrap:wrap;align-items:center;min-height:22px;padding:0;gap:4px;margin:0}
+:is(#g,#hm) .c .act .lk{top:44px;right:14px}
+:is(#g,#hm) .c .mbp{flex-wrap:nowrap;white-space:nowrap;justify-content:flex-start}
+:is(#g,#hm) .c .t .cdw .cd{display:inline-block;font-size:.625rem;line-height:1.3;padding:4px 9px;border-radius:10px}
+:is(#g,#hm) .c .t .cdn{font-size:.625rem;line-height:1.35}
 </style><style>.cdel{width:34px;height:34px;padding:0;border:1px solid var(--ln);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;color:var(--rd);background:var(--card)}.cdel svg{width:18px;height:18px}</style><style>#mb .cdel{width:30px;height:30px;border-radius:9px}#mb .cdel svg{width:16px;height:16px}</style><style>.mbx{margin:14px 0;padding:14px;border:1.5px solid #efd9a0;border-radius:18px;background:#fff6dc;color:#3b2a05}
 .mbx button,.mbx a{font-family:inherit}.mbhd{all:unset;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:10px;width:100%;cursor:pointer}.mbhd[disabled]{cursor:default}
 .mbic{flex:none;display:inline-flex;width:40px;height:40px}.mbic.sm{width:30px;height:30px;align-items:center;justify-content:center}
@@ -351,7 +351,26 @@ button,a,select,input{touch-action:manipulation;-webkit-tap-highlight-color:tran
 
 .gm.ld .big{aspect-ratio:1/1.1;object-fit:contain;color:transparent;background:var(--ac2);border-radius:12px}
 .gm.ld::after{content:"";position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border:4px solid var(--ln);border-top-color:var(--ac);border-radius:50%;animation:hqspin .8s linear infinite;pointer-events:none;z-index:3}
-#g .c img.ld{background:var(--hqsp) center/30px 30px no-repeat,var(--cv,var(--ac2))}
+:is(#g,#hm) .c img.ld{background:var(--hqsp) center/30px 30px no-repeat,var(--cv,var(--ac2))}
+
+.hm[hidden]{display:none}.hm-on .info,.hm-on #g,.hm-on .pager,.hm-on .nums,.hm-on .emp{display:none}.hm{margin:6px 0 4px}
+.hs{margin:0 0 18px}
+.hh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:10px}
+.hh h2{font:700 1.45rem/1.2 Lora,Georgia,serif;color:var(--ink);margin:0}
+.hh p{margin:3px 0 0;color:var(--mut);font-size:.9rem}
+.hall{flex:none;display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:6px 0;font:800 .92rem "DM Sans",sans-serif;color:var(--ac);cursor:pointer;white-space:nowrap}
+.hall svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hall:focus-visible,.rb:focus-visible{outline:3px solid var(--ac);outline-offset:2px;border-radius:8px}
+.rw{position:relative}
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:12px 2px 10px;margin:-8px -2px 0;overscroll-behavior-x:contain}
+.rail::-webkit-scrollbar{display:none}
+.rail .c{flex:0 0 calc((100% - 12px)/2.2);scroll-snap-align:start;height:auto}
+@media(min-width:600px){.rail .c{flex-basis:calc((100% - 24px)/3)}}
+@media(min-width:900px){.rail{gap:16px}.rail .c{flex-basis:calc((100% - 48px)/4)}}
+.rb{display:none;position:absolute;top:42%;z-index:4;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--ln);background:var(--card);color:var(--ink);align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18);padding:0}
+.rb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.rb.rp{left:-14px}.rb.rn{right:-14px}
+@media(hover:hover) and (min-width:700px){.rb.on{display:flex}}
 </style><script>(function(){
 var ov=null,tm=0;
 window.hqBusy=function(t){
@@ -384,7 +403,7 @@ function cardImgs(){[].forEach.call(document.querySelectorAll('#g .c>img'),funct
  im.addEventListener('error',function(){n++;if(n>1||im.getAttribute('src')===s0)off()})})}
 window.addEventListener('pageshow',function(){window.hqIdle()});
 document.addEventListener('DOMContentLoaded',function(){cardImgs();document.addEventListener('click',nav)});
-})();</script></head><body><div class="brand"><div class="bi"><img src="images/logo.webp" alt="Logo HAQA Books"><span class="dv"></span><div><h1>HAQA BOOKS</h1><p class="tg"><i>Growing with ‘Ilm upon al-Haqq (<span lang="ar">حق</span>)</i></p></div></div><span class="bi2"><a id="sh" class="shb" target="_blank" rel="noopener" href="#" aria-label="Bagikan katalog" title="Bagikan katalog"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></a><a class="wa" href="https://wa.link/en8w7e" target="_blank" rel="noopener" aria-label="Chat WhatsApp"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg></a><a class="wa cnb" href="checkout.html#akun" aria-label="Akun" title="Akun"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a><button id="cb2" type="button" class="wa cnb" aria-label="Keranjang" title="Keranjang"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12zM6 6L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg><span id="cn" class="cbd" hidden>0</span></button></span></div><div class="wrap"><h2 class="jk">Jelajahi Koleksi</h2><p class="jsub">Gunakan pencarian dan filter untuk menemukan produk yang sesuai.</p><div class="sb"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Cari judul, penerbit, atau tema..." aria-label="Cari"><button id="qx" type="button" class="qx" aria-label="Hapus pencarian" hidden><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="sel"><div class="sw"><svg class="l" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M18 14c2 .7 3 2.4 3 5"/></svg><select id="su" aria-label="Berdasarkan umur"><option value="">Semua Umur</option><option value="0-2">0–2 tahun</option><option value="2-4">2–4 tahun</option><option value="4-6">4–6 tahun</option><option value="6-8">6–8 tahun</option><option value="8-12">8–12 tahun</option><option value="12-18">12–18 tahun</option><option value="18-99">Dewasa</option></select></div><div class="sw"><svg class="l" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12.5V4h8.5L21 13.5 13.5 21 3 12.5z"/><circle cx="8" cy="8.5" r="1.2"/></svg><select id="sc" aria-label="Berdasarkan kategori / tema"><option value="">Semua Kategori</option></select></div><button id="bp" type="button" class="bpb"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg>Bantu Aku Pilih</button></div><div class="chrow"><nav class="chips" id="nt" aria-label="Status"><button aria-pressed="true" data-v=""><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Semua Produk</button><button aria-pressed="false" data-v="ready"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></svg>Ready Stock</button><button aria-pressed="false" data-v="poon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Pre Order</button><button aria-pressed="false" data-v="promo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12.5V4h8.5L21 13.5 13.5 21 3 12.5z"/><circle cx="8" cy="8.5" r="1.2"/></svg>Promo</button></nav></div><div class="kp"><div class="kh" id="ph2"><h3 id="st2">Semua Produk</h3><span id="cnt" class="cnt2"></span><button id="fa" type="button" class="fab" aria-label="Filter lanjutan: penerbit, jenis buku, urutan" aria-expanded="false" aria-controls="adv"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span id="fadv" class="fbd" hidden></span></button></div><div id="adv" class="adv" hidden><select id="sp" aria-label="Penerbit"><option value="">Semua penerbit</option></select><select id="sf" aria-label="Jenis buku"><option value="">Semua jenis</option></select><select id="so" aria-label="Urutan"><option value="">Urutan default</option><option value="lo">Harga terendah</option><option value="hi">Harga tertinggi</option><option value="sv">Paling hemat</option><option value="az">Judul A-Z</option></select><div class="rng"><div class="rh"><span>Rentang harga</span><span><b id="rmin">Rp 0</b> – <b id="rmax">Rp 2.000.000</b></span></div><div class="rs"><div class="rt"></div><div class="rf" id="rf"></div><input type="range" id="pmin" min="0" max="800000" step="10000" value="0" aria-label="Harga minimum"><input type="range" id="pmax" min="0" max="800000" step="10000" value="800000" aria-label="Harga maksimum"></div></div></div><div class="kg"><button type="button" class="kc c1" data-cg="Buku"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg></span>Buku</button><button type="button" class="kc c2" data-cg="Puzzle & Mainan"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a2 2 0 1 1 4 0v1h3.5A1.5 1.5 0 0 1 19 6.5V10h-1a2 2 0 1 0 0 4h1v3.5a1.5 1.5 0 0 1-1.5 1.5H14v-1a2 2 0 1 0-4 0v1H6.5A1.5 1.5 0 0 1 5 17.5V14h1a2 2 0 1 0 0-4H5V6.5A1.5 1.5 0 0 1 6.5 5H10V4z"/></svg></span>Puzzle &amp; Mainan</button><button type="button" class="kc c3" data-cg="Kalender"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><circle cx="8.5" cy="14" r=".8"/><circle cx="12" cy="14" r=".8"/><circle cx="15.5" cy="14" r=".8"/><circle cx="8.5" cy="17.2" r=".8"/><circle cx="12" cy="17.2" r=".8"/></svg></span>Kalender</button><button type="button" class="kc c4" data-cg="Flashcard"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/></svg></span>Flashcard</button><button type="button" class="kc c5" data-cg="Printable"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M14 3.5V8h4M9 13h6M9 16.5h6"/></svg></span>Printable</button><button type="button" class="kc c6" data-cg="Produk Lainnya"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5V20h14v-7.5M12 8.5V20M12 8.5C9.5 8.5 8 7.5 8 6s1.5-2.5 4 2.5zM12 8.5c2.5 0 4-1 4-2.5S14.5 3.5 12 8.5z"/></svg></span>Produk Lainnya</button></div></div><div class="fxr"><button id="fx" type="button" class="rst" hidden><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg>Hapus semua filter</button></div><div class="info"><span id="pg"></span></div><p id="emp" class="emp" hidden></p><main id="g"></main><div class="pager"><button id="pv">Sebelumnya</button><span id="pc"></span><button id="nx">Berikutnya</button></div><div class="nums" id="nums"></div></div><section class="order" aria-label="Cara belanja"><h2 class="ot">Cara Belanja</h2><ol class="st"><li>Pilih produk yang diinginkan (pilih varian dan jumlah bila ada), lalu tambahkan ke keranjang.</li><li>Buka keranjang, periksa pesanan Anda, lalu klik <b>“Lanjutkan ke pembayaran”</b>.</li><li>Isi data penerima:<ul><li>Nama penerima</li><li>Nomor WhatsApp</li><li>Alamat lengkap</li><li>Kecamatan &amp; kode pos</li></ul></li><li>Pilih ekspedisi. Ongkir tampil sebagai perkiraan dan akan dikonfirmasi admin.</li><li>Buat pesanan, lalu transfer sesuai nominal yang tampil (termasuk kode unik).</li><li>Kirim bukti transfer beserta nomor pesanan ke WhatsApp admin untuk diverifikasi.</li><li>Pesanan diproses dan dikirim, lalu nomor resi diberikan setelah paket dikirim.</li></ol><p class="ps"><b>Pre Order:</b> pembayaran dilakukan saat produk ready, dan pesanan dikirim sesuai jadwal PO. Admin akan menginformasikan lewat WhatsApp.</p></section><section class="soc" aria-label="Media sosial"><a class="sl" href="https://wa.me/6285846189815" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.900 11.900 0 0 0 4.600 4c.6.3 1.1.4 1.5.5a3.6 3.6 0 0 0 1.7-.1 2.8 2.8 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c0-.1-.2-.2-.5-.3z"/></svg><span><b>WhatsApp</b><small>Pemesanan dan tanya stok</small></span></a><a class="sl" href="https://chat.whatsapp.com/HzYEJ5RUk4cFkwvgZ1qz41?mode=gi_t" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.900 11.900 0 0 0 4.600 4c.6.3 1.1.4 1.5.5a3.6 3.6 0 0 0 1.7-.1 2.8 2.8 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c0-.1-.2-.2-.5-.3z"/></svg><span><b>Grup Member WhatsApp</b><small>Potongan harga pre-order buku terbaru</small></span></a><a class="sl" href="https://t.me/haqabookssale" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M21.600 3.400 2.700 10.700c-1 .4-1 1-.2 1.200l4.800 1.500 1.900 5.800c.2.600.4.700.9.700s.6-.2.9-.5l2.300-2.200 4.700 3.500c.9.5 1.500.2 1.700-.8l3-14.500c.3-1.200-.4-1.700-1.400-1.300zM8.700 13.400l9-5.700c.4-.3.800-.1.500.2l-7.300 6.700-.3 3.100-1.900-4.300z"/></svg><span><b>Telegram Sale</b><small>Katalog dan preview lengkap khusus Sale</small></span></a><a class="sl" href="https://t.me/haqabooks" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M21.600 3.400 2.700 10.700c-1 .4-1 1-.2 1.200l4.800 1.500 1.900 5.800c.2.600.4.700.9.700s.6-.2.9-.5l2.300-2.200 4.700 3.500c.9.5 1.500.2 1.700-.8l3-14.500c.3-1.200-.4-1.700-1.400-1.300zM8.700 13.400l9-5.700c.4-.3.800-.1.500.2l-7.300 6.700-.3 3.100-1.900-4.300z"/></svg><span><b>Telegram PO</b><small>Katalog dan materi promosi buku PO</small></span></a><a class="sl" href="https://www.instagram.com/haqabooks" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.300" cy="6.700" r="1.100" fill="currentColor" stroke="none"/></svg><span><b>Instagram</b><small>@haqabooks</small></span></a></section><section class="end"><p>Jazakumullahu khairan atas kepercayaan dan dukungannya kepada HAQA Books.</p><p>Semoga setiap buku yang sampai di tangan Anda menjadi wasilah bertambahnya ilmu, tumbuhnya amal, dan kebaikan bagi keluarga.</p><p><b>Barakallahu fiikum</b></p></section><footer>Harga dan stok dapat berubah sewaktu-waktu. <a href="syarat-ketentuan.html" style="color:inherit;font-weight:700">Syarat &amp; Ketentuan Partner</a></footer><div class="cbar"><button id="cb" class="cbtn"></button><button id="fb" class="fbtn" aria-label="Lihat favorit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span id="fc">0</span></button><a id="cw" class="cw" target="_blank" rel="noopener" href="https://wa.me/6285846189815">Chat WA</a></div><div id="ov" class="ov" hidden><div class="md" role="dialog" aria-modal="true" aria-label="Detail"><button id="x" class="xb" aria-label="Tutup">✕</button><div id="mb"></div></div></div><div id="toast" role="status"></div><aside id="mp" class="mpromo" aria-label="Promo member dan reseller"><a href="https://wa.me/6285846189815?text=Assalamu%E2%80%99alaikum%2C%20saya%20ingin%20daftar%20member%2Freseller%20HAQA%20Books." target="_blank" rel="noopener"><b>DAFTAR MEMBER / RESELLER</b><span>DISKON UP TO 40%</span></a><button id="mpx" type="button" aria-label="Tutup promo">×</button></aside><script>window.HAQA_SINGLE=1;</script><script>/* HAQA Books – data produk.
+})();</script></head><body><div class="brand"><div class="bi"><img src="images/logo.webp" alt="Logo HAQA Books"><span class="dv"></span><div><h1>HAQA BOOKS</h1><p class="tg"><i>Growing with ‘Ilm upon al-Haqq (<span lang="ar">حق</span>)</i></p></div></div><span class="bi2"><a id="sh" class="shb" target="_blank" rel="noopener" href="#" aria-label="Bagikan katalog" title="Bagikan katalog"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></a><a class="wa" href="https://wa.link/en8w7e" target="_blank" rel="noopener" aria-label="Chat WhatsApp"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg></a><a class="wa cnb" href="checkout.html#akun" aria-label="Akun" title="Akun"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a><button id="cb2" type="button" class="wa cnb" aria-label="Keranjang" title="Keranjang"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12zM6 6L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg><span id="cn" class="cbd" hidden>0</span></button></span></div><div class="wrap"><h2 class="jk">Jelajahi Koleksi</h2><p class="jsub">Gunakan pencarian dan filter untuk menemukan produk yang sesuai.</p><div class="sb"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Cari judul, penerbit, atau tema..." aria-label="Cari"><button id="qx" type="button" class="qx" aria-label="Hapus pencarian" hidden><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="sel"><div class="sw"><svg class="l" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M18 14c2 .7 3 2.4 3 5"/></svg><select id="su" aria-label="Berdasarkan umur"><option value="">Semua Umur</option><option value="0-2">0–2 tahun</option><option value="2-4">2–4 tahun</option><option value="4-6">4–6 tahun</option><option value="6-8">6–8 tahun</option><option value="8-12">8–12 tahun</option><option value="12-18">12–18 tahun</option><option value="18-99">Dewasa</option></select></div><div class="sw"><svg class="l" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12.5V4h8.5L21 13.5 13.5 21 3 12.5z"/><circle cx="8" cy="8.5" r="1.2"/></svg><select id="sc" aria-label="Berdasarkan kategori / tema"><option value="">Semua Kategori</option></select></div><button id="bp" type="button" class="bpb"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg>Bantu Aku Pilih</button></div><div class="chrow"><nav class="chips" id="nt" aria-label="Status"><button aria-pressed="true" data-v=""><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Semua Produk</button><button aria-pressed="false" data-v="ready"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></svg>Ready Stock</button><button aria-pressed="false" data-v="poon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Pre Order</button><button aria-pressed="false" data-v="promo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12.5V4h8.5L21 13.5 13.5 21 3 12.5z"/><circle cx="8" cy="8.5" r="1.2"/></svg>Promo</button></nav></div><div class="kp"><div class="kh" id="ph2"><h3 id="st2">Semua Produk</h3><span id="cnt" class="cnt2"></span><button id="fa" type="button" class="fab" aria-label="Filter lanjutan: penerbit, jenis buku, urutan" aria-expanded="false" aria-controls="adv"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span id="fadv" class="fbd" hidden></span></button></div><div id="adv" class="adv" hidden><select id="sp" aria-label="Penerbit"><option value="">Semua penerbit</option></select><select id="sf" aria-label="Jenis buku"><option value="">Semua jenis</option></select><select id="so" aria-label="Urutan"><option value="">Urutan default</option><option value="lo">Harga terendah</option><option value="hi">Harga tertinggi</option><option value="sv">Paling hemat</option><option value="az">Judul A-Z</option></select><div class="rng"><div class="rh"><span>Rentang harga</span><span><b id="rmin">Rp 0</b> – <b id="rmax">Rp 2.000.000</b></span></div><div class="rs"><div class="rt"></div><div class="rf" id="rf"></div><input type="range" id="pmin" min="0" max="800000" step="10000" value="0" aria-label="Harga minimum"><input type="range" id="pmax" min="0" max="800000" step="10000" value="800000" aria-label="Harga maksimum"></div></div></div><div class="kg"><button type="button" class="kc c1" data-cg="Buku"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg></span>Buku</button><button type="button" class="kc c2" data-cg="Puzzle & Mainan"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a2 2 0 1 1 4 0v1h3.5A1.5 1.5 0 0 1 19 6.5V10h-1a2 2 0 1 0 0 4h1v3.5a1.5 1.5 0 0 1-1.5 1.5H14v-1a2 2 0 1 0-4 0v1H6.5A1.5 1.5 0 0 1 5 17.5V14h1a2 2 0 1 0 0-4H5V6.5A1.5 1.5 0 0 1 6.5 5H10V4z"/></svg></span>Puzzle &amp; Mainan</button><button type="button" class="kc c3" data-cg="Kalender"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><circle cx="8.5" cy="14" r=".8"/><circle cx="12" cy="14" r=".8"/><circle cx="15.5" cy="14" r=".8"/><circle cx="8.5" cy="17.2" r=".8"/><circle cx="12" cy="17.2" r=".8"/></svg></span>Kalender</button><button type="button" class="kc c4" data-cg="Flashcard"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/></svg></span>Flashcard</button><button type="button" class="kc c5" data-cg="Printable"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M14 3.5V8h4M9 13h6M9 16.5h6"/></svg></span>Printable</button><button type="button" class="kc c6" data-cg="Produk Lainnya"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5V20h14v-7.5M12 8.5V20M12 8.5C9.5 8.5 8 7.5 8 6s1.5-2.5 4 2.5zM12 8.5c2.5 0 4-1 4-2.5S14.5 3.5 12 8.5z"/></svg></span>Produk Lainnya</button></div></div><div class="fxr"><button id="fx" type="button" class="rst" hidden><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg>Hapus semua filter</button></div><div id="hm" class="hm" aria-label="Pilihan produk"></div><div class="info"><span id="pg"></span></div><p id="emp" class="emp" hidden></p><main id="g"></main><div class="pager"><button id="pv">Sebelumnya</button><span id="pc"></span><button id="nx">Berikutnya</button></div><div class="nums" id="nums"></div></div><section class="order" aria-label="Cara belanja"><h2 class="ot">Cara Belanja</h2><ol class="st"><li>Pilih produk yang diinginkan (pilih varian dan jumlah bila ada), lalu tambahkan ke keranjang.</li><li>Buka keranjang, periksa pesanan Anda, lalu klik <b>“Lanjutkan ke pembayaran”</b>.</li><li>Isi data penerima:<ul><li>Nama penerima</li><li>Nomor WhatsApp</li><li>Alamat lengkap</li><li>Kecamatan &amp; kode pos</li></ul></li><li>Pilih ekspedisi. Ongkir tampil sebagai perkiraan dan akan dikonfirmasi admin.</li><li>Buat pesanan, lalu transfer sesuai nominal yang tampil (termasuk kode unik).</li><li>Kirim bukti transfer beserta nomor pesanan ke WhatsApp admin untuk diverifikasi.</li><li>Pesanan diproses dan dikirim, lalu nomor resi diberikan setelah paket dikirim.</li></ol><p class="ps"><b>Pre Order:</b> pembayaran dilakukan saat produk ready, dan pesanan dikirim sesuai jadwal PO. Admin akan menginformasikan lewat WhatsApp.</p></section><section class="soc" aria-label="Media sosial"><a class="sl" href="https://wa.me/6285846189815" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.900 11.900 0 0 0 4.600 4c.6.3 1.1.4 1.5.5a3.6 3.6 0 0 0 1.7-.1 2.8 2.8 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c0-.1-.2-.2-.5-.3z"/></svg><span><b>WhatsApp</b><small>Pemesanan dan tanya stok</small></span></a><a class="sl" href="https://chat.whatsapp.com/HzYEJ5RUk4cFkwvgZ1qz41?mode=gi_t" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.900 11.900 0 0 0 4.600 4c.6.3 1.1.4 1.5.5a3.6 3.6 0 0 0 1.7-.1 2.8 2.8 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c0-.1-.2-.2-.5-.3z"/></svg><span><b>Grup Member WhatsApp</b><small>Potongan harga pre-order buku terbaru</small></span></a><a class="sl" href="https://t.me/haqabookssale" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M21.600 3.400 2.700 10.700c-1 .4-1 1-.2 1.200l4.800 1.500 1.900 5.800c.2.600.4.700.9.700s.6-.2.9-.5l2.300-2.200 4.700 3.500c.9.5 1.500.2 1.700-.8l3-14.500c.3-1.200-.4-1.700-1.400-1.300zM8.700 13.400l9-5.700c.4-.3.800-.1.500.2l-7.300 6.700-.3 3.100-1.900-4.300z"/></svg><span><b>Telegram Sale</b><small>Katalog dan preview lengkap khusus Sale</small></span></a><a class="sl" href="https://t.me/haqabooks" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M21.600 3.400 2.700 10.700c-1 .4-1 1-.2 1.200l4.800 1.500 1.900 5.800c.2.600.4.700.9.700s.6-.2.9-.5l2.300-2.200 4.700 3.500c.9.5 1.500.2 1.700-.8l3-14.500c.3-1.200-.4-1.700-1.400-1.300zM8.700 13.400l9-5.700c.4-.3.800-.1.500.2l-7.300 6.700-.3 3.100-1.900-4.300z"/></svg><span><b>Telegram PO</b><small>Katalog dan materi promosi buku PO</small></span></a><a class="sl" href="https://www.instagram.com/haqabooks" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.300" cy="6.700" r="1.100" fill="currentColor" stroke="none"/></svg><span><b>Instagram</b><small>@haqabooks</small></span></a></section><section class="end"><p>Jazakumullahu khairan atas kepercayaan dan dukungannya kepada HAQA Books.</p><p>Semoga setiap buku yang sampai di tangan Anda menjadi wasilah bertambahnya ilmu, tumbuhnya amal, dan kebaikan bagi keluarga.</p><p><b>Barakallahu fiikum</b></p></section><footer>Harga dan stok dapat berubah sewaktu-waktu. <a href="syarat-ketentuan.html" style="color:inherit;font-weight:700">Syarat &amp; Ketentuan Partner</a></footer><div class="cbar"><button id="cb" class="cbtn"></button><button id="fb" class="fbtn" aria-label="Lihat favorit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span id="fc">0</span></button><a id="cw" class="cw" target="_blank" rel="noopener" href="https://wa.me/6285846189815">Chat WA</a></div><div id="ov" class="ov" hidden><div class="md" role="dialog" aria-modal="true" aria-label="Detail"><button id="x" class="xb" aria-label="Tutup">✕</button><div id="mb"></div></div></div><div id="toast" role="status"></div><aside id="mp" class="mpromo" aria-label="Promo member dan reseller"><a href="https://wa.me/6285846189815?text=Assalamu%E2%80%99alaikum%2C%20saya%20ingin%20daftar%20member%2Freseller%20HAQA%20Books." target="_blank" rel="noopener"><b>DAFTAR MEMBER / RESELLER</b><span>DISKON UP TO 40%</span></a><button id="mpx" type="button" aria-label="Tutup promo">×</button></aside><script>window.HAQA_SINGLE=1;</script><script>/* HAQA Books – data produk.
    Satu baris = satu produk. Untuk menambah buku: tambahkan baris baru di akhir dan letakkan foto di folder images/.
    Kolom penting: i (id), t (judul), p (penerbit), f (jenis), pr (harga), sp (harga coret), st (ready|po|poon|kirim|closed|habis),
    a (label usia), lo/hi (rentang usia untuk filter), themes (tema utama), sub (subtema), images (cover + galeri). */
@@ -961,7 +980,28 @@ function render(){var s=norm(S.q).trim(),ub=S.u?S.u.split('-').map(Number):null;
  var P=[],i;for(i=1;i<=T;i++){if(i===1||i===T||Math.abs(i-pg)<=1||(pg<=3&&i<=4)||(pg>=T-2&&i>=T-3))P.push(i);else if(P[P.length-1]!=='\u2026')P.push('\u2026')}
  var N=$('nums');N.innerHTML='';P.forEach(function(p){var e=document.createElement(p==='\u2026'?'span':'button');e.textContent=p;if(p!=='\u2026'){e.setAttribute('aria-label','Halaman '+p);if(p===pg)e.setAttribute('aria-current','page');e.onclick=function(){pg=p;render();$('q').scrollIntoView({behavior:'smooth'})}}N.appendChild(e)});
  $('pv').disabled=pg<=1;$('nx').disabled=pg>=T;syncUI()}
-function syncUI(){var adv=(S.p?1:0)+(S.f?1:0)+(S.o?1:0)+((S.pmin||S.pmax)?1:0),fb=$('fadv');fb.hidden=!adv;fb.textContent=adv;$('fx').hidden=!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax);$('st2').textContent=S.cgn||'Semua Produk';document.querySelectorAll('.kc').forEach(function(k){k.classList.toggle('on',!!S.cg&&k.dataset.cg===S.cgn)});$('qx').hidden=!S.q}
+
+/* ---------- beranda: slider Ready Stock / Pre Order / Promo ---------- */
+var HM_N=8;
+function hmHome(){return!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax)}
+function homeSync(){var h=$('hm'),on=!!h&&!!h.firstChild&&hmHome();if(h)h.hidden=!on;document.body.classList.toggle('hm-on',on)}
+function hmArrows(){document.querySelectorAll('#hm .hs').forEach(function(x){var r=x.querySelector('.rail'),p=x.querySelector('.rp'),n=x.querySelector('.rn');if(!r||!p||!n)return;var m=r.scrollWidth-r.clientWidth;p.classList.toggle('on',r.scrollLeft>4);n.classList.toggle('on',m>4&&r.scrollLeft<m-4)})}
+function buildHome(){var el=$('hm');if(!el)return;var M={};cs.forEach(function(c){M[c.dataset.i]=c});
+ var A='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+ var S3=[
+  {k:'ready',t:'Produk Ready Stock',s:'Produk yang tersedia untuk langsung dipesan.',L:ORDER.filter(function(b){return b.st==='ready'})},
+  {k:'poon',t:'Pre-Order Berlangsung',s:'Koleksi yang bisa dipesan sebelum tersedia.',L:ORDER.filter(function(b){return b.st==='poon'&&!poClosed(b)&&b.ps!=='Belum Dibuka'})},
+  {k:'promo',t:'Promo Spesial',s:'Harga lebih hemat untuk koleksi pilihan.',L:ORDER.filter(function(b){return b.promo||b.st==='po'}).sort(function(x,y){if((x.pf||0)!==(y.pf||0))return(y.pf||0)-(x.pf||0);if(adult(x)!==adult(y))return adult(x)?1:-1;if(pubRank(x)!==pubRank(y))return pubRank(x)-pubRank(y);return x.i-y.i})}];
+ S3.forEach(function(d){var L=d.L.slice(0,HM_N).filter(function(b){return M[b.i]});if(!L.length)return;
+  var sec=document.createElement('section');sec.className='hs';sec.setAttribute('aria-label',d.t);
+  sec.innerHTML='<div class="hh"><div><h2>'+d.t+'</h2><p>'+d.s+'</p></div><button type="button" class="hall" data-hm="'+d.k+'">Lihat Semua '+A+'</button></div><div class="rw"><button type="button" class="rb rp" data-hmn="-1" aria-label="Geser ke kiri"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><div class="rail" tabindex="-1"></div><button type="button" class="rb rn" data-hmn="1" aria-label="Geser ke kanan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>';
+  var r=sec.querySelector('.rail');L.forEach(function(b){var c=M[b.i].cloneNode(true);c.classList.remove('hide');r.appendChild(c)});
+  r.addEventListener('scroll',hmArrows,{passive:true});el.appendChild(sec)});
+ el.addEventListener('click',function(e){var t=e.target.closest('button[data-hm],button[data-hmn]');if(!t)return;e.stopPropagation();
+  if(t.dataset.hm){var c=document.querySelector('#nt button[data-v="'+t.dataset.hm+'"]');if(c)c.click();var h=$('ph2');if(h)h.scrollIntoView({behavior:'smooth'});return}
+  var r=t.closest('.rw').querySelector('.rail');r.scrollBy({left:(+t.dataset.hmn)*r.clientWidth*.9,behavior:'smooth'})});
+ window.addEventListener('resize',hmArrows);setTimeout(hmArrows,60);homeSync()}
+function syncUI(){homeSync();var adv=(S.p?1:0)+(S.f?1:0)+(S.o?1:0)+((S.pmin||S.pmax)?1:0),fb=$('fadv');fb.hidden=!adv;fb.textContent=adv;$('fx').hidden=!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax);$('st2').textContent=S.cgn||'Semua Produk';document.querySelectorAll('.kc').forEach(function(k){k.classList.toggle('on',!!S.cg&&k.dataset.cg===S.cgn)});$('qx').hidden=!S.q}
 function openAdv(v){$('adv').hidden=!v;$('fa').setAttribute('aria-expanded',v?'true':'false')}
 function catOf(b){var t=norm(b.t||''),ty=typesOf(b.pid&&B[b.pid]?B[b.pid]:b)[0];
  if(ty==='Kalender'||/kalender/.test(t))return'Kalender';
@@ -979,7 +1019,7 @@ function resetAll(){S.q=S.u=S.t=S.p=S.f=S.st=S.o='';S.cg=null;S.cgn='';S.pmin=S.
 function set(k,v){S[k]=v;pg=1;render()}
 
 /* ---------- event ---------- */
-document.addEventListener('click',function(e){if(e.target.closest('#g .c.sold'))return;var t=e.target.closest('button,a');if(!t){var cc=e.target.closest('#g .c');if(cc)detail(+cc.dataset.i);return}
+document.addEventListener('click',function(e){if(e.target.closest('#g .c.sold,#hm .c.sold'))return;var t=e.target.closest('button,a');if(!t){var cc=e.target.closest('#g .c,#hm .c');if(cc)detail(+cc.dataset.i);return}
  if(t.tagName==='A'&&(t.id==='cw'||t.classList.contains('cw'))){var pp=fixCart();t.href=Object.keys(cart).length?'checkout.html':waUrl('');if(pp)qpop(pp);return}
  var a=t.dataset&&t.dataset.a,i=t.dataset&&t.dataset.i,b=i!==undefined?B[i]:null;
  if(t.id==='x')return close_();
@@ -1051,7 +1091,7 @@ $('sh').addEventListener('click',function(e){e.preventDefault();var u=baseUrl(),
 mbnRender();
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='mbk'){e.preventDefault();mbAct()}});
 document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='vsel')return;var p=+t.dataset.i,v=+t.value;if(v){selVar(p,v);return}gShow(0);var mx=$('mbx');if(mx)mx.outerHTML=mbBox(B[p]);$('vp').innerHTML='Mulai '+vprice(B[p]);$('va').innerHTML='<button class="buy" disabled>Pilih varian dulu</button>'});
-initCards();Object.keys(likes).forEach(lkSync);favCount();
+initCards();buildHome();Object.keys(likes).forEach(lkSync);favCount();
 var _pp=fixCart();render();bar();if(_pp)qpop(_pp);openFromHash();
 if('serviceWorker' in navigator&&!window.HAQA_SINGLE&&/^https?:$/.test(location.protocol)){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}}
 setTimeout(function(){if(location.hash==='#keranjang'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}cartView()}},0);
