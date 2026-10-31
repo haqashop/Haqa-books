@@ -391,6 +391,11 @@ button,a,select,input{touch-action:manipulation;-webkit-tap-highlight-color:tran
 .bimg{position:absolute;bottom:0;left:calc(var(--k)*var(--s));height:100px;width:auto;max-width:none;object-fit:contain;border-radius:8px;box-shadow:0 8px 18px rgba(0,0,0,.38);background:rgba(255,255,255,.15);transform:rotate(calc((var(--k) - 1)*7deg));transform-origin:50% 100%}
 .bimg:nth-child(1){z-index:1}.bimg:nth-child(2){z-index:3;height:122px}.bimg:nth-child(3){z-index:2}
 @media(max-width:420px){.bimg:nth-child(3){display:none}.bst{width:112px}}
+.cng{background:var(--ac2);border:1px solid var(--ln);border-radius:14px;padding:10px 12px;margin:0 0 10px;font-size:.88rem;line-height:1.45}
+.cng p{margin:0}.cng p+p,.cgr+p{margin-top:8px;padding-top:8px;border-top:1px dashed var(--ln)}
+.cgb{height:8px;border-radius:99px;background:var(--ln);overflow:hidden;margin:7px 0 2px}.cgb i{display:block;height:100%;background:var(--ac);border-radius:99px;transition:width .3s}
+.cgr{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cgx{font:800 .8rem "DM Sans",sans-serif;padding:6px 12px;border-radius:99px;border:1.5px solid var(--ac);background:var(--card);color:var(--ac);cursor:pointer;text-decoration:none;white-space:nowrap}
 </style><script>(function(){
 var ov=null,tm=0;
 window.hqBusy=function(t){
@@ -968,7 +973,7 @@ function qclose(){var el=$('qm');if(el)el.hidden=true;if($('ov').hidden)document
 
 /* ---------- keranjang & favorit ---------- */
 function cartView(){fixCart();var L=items();if(!L.length){open_('<h3>Keranjang</h3><p>Belum ada buku. Klik <b>+ Keranjang</b> pada buku pilihan Anda.</p>');return}
- var n=0,t=0,h='<h3>Keranjang</h3>'+L.map(function(b){var q=cart[b.i],u=unit(b,q);n+=q;t+=u*q;return'<div class="ci cx"><div class="cn"><b>'+esc(pname(b))+'</b>'+(b.pid?'<em>Varian: '+esc(b.vl)+(b.tr?' \u00B7 '+esc(b.tr):'')+'</em>':'')+'<span>'+money(u)+'/pcs</span>'+mbHint(b,q)+'</div><div class="q"><button type="button" data-a="cm" data-i="'+b.i+'" aria-label="Kurangi">\u2212</button><span class="qv">'+q+'</span><button type="button" data-a="cp" data-i="'+b.i+'" aria-label="Tambah">+</button></div><div class="cs"><span>Subtotal: <b>'+money(u*q)+'</b></span><button type="button" class="cdel" data-a="cd" data-i="'+b.i+'" aria-label="Hapus dari keranjang" title="Hapus"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"/></svg></button></div></div>'}).join('')+'<div class="tot"><span>'+n+' buku</span><span>'+money(t)+'</span></div><a class="cw" href="checkout.html" style="display:block;text-align:center;text-decoration:none">Lanjutkan ke pembayaran</a>';open_(h)}
+ var n=0,t=0,h='<h3>Keranjang</h3>'+cartNudge(L)+L.map(function(b){var q=cart[b.i],u=unit(b,q);n+=q;t+=u*q;return'<div class="ci cx"><div class="cn"><b>'+esc(pname(b))+'</b>'+(b.pid?'<em>Varian: '+esc(b.vl)+(b.tr?' \u00B7 '+esc(b.tr):'')+'</em>':'')+'<span>'+money(u)+'/pcs</span>'+mbHint(b,q)+'</div><div class="q"><button type="button" data-a="cm" data-i="'+b.i+'" aria-label="Kurangi">\u2212</button><span class="qv">'+q+'</span><button type="button" data-a="cp" data-i="'+b.i+'" aria-label="Tambah">+</button></div><div class="cs"><span>Subtotal: <b>'+money(u*q)+'</b></span><button type="button" class="cdel" data-a="cd" data-i="'+b.i+'" aria-label="Hapus dari keranjang" title="Hapus"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"/></svg></button></div></div>'}).join('')+'<div class="tot"><span>'+n+' buku</span><span>'+money(t)+'</span></div><a class="cw" href="checkout.html" style="display:block;text-align:center;text-decoration:none">Lanjutkan ke pembayaran</a>';open_(h)}
 function favView(){var L=Object.keys(likes).map(function(k){return B[k]}).filter(Boolean);if(!L.length){open_('<h3>Favorit</h3><p>Belum ada favorit. Klik ikon love pada buku yang Anda suka.</p>');$('mb').dataset.v='fav';return}
  var h='<h3>Favorit ('+L.length+' buku)</h3>'+L.map(function(b){return'<div class="ci"><div><b>'+esc(b.t)+'</b><span>'+(b.pr?money(b.pr):'Harga belum tertera')+'</span></div><div class="fa"><button class="fv" data-a="fd" data-i="'+b.i+'">Lihat</button>'+lkHtml(b.i)+'</div></div>'}).join('');open_(h);$('mb').dataset.v='fav'}
 
@@ -1057,6 +1062,22 @@ function buildBanner(){var el=$('bn');if(!el)return;
  ['mouseleave','focusout','touchend'].forEach(function(n){el.addEventListener(n,function(){setTimeout(function(){pause=0},3000)},{passive:true})});
  if(sl.length>1&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){clearInterval(BN_T);BN_T=setInterval(function(){if(pause||document.hidden||el.hidden)return;go_(cur+1)},5000)}
  homeSync()}
+
+/* ---------- bar progres keranjang ---------- */
+function unitNM(b,q){return(b.st==='poon'&&q>1&&b.pr)?Math.round(b.pr*(1-PO_DISC)):b.pr}
+function cartNudge(L){if(!L.length)return'';var mem=isMem(),cur=0,mt=0,best=null;
+ L.forEach(function(b){var q=cart[b.i]||0,u=unitNM(b,q),m=mprice(b,q);cur+=u*q;mt+=((m&&m<u)?m:u)*q;
+  if(!b.pr||b.st==='habis'||b.st==='closed')return;var qq=gq(b,q),nu=0,n=0;
+  if(mem){var t=mtiers(b);for(var k=0;k<t.length;k++)if(t[k][0]>qq){n=t[k][0];nu=Math.round(b.pr*(1-t[k][1]/100));break}
+   if(n&&b.st==='poon')nu=Math.min(nu,Math.round(b.pr*(1-PO_DISC)))}
+  else if(b.st==='poon'&&q===1){n=2;nu=Math.round(b.pr*(1-PO_DISC))}
+  if(!n)return;var cu=unit(b,q);if(nu>=cu)return;var need=n-qq,sv=(q+need)*(cu-nu);
+  if(!best||need<best.need||(need===best.need&&sv>best.sv))best={b:b,q:qq,n:n,need:need,nu:nu,sv:sv}});
+ var h='';
+ if(best)h+='<p><b>Tambah '+best.need+' pcs lagi</b> '+esc(pname(best.b))+', harga jadi <b>'+money(best.nu)+'</b>/pcs, hemat <b>'+money(best.sv)+'</b>.</p><div class="cgb" role="progressbar" aria-valuemin="0" aria-valuemax="'+best.n+'" aria-valuenow="'+best.q+'" aria-label="Menuju harga lebih hemat"><i style="width:'+Math.min(100,Math.round(best.q/best.n*100))+'%"></i></div><div class="cgr"><small>'+best.q+' dari '+best.n+' pcs</small><button type="button" class="cgx" data-a="cp" data-i="'+best.b.i+'">+ Tambah 1</button></div>';
+ else if(mem&&cur>0)h+='<p>\u2B50 Harga member terbaik sudah Anda dapatkan.</p>';
+ if(!mem&&cur-mt>0)h+='<p>\u2B50 <b>Gabung member</b>, total belanja ini jadi <b>'+money(mt)+'</b> (hemat '+money(cur-mt)+'). <a class="cgx" href="'+MB_URL+'" target="_blank" rel="noopener">Gabung Member</a></p>';
+ return h?'<div class="cng">'+h+'</div>':''}
 function syncUI(){homeSync();typeSync();var adv=(S.p?1:0)+(S.f?1:0)+(S.o?1:0)+((S.pmin||S.pmax)?1:0),fb=$('fadv');fb.hidden=!adv;fb.textContent=adv;$('fx').hidden=!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax);$('st2').textContent=S.cgn||'Semua Produk';document.querySelectorAll('.kc[data-cg]').forEach(function(k){k.classList.toggle('on',!!S.cg&&k.dataset.cg===S.cgn)});$('qx').hidden=!S.q}
 function openAdv(v){$('adv').hidden=!v;$('fa').setAttribute('aria-expanded',v?'true':'false')}
 function catOf(b){var t=norm(b.t||''),ty=typesOf(b.pid&&B[b.pid]?B[b.pid]:b)[0];
