@@ -763,7 +763,9 @@ function isMem(){try{return localStorage.getItem('hq_member_v2')===MB_H}catch(e)
 function mbase(b){var P=(b.pid&&B[b.pid])||b;if(P.promo)return 0.10;if(b.st==='poon')return 0.15;if(b.st==='ready'&&(b.tr==='Harga PO'||b.tr==='Harga Spesial'))return 0.15;return 0.10}
 function mtiers(b){var P=(b.pid&&B[b.pid])||b,t=b.mt||P.mt;if(t)return t.map(function(x){return[x[0],x[1]/100]});var o=[[1,mbase(b)]];[[3,20],[5,25],[10,30]].forEach(function(x){if(x[1]/100>o[0][1])o.push([x[0],x[1]/100])});return o}
 function mbase(b,P){if(P.promo)return 0.10;if(b.st==='poon')return 0.15;var pt=b.pt||P.pt;if(b.st==='ready'&&pt&&pt.length>1&&TODAY<pt[pt.length-1][0])return 0.15;return 0.10}
-function mtiers(b){var P=(b.pid&&B[b.pid])||b,t=b.mt||P.mt;if(t)return t;var r=Math.round(mbase(b,P)*100);return b.st==='poon'?[[1,r],[3,20],[5,25],[10,30]]:[[1,r]]}
+function rsT(b){var t=mtiers(b);return t&&t.length>1?t.filter(function(x){return x[0]>=2}):null}
+function rs2(t){if(!t||t.length<2)return t;var a=t[0][1]+3,o=[t[0]],d=0;t.slice(1).forEach(function(x){if(x[0]===2)return;if(!d&&x[0]>2){o.push([2,a]);d=1}o.push(x)});if(!d)o.push([2,a]);return o}
+function mtiers(b){var P=(b.pid&&B[b.pid])||b,t=b.mt||P.mt;if(t)return rs2(t);var r=Math.round(mbase(b,P)*100);return b.st==='poon'?rs2([[1,r],[3,20],[5,25],[10,30]]):[[1,r]]}
 function mrate(b,q){if(b.st==='habis')return 0;var t=mtiers(b),r=0;q=q?gq(b,q):1;for(var k=0;k<t.length;k++)if(q>=t[k][0])r=t[k][1]/100;return r} function gq(b,q){var P=(b.pid&&B[b.pid])||b;if(!b.mg||!P.vr)return q;var n=0;P.vr.forEach(function(v){if(B[v].mg===b.mg)n+=(cart&&cart[v])||0});return Math.max(q,n)}
 function mprice(b,q){var r=mrate(b,q);return(b&&b.pr&&r)?Math.round(b.pr*(1-r)):0}
 function unit(b,q){var u=(b.st==='poon'&&q>1&&b.pr)?Math.round(b.pr*(1-PO_DISC)):b.pr;if(isMem()){var m=mprice(b,q);if(m&&m<u)u=m}return u}
@@ -779,11 +781,11 @@ function rsRows(b){var P=(b.pid&&B[b.pid])||b,t=b.rs||P.rs;return t&&t.length?t:
 function pcsTxt(q){return q+(q>1?'+':'')+' pcs'}
 function tierList(b,t){return'<ul class="mbtr">'+t.map(function(x){return'<li><span>'+pcsTxt(x[0])+'</span><b>Diskon '+x[1]+'%</b><span>'+money(Math.round(b.pr*(1-x[1]/100)))+'/pcs</span></li>'}).join('')+'</ul>'}
 function rsTable(b,R){return'<div class="rst"><table><thead><tr><th>Jumlah pembelian</th><th>Harga per item</th><th>Diskon</th><th>Hemat/item</th></tr></thead><tbody>'+R.map(function(x,k){var n=R[k+1],lo=x[0],hi=n?n[0]-1:0,rg=R.length===1?'Semua jumlah':hi?(lo===hi?lo+' pcs':lo+' \u2013 '+hi+' pcs'):'\u2265 '+lo+' pcs';return'<tr><td>'+rg+'</td><td>'+money(Math.round(b.pr*(1-x[1]/100)))+'</td><td><span class="mbdc">'+x[1]+'%</span></td><td class="hm">'+money(Math.round(b.pr*x[1]/100))+'</td></tr>'}).join('')+'</tbody></table></div>'}
-function rsBox(b){var o=!!RS_OPEN,R=rsRows(b),h='<div class="rsx"><button type="button" class="rshd" data-a="rt" data-i="'+b.i+'" aria-expanded="'+o+'"><span class="mbic sm">'+I_STORE+'</span><span class="mbtt"><b>Harga reseller</b><small>Dapatkan harga lebih rendah untuk pembelian jumlah tertentu.</small></span><span class="mbch'+(o?' up':'')+'">'+I_CH+'</span></button>';
+function rsBox(b){if(!rsT(b))return'';var o=!!RS_OPEN,R=rsRows(b),h='<div class="rsx"><button type="button" class="rshd" data-a="rt" data-i="'+b.i+'" aria-expanded="'+o+'"><span class="mbic sm">'+I_STORE+'</span><span class="mbtt"><b>Harga reseller</b><small>Dapatkan harga lebih rendah untuk pembelian jumlah tertentu.</small></span><span class="mbch'+(o?' up':'')+'">'+I_CH+'</span></button>';
  if(!o)return h+'<button type="button" class="rsrow" data-a="rt" data-i="'+b.i+'"><span>'+I_USER+'Lihat harga reseller</span><span class="mbch rt">'+I_CH+'</span></button></div>';
  if(!isMem())h+='<p class="rsn rslk">\uD83D\uDD12 Harga bertingkat khusus member. Masukkan kode member di atas untuk melihatnya.</p>';
  else if(isV(b))h+='<p class="rsn">Pilih varian terlebih dahulu untuk melihat harga bertingkat.</p>';
- else if(b.pr)h+=rsTable(b,mtiers(b));
+ else if(b.pr)h+=rsTable(b,rsT(b));
  return h+tncHTML(b)+'</div>'}
 function mbBox(b){var m=mprice(b);if(!m)return'';var mem=isMem(),op=!!(MB_OPEN||mem),r=Math.round(mrate(b)*100),v=isV(b),t=mtiers(b),ref=b.sp&&b.sp>b.pr?'harga promo reguler':'harga reguler';
  var h='<section class="mbx" id="mbx" data-i="'+b.i+'"><button type="button" class="mbhd" data-a="mt" data-i="'+b.i+'" aria-expanded="'+op+'"'+(mem?' disabled':'')+'><span class="mbic">'+I_PCT+'</span><span class="mbtt"><b>Tambahan diskon '+r+'% untuk member</b></span><span class="mbch'+(op?' up':(' rt'))+'">'+I_CH+'</span>';

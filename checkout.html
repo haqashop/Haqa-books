@@ -202,7 +202,9 @@ function toast(m){var t=$('toast');t.textContent=m;t.className='on';clearTimeout
 function isMem(){try{return localStorage.getItem('hq_member_v2')===MB_H}catch(e){return false}}
 function PO_D(b,q){return(b.st==='poon'&&q>1&&b.pr)?Math.round(b.pr*.95):b.pr}
 function mbase(b,P){if(P.promo)return .10;if(b.st==='poon')return .15;var pt=b.pt||P.pt;if(b.st==='ready'&&pt&&pt.length>1&&TODAY<pt[pt.length-1][0])return .15;return .10}
-function mtiers(b){var P=(b.pid&&B[b.pid])||b,t=b.mt||P.mt;if(t)return t;var r=Math.round(mbase(b,P)*100);return b.st==='poon'?[[1,r],[3,20],[5,25],[10,30]]:[[1,r]]}
+function rsT(b){var t=mtiers(b);return t&&t.length>1?t.filter(function(x){return x[0]>=2}):null}
+function rs2(t){if(!t||t.length<2)return t;var a=t[0][1]+3,o=[t[0]],d=0;t.slice(1).forEach(function(x){if(x[0]===2)return;if(!d&&x[0]>2){o.push([2,a]);d=1}o.push(x)});if(!d)o.push([2,a]);return o}
+function mtiers(b){var P=(b.pid&&B[b.pid])||b,t=b.mt||P.mt;if(t)return rs2(t);var r=Math.round(mbase(b,P)*100);return b.st==='poon'?rs2([[1,r],[3,20],[5,25],[10,30]]):[[1,r]]}
 function gq(b,q,cart){var P=(b.pid&&B[b.pid])||b;if(!b.mg||!P.vr)return q;var n=0;P.vr.forEach(function(v){if(B[v]&&B[v].mg===b.mg)n+=cart[v]||0});return Math.max(q,n)}
 function unit(b,q,cart){var u=PO_D(b,q);if(isMem()&&b.st!=='habis'){var t=mtiers(b),r=0,g=gq(b,q,cart);t.forEach(function(x){if(g>=x[0])r=x[1]/100});var m=r?Math.round(b.pr*(1-r)):0;if(m&&m<u)u=m}return u}
 function wg(b){var m=/([\d.,]+)\s*(kg|g)/i.exec(b.w||'');if(!m)return 250;var n=parseFloat(m[1].replace(',','.'));return m[2].toLowerCase()==='kg'?n*1000:n}
@@ -236,10 +238,10 @@ var TNC=['Harga member/reseller berlaku untuk akun dengan kode member aktif.','B
 function mrate(b,q){if(!b||b.st==='habis'||!b.pr)return 0;var t=mtiers(b),r=0,g=gq(b,q,cart);t.forEach(function(x){if(g>=x[0])r=x[1]/100});return r}
 function mprice(b,q){var r=mrate(b,q);return r?Math.round(b.pr*(1-r)):0}
 function tncHTML(){var o=!!TC_OPEN;return'<button type="button" class="tnc" data-cm="tc" aria-expanded="'+o+'">Syarat &amp; ketentuan</button>'+(o?'<ol class="tncl">'+TNC.map(function(x){return'<li>'+esc(x)+'</li>'}).join('')+'</ol>':'')}
-function cmRs(E){var o=!!RS_OPEN,h='<div class="rsx"><button type="button" class="rshd" data-cm="rt" aria-expanded="'+o+'"><span class="mbic sm">'+I_STORE+'</span><span class="mbtt"><b>Harga reseller</b><small>Dapatkan harga lebih rendah untuk pembelian jumlah tertentu.</small></span><span class="mbch'+(o?' up':'')+'">'+I_CH+'</span></button>';
+function cmRs(E){E=E.filter(function(x){return rsT(x.b)});if(!E.length)return'';var o=!!RS_OPEN,h='<div class="rsx"><button type="button" class="rshd" data-cm="rt" aria-expanded="'+o+'"><span class="mbic sm">'+I_STORE+'</span><span class="mbtt"><b>Harga reseller</b><small>Dapatkan harga lebih rendah untuk pembelian jumlah tertentu.</small></span><span class="mbch'+(o?' up':'')+'">'+I_CH+'</span></button>';
  if(!o)return h+'<button type="button" class="rsrow" data-cm="rt"><span>'+I_USER+'Lihat harga reseller</span><span class="mbch rtt">'+I_CH+'</span></button></div>';
  if(!isMem())h+='<p class="rsn rslk">\uD83D\uDD12 Harga bertingkat khusus member. Masukkan kode member di atas untuk melihatnya.</p>';
- else h+=E.map(function(x){return(E.length>1?'<p class="cmt">'+esc(x.b.t)+'</p>':'')+rsTable(x.b,mtiers(x.b))}).join('');
+ else h+=E.map(function(x){return(E.length>1?'<p class="cmt">'+esc(x.b.t)+'</p>':'')+rsTable(x.b,rsT(x.b))}).join('');
  return h+tncHTML()+'</div>'}
 function cmBox(){var E=lines().map(function(l){return{b:l.b,q:l.q,reg:PO_D(l.b,l.q),m:mprice(l.b,l.q)}}).filter(function(x){return x.m&&x.m<x.reg});if(!E.length)return'';
  var mem=isMem(),op=!!(MB_OPEN||mem),rs=E.map(function(x){return Math.round(mrate(x.b,x.q)*100)}),hi=Math.max.apply(null,rs),same=rs.every(function(r){return r===hi});
