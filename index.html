@@ -353,7 +353,7 @@ button,a,select,input{touch-action:manipulation;-webkit-tap-highlight-color:tran
 .gm.ld::after{content:"";position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border:4px solid var(--ln);border-top-color:var(--ac);border-radius:50%;animation:hqspin .8s linear infinite;pointer-events:none;z-index:3}
 :is(#g,#hm) .c img.ld{background:var(--hqsp) center/30px 30px no-repeat,var(--cv,var(--ac2))}
 
-.hm[hidden]{display:none}.hm-on .info,.hm-on #g,.hm-on .pager,.hm-on .nums,.hm-on .emp{display:none}.hm{margin:6px 0 4px}
+.kt{margin-top:2px}.kt[hidden]{display:none}.kt .kc.t .ci svg{width:28px;height:28px}.hm[hidden]{display:none}.hm-on .info,.hm-on #g,.hm-on .pager,.hm-on .nums,.hm-on .emp{display:none}.hm{margin:6px 0 4px}
 .hs{margin:0 0 18px}
 .hh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:10px}
 .hh h2{font:700 1.45rem/1.2 Lora,Georgia,serif;color:var(--ink);margin:0}
@@ -1002,7 +1002,18 @@ function buildHome(){var el=$('hm');if(!el)return;var M={};cs.forEach(function(c
   if(t.dataset.hm){var c=document.querySelector('#nt button[data-v="'+t.dataset.hm+'"]');if(c)c.click();var h=$('ph2');if(h)h.scrollIntoView({behavior:'smooth'});return}
   var r=t.closest('.rw').querySelector('.rail');r.scrollBy({left:(+t.dataset.hmn)*r.clientWidth*.9,behavior:'smooth'})});
  window.addEventListener('resize',hmArrows);setTimeout(hmArrows,60);homeSync()}
-function syncUI(){homeSync();var adv=(S.p?1:0)+(S.f?1:0)+(S.o?1:0)+((S.pmin||S.pmax)?1:0),fb=$('fadv');fb.hidden=!adv;fb.textContent=adv;$('fx').hidden=!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax);$('st2').textContent=S.cgn||'Semua Produk';document.querySelectorAll('.kc').forEach(function(k){k.classList.toggle('on',!!S.cg&&k.dataset.cg===S.cgn)});$('qx').hidden=!S.q}
+
+/* ---------- ikon jenis buku (muncul saat kategori Buku dipilih) ---------- */
+var KT_IC={'Boardbook':'<rect x="5" y="4" width="14" height="16" rx="3.5" stroke-width="2.3"/><path d="M9 4v16"/>','Softcover':'<path d="M6 4h11a1 1 0 0 1 1 1v14H7a1 1 0 0 1-1-1V4z"/><path d="M6 18a1 1 0 0 1 1-1h11"/>','Hardcover':'<rect x="5" y="3.5" width="14" height="17" rx="1.5"/><path d="M8.5 3.5v17M12 8h4"/>','Activity Book':'<path d="M5 4.5h9v15H5z"/><path d="M16.5 8l3 3-6 6H10.5v-3z"/>','Buku Berfitur':'<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M12 8.5v7M8.5 12h7"/>','Soundbook':'<path d="M4 9.5h3l4-3.5v12l-4-3.5H4z"/><path d="M15 9.5a3.8 3.8 0 0 1 0 5M17.8 7a7.5 7.5 0 0 1 0 10"/>','Komik':'<path d="M4 5h16v11h-8.5L7 20v-4H4z"/>'};
+function buildTypes(){var kg=document.querySelector('.kg');if(!kg||$('ktg'))return;var has={};
+ ORDER.forEach(function(b){if(catOf(b)==='Buku')typesOf(b).forEach(function(t){has[t]=1})});
+ var L=Object.keys(KT_IC).filter(function(t){return has[t]});if(!L.length)return;
+ var d=document.createElement('div');d.id='ktg';d.className='kg kt';d.hidden=true;d.setAttribute('aria-label','Jenis buku');
+ d.innerHTML=L.map(function(t,k){return'<button type="button" class="kc t c'+(k%6+1)+'" data-ty="'+esc(t)+'" aria-pressed="false"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true">'+KT_IC[t]+'</svg></span>'+esc(t)+'</button>'}).join('');
+ kg.insertAdjacentElement('afterend',d);
+ d.addEventListener('click',function(e){var t=e.target.closest('.kc');if(!t)return;e.stopPropagation();var y=t.dataset.ty;S.f=S.f===y?'':y;S._kt=!!S.f;$('sf').value=S.f;pg=1;render()})}
+function typeSync(){var k=$('ktg');if(!k)return;k.hidden=S.cgn!=='Buku';k.querySelectorAll('.kc').forEach(function(x){var on=S.f===x.dataset.ty;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)})}
+function syncUI(){homeSync();typeSync();var adv=(S.p?1:0)+(S.f?1:0)+(S.o?1:0)+((S.pmin||S.pmax)?1:0),fb=$('fadv');fb.hidden=!adv;fb.textContent=adv;$('fx').hidden=!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax);$('st2').textContent=S.cgn||'Semua Produk';document.querySelectorAll('.kc[data-cg]').forEach(function(k){k.classList.toggle('on',!!S.cg&&k.dataset.cg===S.cgn)});$('qx').hidden=!S.q}
 function openAdv(v){$('adv').hidden=!v;$('fa').setAttribute('aria-expanded',v?'true':'false')}
 function catOf(b){var t=norm(b.t||''),ty=typesOf(b.pid&&B[b.pid]?B[b.pid]:b)[0];
  if(ty==='Kalender'||/kalender/.test(t))return'Kalender';
@@ -1011,7 +1022,7 @@ function catOf(b){var t=norm(b.t||''),ty=typesOf(b.pid&&B[b.pid]?B[b.pid]:b)[0];
  if(ty==='Puzzle'||(/puzzle|mainan|permainan|learning pack|papan/.test(t)&&!/\bbook\b|buku/.test(t)))return'Puzzle & Mainan';
  if(/pouch|\btas\b|tumbler|\bmug\b|kaos|stiker|poster|pembatas|hampers|boneka|alat tulis|merchandise/.test(t))return'Produk Lainnya';
  return'Buku'}
-function setCg(n){if(S.cgn===n){S.cg=null;S.cgn=''}else{S.cg=true;S.cgn=n}pg=1;render();$('ph2').scrollIntoView({behavior:'smooth'})}
+function setCg(n){if(S.cgn===n){S.cg=null;S.cgn=''}else{S.cg=true;S.cgn=n}if(S.cgn!=='Buku'&&S._kt){S.f='';S._kt=0;$('sf').value=''}pg=1;render();$('ph2').scrollIntoView({behavior:'smooth'})}
 function rngUI(){var a=+$('pmin').value,b=+$('pmax').value,f=$('rf');$('rmin').textContent=rp(a);$('rmax').textContent=rp(b);f.style.left=(a/8e3)+'%';f.style.width=((b-a)/8e3)+'%';$('pmin').style.zIndex=a>400000?3:2}
 function rngSync(){$('pmin').value=S.pmin||0;$('pmax').value=S.pmax||800000;rngUI()}
 rngUI();
@@ -1024,7 +1035,7 @@ document.addEventListener('click',function(e){if(e.target.closest('#g .c.sold,#h
  if(t.tagName==='A'&&(t.id==='cw'||t.classList.contains('cw'))){var pp=fixCart();t.href=Object.keys(cart).length?'checkout.html':waUrl('');if(pp)qpop(pp);return}
  var a=t.dataset&&t.dataset.a,i=t.dataset&&t.dataset.i,b=i!==undefined?B[i]:null;
  if(t.id==='x')return close_();
- if(t.id==='kall'){S.cg=null;S.cgn='';pg=1;render();return}
+ if(t.id==='kall'){S.cg=null;S.cgn='';if(S._kt){S.f='';S._kt=0;$('sf').value=''}pg=1;render();return}
  if(t.dataset&&t.dataset.cg){return setCg(t.dataset.cg)}
  if(t.id==='qx'){S.q='';$('q').value='';pg=1;render();$('q').focus();return}
  if(t.id==='fx')return resetAll();
@@ -1092,7 +1103,7 @@ $('sh').addEventListener('click',function(e){e.preventDefault();var u=baseUrl(),
 mbnRender();
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='mbk'){e.preventDefault();mbAct()}});
 document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='vsel')return;var p=+t.dataset.i,v=+t.value;if(v){selVar(p,v);return}gShow(0);var mx=$('mbx');if(mx)mx.outerHTML=mbBox(B[p]);$('vp').innerHTML='Mulai '+vprice(B[p]);$('va').innerHTML='<button class="buy" disabled>Pilih varian dulu</button>'});
-initCards();buildHome();Object.keys(likes).forEach(lkSync);favCount();
+initCards();buildHome();buildTypes();Object.keys(likes).forEach(lkSync);favCount();
 var _pp=fixCart();render();bar();if(_pp)qpop(_pp);openFromHash();
 if('serviceWorker' in navigator&&!window.HAQA_SINGLE&&/^https?:$/.test(location.protocol)){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}}
 setTimeout(function(){if(location.hash==='#keranjang'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}cartView()}},0);
