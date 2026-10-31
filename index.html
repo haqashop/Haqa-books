@@ -396,6 +396,17 @@ button,a,select,input{touch-action:manipulation;-webkit-tap-highlight-color:tran
 .cgb{height:8px;border-radius:99px;background:var(--ln);overflow:hidden;margin:7px 0 2px}.cgb i{display:block;height:100%;background:var(--ac);border-radius:99px;transition:width .3s}
 .cgr{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .cgx{font:800 .8rem "DM Sans",sans-serif;padding:6px 12px;border-radius:99px;border:1.5px solid var(--ac);background:var(--card);color:var(--ac);cursor:pointer;text-decoration:none;white-space:nowrap}
+@media(prefers-reduced-motion:no-preference){
+.c{transition:transform .18s cubic-bezier(.2,.8,.3,1),box-shadow .2s ease}
+.c:active:not(:has(button:active,a:active)){transform:scale(.965)}
+@media(hover:hover){.c:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(39,51,76,.14)}.c:active:not(:has(button:active,a:active)){transform:scale(.965)}}
+.buy,.add,.ask,.bb,.hall,.cgx{transition:transform .15s ease}
+.buy:active,.add:active,.ask:active,.bb:active,.cgx:active{transform:scale(.94)}
+.bump{animation:cbump .6s cubic-bezier(.3,.7,.4,1)}
+@keyframes cbump{0%{transform:none}28%{transform:translateY(-9px) scale(1.18)}52%{transform:translateY(0) scale(.94)}72%{transform:translateY(-3px) scale(1.04)}100%{transform:none}}
+.rv{opacity:0;transform:translateY(16px)}
+.rv.in{opacity:1;transform:none;transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.3,1)}
+}
 </style><script>(function(){
 var ov=null,tm=0;
 window.hqBusy=function(t){
@@ -1078,6 +1089,14 @@ function cartNudge(L){if(!L.length)return'';var mem=isMem(),cur=0,mt=0,best=null
  else if(mem&&cur>0)h+='<p>\u2B50 Harga member terbaik sudah Anda dapatkan.</p>';
  if(!mem&&cur-mt>0)h+='<p>\u2B50 <b>Gabung member</b>, total belanja ini jadi <b>'+money(mt)+'</b> (hemat '+money(cur-mt)+'). <a class="cgx" href="'+MB_URL+'" target="_blank" rel="noopener">Gabung Member</a></p>';
  return h?'<div class="cng">'+h+'</div>':''}
+
+/* ---------- animasi kecil: muncul saat menggulir + keranjang melompat ---------- */
+function cartBump(){['cb2','cb','cn'].forEach(function(id){var e=$(id);if(!e)return;e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump')})}
+function initMotion(){if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ var cn=$('cn');if(cn&&window.MutationObserver){var last=parseInt(cn.textContent)||0;new MutationObserver(function(){var n=parseInt(cn.textContent)||0;if(n>last)cartBump();last=n}).observe(cn,{childList:true,characterData:true,subtree:true})}
+ if(!('IntersectionObserver' in window))return;
+ var io=new IntersectionObserver(function(es){var k=0;es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);var d=Math.min(k++,5)*70;el.style.transitionDelay=d+'ms';el.classList.add('in');setTimeout(function(){el.classList.remove('rv','in');el.style.transitionDelay=''},d+800)})},{rootMargin:'0px 0px -6% 0px',threshold:.08});
+ document.querySelectorAll('#hm .hs,#g .c,#hm .rail .c,.order,.soc').forEach(function(el){el.classList.add('rv');io.observe(el)})}
 function syncUI(){homeSync();typeSync();var adv=(S.p?1:0)+(S.f?1:0)+(S.o?1:0)+((S.pmin||S.pmax)?1:0),fb=$('fadv');fb.hidden=!adv;fb.textContent=adv;$('fx').hidden=!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax);$('st2').textContent=S.cgn||'Semua Produk';document.querySelectorAll('.kc[data-cg]').forEach(function(k){k.classList.toggle('on',!!S.cg&&k.dataset.cg===S.cgn)});$('qx').hidden=!S.q}
 function openAdv(v){$('adv').hidden=!v;$('fa').setAttribute('aria-expanded',v?'true':'false')}
 function catOf(b){var t=norm(b.t||''),ty=typesOf(b.pid&&B[b.pid]?B[b.pid]:b)[0];
@@ -1168,7 +1187,7 @@ $('sh').addEventListener('click',function(e){e.preventDefault();var u=baseUrl(),
 mbnRender();
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='mbk'){e.preventDefault();mbAct()}});
 document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='vsel')return;var p=+t.dataset.i,v=+t.value;if(v){selVar(p,v);return}gShow(0);var mx=$('mbx');if(mx)mx.outerHTML=mbBox(B[p]);$('vp').innerHTML='Mulai '+vprice(B[p]);$('va').innerHTML='<button class="buy" disabled>Pilih varian dulu</button>'});
-initCards();buildHome();buildTypes();buildBanner();Object.keys(likes).forEach(lkSync);favCount();
+initCards();buildHome();buildTypes();buildBanner();initMotion();Object.keys(likes).forEach(lkSync);favCount();
 var _pp=fixCart();render();bar();if(_pp)qpop(_pp);openFromHash();
 if('serviceWorker' in navigator&&!window.HAQA_SINGLE&&/^https?:$/.test(location.protocol)){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}}
 setTimeout(function(){if(location.hash==='#keranjang'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}cartView()}},0);
