@@ -42,6 +42,7 @@ body{font-size:14px}h1{font:700 28px/1.25 Lora,Georgia,serif;letter-spacing:norm
 .bi .dv{width:1px;align-self:stretch;background:rgba(255,255,255,.35)}
 .brand h1{font:600 clamp(1.35rem,6.4vw,1.9rem)/1.1 Lora,Georgia,serif;letter-spacing:.14em;color:#f2ece0;margin:0}
 .brand .tg{font:italic 400 .9rem/1.3 Lora,Georgia,serif;color:#e8e0d0;margin:4px 0 0}
+.pwrap{position:relative}.pwrap input{padding-right:52px}.pweye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;background:transparent;color:var(--ink);opacity:.6;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:10px;padding:0}.pweye:hover,.pweye:focus-visible{opacity:1}.pweye svg{width:22px;height:22px}
 </style><style>
 /* ===== kompak: skala disesuaikan dengan contoh ===== */
 body{font-size:14px}
@@ -402,9 +403,11 @@ function render0(){
  manage=view==='akun'&&atab==='alamat';
  if(view==='akun')return renderAkun();
  render1()}
+var EYE_ON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',EYE_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.9 10.9 0 0 1 12 19c-7 0-11-7-11-7a19.8 19.8 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.9 10.9 0 0 1 12 4c7 0 11 7 11 7a19.7 19.7 0 0 1-3.17 4.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>';
+function eyeInit(){var q=document.querySelectorAll('#lf input[type="password"]');Array.prototype.forEach.call(q,function(inp){if(inp.parentNode.className==='pwrap')return;var w=document.createElement('div');w.className='pwrap';inp.parentNode.insertBefore(w,inp);w.appendChild(inp);var b=document.createElement('button');b.type='button';b.className='pweye';b.setAttribute('aria-label','Tampilkan kata sandi');b.innerHTML=EYE_ON;b.onclick=function(){var s=inp.type==='password';inp.type=s?'text':'password';b.innerHTML=s?EYE_OFF:EYE_ON;b.setAttribute('aria-label',s?'Sembunyikan kata sandi':'Tampilkan kata sandi')};w.appendChild(b)})}
 function renderLupa(){
  var h='<div class="ey">Lupa kata sandi</div><h1>Atur ulang kata sandi.</h1><p class="mut">Isi email dan no. HP yang dulu Anda daftarkan, lalu buat kata sandi baru.</p><div class="card"><form id="lf" novalidate><label>Email <i>*</i></label><input name="email" type="email" autocomplete="email" autocapitalize="none"><label>No. HP <i>*</i></label><input name="hp" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"><label>Kata sandi baru <i>*</i></label><input name="pw" type="password" autocomplete="new-password" placeholder="Minimal 6 karakter"><p id="er" class="note hide" style="color:var(--rd)"></p><button class="btn" type="submit">Simpan kata sandi baru</button></form><p style="text-align:center;margin-bottom:0"><a href="#" data-go="login">Kembali masuk</a> &middot; <a href="#" data-go="daftar">Buat akun</a></p><p class="note" style="text-align:center">Akun tersimpan di perangkat tempat Anda mendaftar. Jika tidak menemukan akun, silakan <a href="#" data-go="daftar">buat akun baru</a> atau <a href="https://wa.me/'+CFG.wa+'" target="_blank" rel="noopener">hubungi kami via WhatsApp</a>.</p></div>';
- $('app').innerHTML=h;
+ $('app').innerHTML=h;eyeInit();
  $('lf').onsubmit=function(e){e.preventDefault();var f=e.target.elements,er=$('er'),pw=f.pw.value;function bad(t){er.textContent=t;er.className='note'}
   var em=f.email.value.trim().toLowerCase(),hp=normHp(f.hp.value);
   if(!/^\S+@\S+\.\S+$/.test(em))return bad('Email tidak valid.');
@@ -415,7 +418,7 @@ function renderLupa(){
   var salt=String(Date.now());
   sha(salt+pw).then(function(h){ex.salt=salt;ex.h=h;sv('hq_users',us);doLogin(ex);toast('Kata sandi berhasil diganti')})}}
 function renderAuth(m){if(m==='lupa')return renderLupa();var r=m==='daftar',h='<div class="ey">'+(r?'Buat akun':'Masuk')+'</div><h1>'+(r?'Daftar akun baru.':'Masuk untuk lanjut.')+'</h1><p class="mut">'+(gate?'Anda perlu masuk dulu sebelum checkout.':'Kelola pesanan dan alamat Anda.')+'</p><div class="card"><form id="lf" novalidate>'+(r?'<label>Nama lengkap <i>*</i></label><input name="nama" autocomplete="name"><label>No. HP <i>*</i></label><input name="hp" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"><label>Email <i>*</i></label><input name="email" type="email" autocomplete="email">':'<label>Email atau No. HP <i>*</i></label><input name="idn" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Email atau 08xxxxxxxxxx">')+'<label>Kata sandi <i>*</i></label><input name="pw" type="password" autocomplete="'+(r?'new':'current')+'-password" placeholder="Minimal 6 karakter"><p id="er" class="note hide" style="color:var(--rd)"></p><button class="btn" type="submit">'+(r?'Daftar':'Masuk')+'</button></form><p style="text-align:center;margin-bottom:0">'+(r?'Sudah punya akun? <a href="#" data-go="login">Masuk</a>':'Belum punya akun? <a href="#" data-go="daftar">Buat akun</a><br><a href="#" data-go="lupa">Lupa kata sandi?</a>')+'</p></div>';
- $('app').innerHTML=h;
+ $('app').innerHTML=h;eyeInit();
  $('lf').onsubmit=function(e){e.preventDefault();var f=e.target.elements,pw=f.pw.value,er=$('er');function bad(t){er.textContent=t;er.className='note'}
   var us=ls('hq_users',[]);
   if(r){var em=f.email.value.trim().toLowerCase(),hp=normHp(f.hp.value);
