@@ -947,15 +947,22 @@ function specLines(b,P){var fr=[],sp=sections(P.ld||'').filter(function(p){retur
   else if(/cover|board ?book|boardbook/i.test(y))put('c',cap(y));
   else if(/kertas|hvs|art ?paper|book ?paper|matte|ivory|gsm|\bgr\b/i.test(y))put('k',/kertas/i.test(y)?cap(y):'Kertas '+y)});
  var o=[];if(S.c)o.push('\uD83D\uDCD1'+S.c);if(S.j)o.push('\uD83D\uDD17'+S.j);if(S.u)o.push('\uD83D\uDD0DUkuran: '+S.u);if(S.h)o.push('\uD83D\uDCD6Isi: '+S.h);if(S.k)o.push('\uD83C\uDFF7'+S.k);if(S.b)o.push('\u2696\uFE0FBerat: '+S.b);if(S.w)o.push('\uD83C\uDF08'+S.w);return o}
-function shareText(b){var P=(b.pid&&B[b.pid])||b,po=P.st==='poon'||b.st==='poon',L=[],title=P.t+(b.pid&&b.vl?' \u2013 '+b.vl:''),pc=function(r){return rpS(Math.round(b.pr*(1-r/100)))};
- L.push(po?'Pre Order':(b.st==='ready'?'Ready Stock':stText(b)));L.push('');L.push('*'+title+'*');L.push('');
- var d=[];if(po&&P.pe)d.push('\u203C\uFE0FClose PO '+idD(P.pe));if(P.er)d.push('\uD83D\uDCE6Est. Ready '+P.er);if(d.length){L=L.concat(d);L.push('')}
+function shareText(b){var P=(b.pid&&B[b.pid])||b,po=P.st==='poon'||b.st==='poon',L=[],VV=isV(P),title=P.t+(!VV&&b.pid&&b.vl?' \u2013 '+b.vl:''),pc=function(r){return rpS(Math.round(b.pr*(1-r/100)))};
+ var X=VV?P:b;L.push(po?'Pre Order':(X.np?stText(X):(X.st==='ready'?'Ready Stock':stText(X))));L.push('');L.push('*'+title+'*');L.push('');
+ var d=[];if(po&&P.pe)d.push('\u203C\uFE0FClose PO '+idD(P.pe));if(P.er)d.push('\uD83D\uDCE6Est. Ready '+P.er);if(VV&&P.promo&&P.pu)d.push('\u23F3Promo sampai '+idD(P.pu));if(d.length){L=L.concat(d);L.push('')}
+ if(VV){P.vr.forEach(function(id,k){var v=B[id];if(!v)return;var pv=function(r){return rpS(Math.round(v.pr*(1-r/100)))};
+  L.push('*'+(k+1)+'. '+(v.vl||v.t)+'*');L.push((po?'Harga PO: ':'Harga: ')+rpS(v.pr)+(v.sp&&v.sp>v.pr?' (Normal ~'+rpS(v.sp)+'~)':''));
+  var vm=mtiers(v)||[],v1=vm[0];if(v1){L.push('*Harga Member HAQA*');L.push('Min '+v1[0]+': Disc '+v1[1]+'% ('+pv(v1[1])+')\u2705')}
+  var vR=rsT(v);if(vR&&vR.length){L.push('\uD83D\uDC49\uD83C\uDFFB*Reseller*');vR.forEach(function(x){L.push('Min '+x[0]+': Diskon '+x[1]+'% ('+pv(x[1])+')')})}
+  L.push('')});L.pop()}
+ else{
  L.push((po?'Harga PO: ':'Harga: ')+rpS(b.pr));if(b.sp&&b.sp>b.pr)L.push('Harga Normal: ~'+rpS(b.sp)+'~');
  var mt=mtiers(b)||[],m1=mt[0];if(m1){L.push('');L.push('*Harga Member HAQA*');L.push('Min '+m1[0]+': Disc '+m1[1]+'% ('+pc(m1[1])+')\u2705')}
  var R=rsT(b);if(R&&R.length){L.push('');L.push('\uD83D\uDC49\uD83C\uDFFB*Reseller*');R.forEach(function(x){L.push('Min '+x[0]+': Diskon '+x[1]+'% ('+pc(x[1])+')')})}
+ }
  var tgu=P.vd||(P.st==='ready'?'https://t.me/haqabookssale':'https://t.me/haqabooks');
  L.push('');L.push('\u2014\u2014\u2014');L.push('');L.push('\uD83D\uDD17Link e-Katalog: '+location.href.split('#')[0].split('?')[0]+'#book-'+P.i);L.push('\uD83D\uDD17Link Telegram: '+tgu);
- var sp=specLines(b,P);if(sp.length){L.push('');L.push('*\uD83D\uDCDA SPESIFIKASI \uD83D\uDCDA*');L=L.concat(sp)}
+ var sp=VV?P.vr.map(function(id){var v=B[id];return v&&v.n?'\u25AA\uFE0F'+(v.vl||v.t)+': '+v.n:''}).filter(Boolean):specLines(b,P);if(sp.length){L.push('');L.push('*\uD83D\uDCDA SPESIFIKASI \uD83D\uDCDA*');L=L.concat(sp)}
  var kg=bul(P,/keunggulan|kelebihan|mengapa|kenapa|alasan|keistimewaan|nilai utama|apa spesialnya/i,5);if(kg.length){L.push('');L.push('*Mengapa harus punya buku ini?*');kg.forEach(function(x){L.push('\u2600\uFE0F '+x)})}
  var mf=bul(P,/manfaat|dipelajari|yang anak dapatkan|bekal|kemampuan yang dilatih/i,5);if(mf.length){L.push('');L.push('*Manfaat buku ini:*');mf.forEach(function(x){L.push('\uD83D\uDE80 '+x)})}
  return L.join('\n')}
