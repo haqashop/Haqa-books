@@ -1052,12 +1052,13 @@ function shDesc(b){var P=b.pid&&B[b.pid]?B[b.pid]:b,L=[];if(P.d)L.push(P.d);
 function shPara(P){var L=[];sections(P.ld||'').forEach(function(x){if(x.h==='Tentang buku')x.l.forEach(function(t){t=(t||'').trim();if(t&&t.indexOf('- ')!==0)L.push(t)})});var t=P.sd||L[0]||P.d||'';if(t.length>700){var c=t.slice(0,700),z=c.lastIndexOf('. ');t=z>200?c.slice(0,z+1):c.replace(/\s+\S*$/,'')+'\u2026'}return t}
 function shFeat(P){var re=/^(Keistimewaan|Keunggulan|Kelebihan|Manfaat)/i,r=[];sections(P.ld||'').some(function(x){if(!re.test(x.h))return false;x.l.forEach(function(t){t=(t||'').trim();if(t.indexOf('- ')===0)r.push(t.slice(2).trim())});return r.length>0});return r.slice(0,8)}
 function shSpec(P){var bad=/^(muroja|muraja|penulis|ilustrator|penerbit|harga|po\b|pre order|pengiriman|isbn)/i,r=[];sections(P.ld||'').some(function(x){if(x.h!=='Spesifikasi')return false;x.l.forEach(function(t){t=(t||'').trim();if(t.indexOf('- ')===0){t=t.slice(2).trim();if(t&&!bad.test(t))r.push(t)}});return true});return r.slice(0,8)}
+function shHook(P){var t=(P.d||P.sd||shPara(P)||'').trim();if(t.length>240){var c=t.slice(0,240),z=c.lastIndexOf('. ');t=z>80?c.slice(0,z+1):c.replace(/\s+\S*$/,'')+'\u2026'}return t}
 function shMsg(b){var P=b.pid&&B[b.pid]?B[b.pid]:b,o=['\u2728'+stText(P),'','*'+P.t+'*',''];
- if(P.p&&P.p!=='Lainnya')o.push('Penerbit: '+P.p);if(P.c)o.push('Tema: '+P.c);if(P.a)o.push('Usia: '+String(P.a).replace(/^Usia\s*/i,''));
- var sp=shSpec(P);if(sp.length){o.push('','\uD83D\uDCD6Spesifikasi:');sp.forEach(function(t){o.push('\u26AB '+t)})}
- var d=shPara(P);if(d)o.push('',d);
- var f=shFeat(P);if(f.length){o.push('','\u2B50Keistimewaan buku ini:');f.forEach(function(t){o.push('\u2714\uFE0F'+t)})}
+ var d=shHook(P);if(d)o.push(d);
  var vs=isV(P)?P.vr.map(function(v){return B[v]}):[],df=vs.some(function(x){return x.pr!==vs[0].pr});if(P.pr&&df){o.push('','Pilihan harga:');vs.forEach(function(x){o.push('\u2022 '+x.vl+': '+money(x.pr)+(x.sp&&x.sp>x.pr?' (normal '+money(x.sp)+')':''))})}else if(P.pr){o.push('');if(P.sp&&P.sp>P.pr){o.push('Harga normal '+money(P.sp));o.push((P.st==='poon'?'Harga PO':'Harga promo')+' \uD83C\uDFF7\uFE0F'+money(P.pr)+'\u2705')}else o.push('Harga '+(isV(P)?'mulai ':'')+money(P.pr))}
+ o.push('');if(P.p&&P.p!=='Lainnya')o.push('Penerbit: '+P.p);if(P.c)o.push('Tema: '+P.c);if(P.a)o.push('Usia: '+String(P.a).replace(/^Usia\s*/i,''));
+ var sp=shSpec(P);if(sp.length){o.push('','\uD83D\uDCD6Spesifikasi:');sp.slice(0,6).forEach(function(t){o.push('\u26AB '+t)})}
+ var f=shFeat(P);if(f.length){o.push('','\u2B50Keistimewaan buku ini:');f.slice(0,5).forEach(function(t){o.push('\u2714\uFE0F'+t)})}
  o.push('','\uD83D\uDD17Lihat di e-Katalog: '+pUrl(P.i));return o.join('\n')}
 var SHR={},SHP={};
 function shBlob(src){return fetch(src).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(bl){if(/jpeg|png/.test(bl.type))return bl;return new Promise(function(ok){var im=new Image();im.onload=function(){try{var k=Math.min(1,1200/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*k);c.height=Math.round(im.naturalHeight*k);var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);c.toBlob(function(j){ok(j||bl)},'image/jpeg',.9)}catch(e){ok(bl)}};im.onerror=function(){ok(bl)};im.src=URL.createObjectURL(bl)})})}
