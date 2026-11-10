@@ -1327,13 +1327,20 @@ var HM_N=8;
 function hmHome(){return!(S.q||S.u||S.t||S.p||S.f||S.st||S.o||S.cg||S.pmin||S.pmax)}
 function homeSync(){var h=$('hm'),on=!!h&&!!h.firstChild&&hmHome();if(h)h.hidden=!on;document.body.classList.toggle('hm-on',on);homeSync2()}
 function hmArrows(){document.querySelectorAll('#hm .hs').forEach(function(x){var r=x.querySelector('.rail'),p=x.querySelector('.rp'),n=x.querySelector('.rn');if(!r||!p||!n)return;var m=r.scrollWidth-r.clientWidth;p.classList.toggle('on',r.scrollLeft>4);n.classList.toggle('on',m>4&&r.scrollLeft<m-4)})}
+/* Urutan beranda berganti tiap hari (WIB): acak tetap per tanggal, selang-seling penerbit, buku dewasa di belakang */
+function dayKey(){return new Date(Date.now()+7*36e5).toISOString().slice(0,10)}
+function dayShuf(L){var k=dayKey(),h=2166136261,i;for(i=0;i<k.length;i++){h^=k.charCodeAt(i);h=Math.imul(h,16777619)}
+ function rnd(){h+=0x6D2B79F5;var t=Math.imul(h^h>>>15,1|h);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}
+ function sh(a){a=a.slice();for(var j=a.length-1;j>0;j--){var r=Math.floor(rnd()*(j+1)),x=a[j];a[j]=a[r];a[r]=x}return a}
+ function mix(a){var o=[],last='';a=sh(a);while(a.length){var n=0;for(var j=0;j<a.length;j++){if((a[j].p||'')!==last){n=j;break}}var b=a.splice(n,1)[0];o.push(b);last=b.p||''}return o}
+ return mix(L.filter(function(b){return!adult(b)})).concat(mix(L.filter(adult)))}
 function buildHome(){var el=$('hm');if(!el)return;var M={};cs.forEach(function(c){M[c.dataset.i]=c});
  var A='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
  var S3=[
-  {k:'ready',t:'Produk Ready Stock',s:'Produk yang tersedia untuk langsung dipesan.',L:ORDER.filter(function(b){return b.st==='ready'&&!b.np})},
-  {k:'poon',t:'Pre-Order Berlangsung',s:'Koleksi yang bisa dipesan sebelum tersedia.',L:ORDER.filter(function(b){return b.st==='poon'&&!poClosed(b)&&b.ps!=='Belum Dibuka'})},
+  {k:'ready',t:'Produk Ready Stock',s:'Produk yang tersedia untuk langsung dipesan.',L:dayShuf(ORDER.filter(function(b){return b.st==='ready'&&!b.np}))},
+  {k:'poon',t:'Pre-Order Berlangsung',s:'Koleksi yang bisa dipesan sebelum tersedia.',L:dayShuf(ORDER.filter(function(b){return b.st==='poon'&&!poClosed(b)&&b.ps!=='Belum Dibuka'}))},
   {k:'promo',t:'Promo Spesial',s:'Harga lebih hemat untuk koleksi pilihan.',L:ORDER.filter(function(b){return b.promo}).sort(function(x,y){if((x.pf||0)!==(y.pf||0))return(y.pf||0)-(x.pf||0);if(adult(x)!==adult(y))return adult(x)?1:-1;if(pubRank(x)!==pubRank(y))return pubRank(x)-pubRank(y);return x.i-y.i})},
-  {k:'po',t:'Ready Stock Penerbit',s:'PO dicatat (produk ready dalam 3-5 hari) atau setelah PO tutup.',L:ORDER.filter(function(b){return b.st==='po'&&!b.promo})}];
+  {k:'po',t:'Ready Stock Penerbit',s:'PO dicatat (produk ready dalam 3-5 hari) atau setelah PO tutup.',L:dayShuf(ORDER.filter(function(b){return b.st==='po'&&!b.promo}))}];
  S3.forEach(function(d){var L=d.L.slice(0,HM_N).filter(function(b){return M[b.i]});if(!L.length)return;
   var sec=document.createElement('section');sec.className='hs';sec.setAttribute('aria-label',d.t);
   sec.innerHTML='<div class="hh"><div><h2>'+d.t+'</h2><p>'+d.s+'</p></div><button type="button" class="hall" data-hm="'+d.k+'">Lihat Semua '+A+'</button></div><div class="rw"><button type="button" class="rb rp" data-hmn="-1" aria-label="Geser ke kiri"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><div class="rail" tabindex="-1"></div><button type="button" class="rb rn" data-hmn="1" aria-label="Geser ke kanan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>';
