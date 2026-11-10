@@ -1154,10 +1154,8 @@ function shMsg(b){var P=b.pid&&B[b.pid]?B[b.pid]:b,st=P.st,po=st==='poon',o=[],
  lab={ready:'READY STOCK',po:'READY STOCK PENERBIT',poon:'PRE ORDER',habis:'HABIS',closed:'PO CLOSED',kirim:'DALAM PENGIRIMAN'}[st]||'READY STOCK';
  o.push('📚 *'+P.t.toUpperCase()+'*');o.push('🏷️ '+(P.p&&P.p!=='Lainnya'?P.p+' | ':'')+lab);
  var h=shHook2(P);if(h)o.push('',h);
- var adult=/dewasa/i.test(P.a||''),ln=bul(P,/dipelajari|pembelajaran|yang anak dapatkan|bekal|kemampuan yang dilatih/i,6),ft=bul(P,/keunggulan|kelebihan|keistimewaan|mengapa|kenapa|alasan|manfaat/i,5);
- if(!ft.length&&P.cf&&P.cf.length)ft=P.cf.slice(0,5);if(ln.length&&ft.length&&ln.join('|')===ft.join('|'))ln=[];
+ var adult=/dewasa/i.test(P.a||''),ln=bul(P,/dipelajari|pembelajaran|yang anak dapatkan|bekal|kemampuan yang dilatih/i,6);
  if(ln.length){o.push('','✨ *'+(adult?'Apa yang Dipelajari?':'Apa yang Dipelajari Anak?')+'*');ln.forEach(function(t){o.push('- '+t)})}
- if(ft.length){o.push('','🌷 *Keunggulan Buku:*');ft.forEach(function(t){o.push('- '+t)})}
  var sp=shSpec2(P,b);if(sp.length){o.push('','📚 *Spesifikasi:*');sp.forEach(function(t){o.push('- '+t)})}
  var vs=isV(P)?P.vr.map(function(v){return B[v]}):[],df=vs.some(function(x){return x.pr!==vs[0].pr});
  if(P.pr&&df){o.push('','💰 *Pilihan harga:*');vs.forEach(function(x){o.push('• '+(x.vk||x.vl)+': '+(x.sp&&x.sp>x.pr?'~'+money(x.sp)+'~ ':'')+'*'+money(x.pr)+'*')})}
