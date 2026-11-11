@@ -1018,7 +1018,14 @@ function rs2(t){if(!t||t.length<2)return t;var a=t[0][1]+3,o=[t[0]],d=0;t.slice(
 function mtiers(b){var P=(b.pid&&B[b.pid])||b,t=b.mt||P.mt;if(t)return rs2(t);var r=Math.round(mbase(b,P)*100);return b.st==='poon'?rs2([[1,r],[3,20],[5,25],[10,30]]):[[1,r]]}
 function mrate(b,q){if(b.st==='habis')return 0;var t=mtiers(b),r=0;q=q?gq(b,q):1;for(var k=0;k<t.length;k++)if(q>=t[k][0])r=t[k][1]/100;return r} function gq(b,q){var P=(b.pid&&B[b.pid])||b;if(!b.mg||!P.vr)return q;var n=0;P.vr.forEach(function(v){if(B[v].mg===b.mg)n+=(cart&&cart[v])||0});return Math.max(q,n)}
 function mprice(b,q){var r=mrate(b,q);return(b&&b.pr&&r)?Math.round(b.pr*(1-r)):0}
-function unit(b,q){var u=(b.st==='poon'&&q>1&&b.pr)?Math.round(b.pr*(1-PO_DISC)):b.pr;if(isMem()){var m=mprice(b,q);if(m&&m<u)u=m}return u}
+/* aturan ready stock khusus member: harga lebih murah jika dibeli bersama buku ready stock lain (hanya produk dengan aturan standar 10%; produk tanpa diskon atau dengan aturan khusus tetap) */
+var CB_R=[0,12,15];
+function cbOn(b){if(!b||b.st!=='ready'||b.bm||b.bb||!b.pr)return false;var P=(b.pid&&B[b.pid])||b,t=b.mt||P.mt;if(t&&!(t.length===1&&t[0][1]===10))return false;return Math.round(mbase(b,P)*100)===10}
+function cbN(b){var n=0;for(var k in cart){var x=B[k];if(x&&x!==b&&cart[k]>0&&x.st==='ready'&&!x.bm&&!x.bb&&x.pr)n++}return Math.min(n,2)}
+function mpriceC(b,q){var r=mrate(b,q);if(r&&cbOn(b))r=Math.max(r,CB_R[cbN(b)]/100);return(b&&b.pr&&r)?Math.round(b.pr*(1-r)):0}
+function cbList(b){if(!cbOn(b))return'';var v=isV(b)?'mulai ':'',s=function(n){var p=Math.round(b.pr*(1-CB_R[n]/100));return'<li><span>'+(n===1?'Beli dengan 1 buku lain':'Beli dengan 2 buku lain atau lebih')+'<small style="display:block">Hemat '+money(b.pr-p)+' dari harga reguler</small></span><b>'+v+money(p)+'</b></li>'};return'<ul class="mbtr">'+s(1)+s(2)+'</ul>'}
+function cbShare(b,pf,L){var f=function(n){return pf(n)+' (hemat '+rpS(b.pr-Math.round(b.pr*(1-n/100)))+')'};L.push('*Harga Member HAQA*');L.push('Beli 1 buku: '+f(Math.round(mrate(b)*100))+'\u2705');L.push('Beli dengan 1 buku lain: '+f(CB_R[1])+'\u2705');L.push('Beli dengan 2 buku lain atau lebih: '+f(CB_R[2])+'\u2705')}
+function unit(b,q){var u=(b.st==='poon'&&q>1&&b.pr)?Math.round(b.pr*(1-PO_DISC)):b.pr;if(isMem()){var m=mpriceC(b,q);if(m&&m<u)u=m}return u}
 function nextTier(b,q){if(!b||!b.pr||b.st==='habis'||b.st==='closed')return null;var mem=isMem(),qq=gq(b,q),n=0,nu=0;
  if(mem){var t=mtiers(b);for(var k=0;k<t.length;k++)if(t[k][0]>qq){n=t[k][0];nu=Math.round(b.pr*(1-t[k][1]/100));break}
   if(n&&b.st==='poon')nu=Math.min(nu,Math.round(b.pr*(1-PO_DISC)))}
@@ -1060,12 +1067,12 @@ function shareText(b){var P=(b.pid&&B[b.pid])||b,po=P.st==='poon'||b.st==='poon'
  var d=[];if(po&&P.pe)d.push('\u203C\uFE0FClose PO '+idD(P.pe));if(P.er)d.push('\uD83D\uDCE6Est. Ready '+P.er);if(VV&&P.promo&&P.pu)d.push('\u23F3Promo sampai '+idD(P.pu));if(d.length){L=L.concat(d);L.push('')}
  if(VV){P.vr.forEach(function(id,k){var v=B[id];if(!v)return;var pv=function(r){return rpS(Math.round(v.pr*(1-r/100)))};
   L.push('*'+(k+1)+'. '+(v.vl||v.t)+'*');L.push((po?'Harga PO: ':'Harga: ')+rpS(v.pr)+(v.sp&&v.sp>v.pr?' (Normal ~'+rpS(v.sp)+'~)':''));
-  var vm=mtiers(v)||[],v1=vm[0];if(v1){L.push('*Harga Member HAQA*');L.push('Min '+v1[0]+': Disc '+v1[1]+'% ('+pv(v1[1])+')\u2705')}
+  var vm=mtiers(v)||[],v1=vm[0];if(cbOn(v))cbShare(v,pv,L);else if(v1){L.push('*Harga Member HAQA*');L.push('Min '+v1[0]+': Disc '+v1[1]+'% ('+pv(v1[1])+')\u2705')}
   var vR=rsT(v);if(vR&&vR.length){L.push('\uD83D\uDC49\uD83C\uDFFB*Reseller*');vR.forEach(function(x){L.push('Min '+x[0]+': Diskon '+x[1]+'% ('+pv(x[1])+')')})}
   L.push('')});L.pop()}
  else{
  L.push((po?'Harga PO: ':'Harga: ')+rpS(b.pr));if(b.sp&&b.sp>b.pr)L.push('Harga Normal: ~'+rpS(b.sp)+'~');
- var mt=mtiers(b)||[],m1=mt[0];if(m1){L.push('');L.push('*Harga Member HAQA*');L.push('Min '+m1[0]+': Disc '+m1[1]+'% ('+pc(m1[1])+')\u2705')}
+ var mt=mtiers(b)||[],m1=mt[0];if(cbOn(b)){L.push('');cbShare(b,pc,L)}else if(m1){L.push('');L.push('*Harga Member HAQA*');L.push('Min '+m1[0]+': Disc '+m1[1]+'% ('+pc(m1[1])+')\u2705')}
  var R=rsT(b);if(R&&R.length){L.push('');L.push('\uD83D\uDC49\uD83C\uDFFB*Reseller*');R.forEach(function(x){L.push('Min '+x[0]+': Diskon '+x[1]+'% ('+pc(x[1])+')')})}
  }
  var tgu=P.vd||(P.st==='ready'?'https://t.me/haqabookssale':'https://t.me/haqabooks');
@@ -1083,11 +1090,11 @@ function rsBox(b,sh){if(!rsT(b))return'';var o=!!RS_OPEN,R=rsRows(b),h='<div cla
  else if(isV(b))h+='<p class="rsn">Pilih varian terlebih dahulu untuk melihat harga bertingkat.</p>';
  else if(b.pr)h+=rsTable(b,rsT(b));
  return h+(sh?shFoot(tncHTML(b),sh):tncHTML(b))+'</div>'}
-function mbBox(b){var m=mprice(b);if(!m)return'';var mem=isMem(),op=!!(MB_OPEN||mem),r=Math.round(mrate(b)*100),v=isV(b),t=mtiers(b),ref=b.bm||b.bb?'harga bundling':(b.sp&&b.sp>b.pr?'harga promo reguler':'harga reguler');
- var h='<section class="mbx" id="mbx" data-i="'+b.i+'"><button type="button" class="mbhd" data-a="mt" data-i="'+b.i+'" aria-expanded="'+op+'"'+(mem?' disabled':'')+'><span class="mbic">'+I_PCT+'</span><span class="mbtt"><b>'+(b.bm||b.bb?'Harga khusus member':'Tambahan diskon '+r+'% untuk member')+'</b></span><span class="mbch'+(op?' up':(' rt'))+'">'+I_CH+'</span>';
+function mbBox(b){var m=mprice(b);if(!m)return'';var mem=isMem(),op=!!(MB_OPEN||mem),r=Math.round(mrate(b)*100),v=isV(b),t=mtiers(b),ref=b.bm||b.bb?'harga bundling':(cbOn(b)?'harga reguler':(b.sp&&b.sp>b.pr?'harga promo reguler':'harga reguler'));
+ var h='<section class="mbx" id="mbx" data-i="'+b.i+'"><button type="button" class="mbhd" data-a="mt" data-i="'+b.i+'" aria-expanded="'+op+'"'+(mem?' disabled':'')+'><span class="mbic">'+I_PCT+'</span><span class="mbtt"><b>'+(b.bm||b.bb||cbOn(b)?'Harga khusus member':'Tambahan diskon '+r+'% untuk member')+'</b></span><span class="mbch'+(op?' up':(' rt'))+'">'+I_CH+'</span>';
  if(!op)return h+'<span class="mbcta"><b>Lihat harga member</b><small>Dapatkan harga lebih hemat dengan bergabung sebagai member HAQA Books.</small></span></button></section>';
  h+='</button><div class="mbbd"><h4 class="mbh4">Harga member</h4><p class="mbsub">Gabung member untuk mendapatkan harga lebih hemat dan berbagai keuntungan lainnya.</p>';
- h+='<div class="mbin"><small>Harga member</small><div class="mbrow"><b class="mbpr">'+(v?'mulai ':'')+money(m)+'</b>'+(b.bm||b.bb?'':'<span class="mbdc">Diskon '+r+'%</span>')+'</div><p class="mbsv">Hemat '+money(b.pr-m)+' dari '+ref+'.</p>';
+ h+='<div class="mbin"><small>Harga member'+(cbOn(b)?' (beli 1 buku)':'')+'</small><div class="mbrow"><b class="mbpr">'+(v?'mulai ':'')+money(m)+'</b>'+(b.bm||b.bb||cbOn(b)?'':'<span class="mbdc">Diskon '+r+'%</span>')+'</div><p class="mbsv">Hemat '+money(b.pr-m)+' dari '+ref+'.</p>'+cbList(b);
   if(mem)h+='<p class="mbok">\u2713 Member aktif. Harga member otomatis dipakai saat memesan.</p><button type="button" class="mbo" data-a="mo">Nonaktifkan</button></div>';
  else h+='<a class="mbj mbgo" href="'+MB_URL+'" target="_blank" rel="noopener">Gabung Member</a><a href="syarat-ketentuan.html" style="display:block;text-align:center;margin-top:8px;font:600 .82rem \'DM Sans\',sans-serif;color:#8a5a12">Baca Syarat &amp; Ketentuan Partner</a></div><p class="mbh">Sudah punya kode member?</p><div class="mbr"><input id="mbk" class="mbk" type="text" autocomplete="off" autocapitalize="characters" placeholder="Masukkan kode member" aria-label="Kode member"><button type="button" class="mbj" data-a="mk">Aktifkan</button></div>';
  var sh=shLink(b),rb=rsBox(b,sh);return h+'</div>'+rb+(rb.indexOf('mbsh')<0&&sh?'<div class="mbfoot"><span></span>'+sh+'</div>':'')+'</section>'}
@@ -1399,7 +1406,7 @@ function buildBanner(){var el=$('bn');if(!el)return;
 /* ---------- bar progres keranjang ---------- */
 function unitNM(b,q){return(b.st==='poon'&&q>1&&b.pr)?Math.round(b.pr*(1-PO_DISC)):b.pr}
 function cartNudge(L){if(!L.length)return'';var mem=isMem(),cur=0,mt=0,best=null;
- L.forEach(function(b){var q=cart[b.i]||0,u=unitNM(b,q),m=mprice(b,q);cur+=u*q;mt+=((m&&m<u)?m:u)*q;
+ L.forEach(function(b){var q=cart[b.i]||0,u=unitNM(b,q),m=mpriceC(b,q);cur+=u*q;mt+=((m&&m<u)?m:u)*q;
   if(!b.pr||b.st==='habis'||b.st==='closed')return;var qq=gq(b,q),nu=0,n=0;
   if(mem){var t=mtiers(b);for(var k=0;k<t.length;k++)if(t[k][0]>qq){n=t[k][0];nu=Math.round(b.pr*(1-t[k][1]/100));break}
    if(n&&b.st==='poon')nu=Math.min(nu,Math.round(b.pr*(1-PO_DISC)))}
