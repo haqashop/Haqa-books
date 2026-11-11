@@ -1156,31 +1156,35 @@ function shSpec2(P,b){var o=[],pb=P.p&&P.p!=='Lainnya'?P.p:'',bad=/^(muroja|mura
  if(P.a)o.push('Rekomendasi usia: '+String(P.a).replace(/^Usia\s*/i,'').replace(/\sth$/i,' tahun'));
  var tm=(/^Tema:\s*(.+)$/m.exec(P.ld||'')||[])[1];tm=tm?tm.trim().replace(/\.$/,''):(P.tm||P.c||'');if(tm)o.push('Tema: '+cap(tm));
  if(P.au)o.push('Penulis: '+P.au);if(P.il)o.push('Ilustrator: '+P.il);if(P.pm)o.push('Murajaah: '+P.pm);return o}
-function shMsg(b){var P=b.pid&&B[b.pid]?B[b.pid]:b,st=P.st,po=st==='poon',o=[],
- lab={ready:'READY STOCK',po:'READY STOCK PENERBIT',poon:'PRE ORDER',habis:'HABIS',closed:'PO CLOSED',kirim:'DALAM PENGIRIMAN'}[st]||'READY STOCK';
- o.push('📚 *'+P.t.toUpperCase()+'*');o.push('🏷️ '+(P.p&&P.p!=='Lainnya'?P.p+' | ':'')+lab);
- var h=shHook2(P);if(h)o.push('',h);
- var adult=/dewasa/i.test(P.a||''),ln=bul(P,/dipelajari|pembelajaran|yang anak dapatkan|bekal|kemampuan yang dilatih/i,6);
- if(ln.length){o.push('','✨ *'+(adult?'Apa yang Dipelajari?':'Apa yang Dipelajari Anak?')+'*');ln.forEach(function(t){o.push('- '+t)})}
- var sp=shSpec2(P,b);if(sp.length){o.push('','📚 *Spesifikasi:*');sp.forEach(function(t){o.push('- '+t)})}
+function shStat(P){var a=badge(P),av=P.np?['Promo']:P.st==='ready'?['Ready Stock'].concat(P.lw&&!unl(P)?[P.promo?'Stok terakhir':'Stok menipis']:[]):(a?[a[1]==='PO \u00B7 Bisa Dipesan'?'Pre Order':a[1]]:[]);return av.join(' \u00B7 ')}
+function shSpec3(P,b){var bad=/^(muroja|muraja|penulis|ilustrator|penerbit|harga|po\b|pre order|pengiriman|isbn|untuk usia|usia)/i,r=[];
+ sections(P.ld||'').some(function(x){if(x.h!=='Spesifikasi')return false;x.l.forEach(function(t){t=(t||'').trim();if(t.indexOf('- ')===0){t=t.slice(2).trim();if(t&&!bad.test(t))r.push(t)}});return true});
+ if(!r.length)shSpec2(P,b).forEach(function(t){var m=/^(Penerbit|Rekomendasi usia|Tema|Penulis|Ilustrator|Murajaah):/.test(t);if(m)return;
+  t=t.replace(/^Format: /,'').replace(/^Isi: /,'Tebal ').replace(/^Kertas isi: /,'Isi ').replace(/^Sampul: /,'Sampul ').replace(/^Ukuran: /,'Ukuran ').replace(/^Berat: /,'Berat ±');r.push(t)});
+ var w=(b&&b.w)||P.w;if(w&&!isV(P)&&!r.some(function(t){return/^Berat/i.test(t)}))r.push('Berat ±'+String(w).replace(/\s*g$/,' g'));return r}
+function shMsg(b){var P=b.pid&&B[b.pid]?B[b.pid]:b,o=[],st=shStat(P);
+ o.push('✨'+st,'','*'+P.t+'*');
+ var d=(P.d||P.sd||'').trim()||shHook2(P);if(d)o.push('',d);
  var vs=isV(P)?P.vr.map(function(v){return B[v]}):[],df=vs.some(function(x){return x.pr!==vs[0].pr});
- if(P.pr&&df){o.push('','💰 *Pilihan harga:*');vs.forEach(function(x){o.push('• '+(x.vk||x.vl)+': '+(x.sp&&x.sp>x.pr?'~'+money(x.sp)+'~ ':'')+'*'+money(x.pr)+'*')})}
- else if(P.pr){o.push('');if(P.sp&&P.sp>P.pr){o.push('💰 Harga normal: ~'+money(P.sp)+'~');o.push('🔥 *'+(po?'Harga PO':'Harga promo')+': '+money(P.pr)+'*')}else o.push('💰 *Harga'+(isV(P)?' mulai':'')+': '+money(P.pr)+'*')}
- if(P.promo&&P.pu)o.push('⏳ Promo sampai '+idD(P.pu));
- o.push('','📦 *'+lab+'*');
- if(st==='ready')o.push('🚚 Siap dipesan dan dikirim!');
- else if(st==='po')o.push('🚚 Siap dipesan, ready dalam 3–5 hari');
- else if(po){if(P.pe)o.push('🗓️ Close PO: '+idD(P.pe));if(P.er)o.push('🚚 Estimasi ready: '+P.er);if(!P.pe&&!P.er)o.push('🚚 Siap dipesan!')}
- else o.push('💬 Tanyakan ketersediaan ke admin');
- o.push('','🔎 *Detail & pemesanan:*',pUrl(P.i));return o.join('\n')}
+ if(P.pr&&df&&vs.length>8){var mn=Math.min.apply(null,vs.map(function(x){return x.pr}));o.push('','Harga mulai 🏷️'+money(mn)+'✅','*'+vs.length+' pilihan judul*, harga tiap judul ada di e-Katalog')}
+ else if(P.pr&&df){o.push('','*Pilihan harga:*');vs.forEach(function(x){o.push('• '+(x.vk||x.vl)+': '+(x.sp&&x.sp>x.pr?'~'+money(x.sp)+'~ ':'')+'🏷️'+money(x.pr)+'✅')})}
+ else if(P.pr){o.push('');if(P.sp&&P.sp>P.pr){o.push('Harga normal '+money(P.sp));o.push((P.st==='poon'&&!P.promo?'Harga PO ':'Harga promo ')+'🏷️'+money(P.pr)+'✅')}else o.push('Harga '+(isV(P)?'mulai ':'')+'🏷️'+money(P.pr)+'✅')}
+ var tm=P.c||P.tm||'',us=P.a?String(P.a).replace(/^Usia\s*/i,''):'',hd=[];
+ if(P.p&&P.p!=='Lainnya')hd.push('Penerbit: '+P.p);if(tm)hd.push('Tema: '+tm);if(us)hd.push('Usia: '+us);if(hd.length)o.push('',hd.join('\n'));
+ var sp=isV(P)&&P.vr.length>8?[]:shSpec3(P,b);if(sp.length){o.push('','📖Spesifikasi:');sp.forEach(function(t){o.push('⚫ '+t)})}
+ o.push('','🔗Lihat di e-Katalog: '+pUrl(P.i));return o.join('\n')}
 var SHR={},SHP={};
 function shBlob(src){return fetch(src).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(bl){if(/jpeg|png/.test(bl.type))return bl;return new Promise(function(ok){var im=new Image();im.onload=function(){try{var k=Math.min(1,1200/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*k);c.height=Math.round(im.naturalHeight*k);var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);c.toBlob(function(j){ok(j||bl)},'image/jpeg',.9)}catch(e){ok(bl)}};im.onerror=function(){ok(bl)};im.src=URL.createObjectURL(bl)})})}
 function prepShare(b){var k=b.i,src=b.images&&b.images[0];if(!src||SHP[k])return;SHP[k]=shBlob(src).then(function(bl){SHR[k]=new File([bl],'sampul-'+k+(bl.type==='image/png'?'.png':'.jpg'),{type:bl.type||'image/jpeg'})}).catch(function(){})}
-function shareNative(b){var su=pUrl(b.i),sm=shMsg(b);
- var go2=function(){var f=SHR[b.i];if(!navigator.share){toast('Menu bagikan tidak tersedia di perangkat ini');return}
-  var d=(f&&navigator.canShare&&navigator.canShare({files:[f]}))?{files:[f],text:sm}:{title:b.t,text:sm};
-  navigator.share(d).catch(function(err){if(!err||err.name!=='AbortError')toast('Gagal membuka menu bagikan')})};
- if(SHR[b.i]||!SHP[b.i])go2();else SHP[b.i].then(go2)}
+var SHF={},SHD={};
+function shFile(src){if(!SHF[src])SHF[src]=shBlob(src).then(function(bl){var f=new File([bl],'foto-'+(src.split('/').pop().replace(/\.\w+$/,''))+(bl.type==='image/png'?'.png':'.jpg'),{type:bl.type||'image/jpeg'});SHD[src]=f;return f}).catch(function(){return null});return SHF[src]}
+function shareImg(b,src){var sm=shMsg(b),go2=function(f){if(!navigator.share){toast('Menu bagikan tidak tersedia di perangkat ini');return}var d=(f&&navigator.canShare&&navigator.canShare({files:[f]}))?{files:[f],text:sm}:{title:b.t,text:sm};navigator.share(d).catch(function(err){if(!err||err.name!=='AbortError')toast('Gagal membuka menu bagikan')})};if(SHD[src])go2(SHD[src]);else shFile(src).then(go2)}
+function shPick(b){var cur=$('bg')&&$('bg').getAttribute('src'),im=(b.images||[]).slice();if(cur&&im.indexOf(cur)<0&&/^images\//.test(cur))im.unshift(cur);
+ if(!im.length){shareImg(b,'');return}if(im.length===1){shareImg(b,im[0]);return}
+ im.forEach(shFile);var e=document.createElement('div');e.className='shs';e.id='shp';
+ e.innerHTML='<div class="sp" role="dialog" aria-label="Pilih gambar"><h4>Pilih gambar yang dikirim</h4><div class="sg">'+im.map(function(x,i){return'<button type="button" data-g="'+i+'" style="padding:0;overflow:hidden;border-radius:10px"><img src="'+esc(thumb(x))+'" data-f="'+esc(x)+'" onerror="this.onerror=null;this.src=this.dataset.f" alt="Foto '+(i+1)+'" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover"></button>'}).join('')+'</div><p class="shn">Ketuk gambar yang mau dikirim, teks produk ikut terkirim.</p><button type="button" class="shx" data-x="1">Batal</button></div>';
+ e.addEventListener('click',function(ev){var t=ev.target,g=t.closest&&t.closest('[data-g]');if(g){var x=im[+g.dataset.g];e.remove();shareImg(b,x);return}if(t===e||(t.closest&&t.closest('[data-x]')))e.remove()});document.body.appendChild(e)}
+function shareNative(b){shPick(b)}
 function shareBook(b){prepShare(b);shareSheet(b.t,shMsg(b),pUrl(b.i),b)}
 function go(u){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a)},200)}
 function waShare(b){return'https://wa.me/?text='+encodeURIComponent(shMsg(b))}
@@ -1487,7 +1491,7 @@ function shFallback(txt,done){try{var a=document.createElement('textarea');a.val
 function shareSheet(title,msg,url,bk){shClose();var q=encodeURIComponent,tg=msg.split(url).join('').replace(/\n{3,}/g,'\n\n').trim();
  var L=[['WhatsApp','\uD83D\uDCAC','https://wa.me/?text='+q(msg)],['Telegram','\u2708\uFE0F','https://t.me/share/url?url='+q(url)+'&text='+q(tg)],['Facebook','f','https://www.facebook.com/sharer/sharer.php?u='+q(url)],['X','\uD835\uDD4F','https://twitter.com/intent/tweet?text='+q(title)+'&url='+q(url)],['Threads','@','https://www.threads.net/intent/post?text='+q(title)+'&url='+q(url)],['Email','\u2709\uFE0F','mailto:?subject='+q(title)+'&body='+q(msg)]];
  var e=document.createElement('div');e.className='shs';e.id='shs';
- e.innerHTML='<div class="sp" role="dialog" aria-label="Bagikan"><h4>Bagikan</h4><button type="button" class="shc" data-c="1"><span>\uD83D\uDD17</span>Salin link saja</button><p class="shl">Bagikan ke</p><div class="sg">'+L.map(function(x){return'<a href="'+esc(x[2])+'" target="_blank" rel="noopener"><span>'+x[1]+'</span>'+x[0]+'</a>'}).join('')+'<button type="button" data-ig="1"><span>\uD83D\uDCF8</span>Instagram</button>'+(bk&&navigator.share?'<button type="button" data-n="1"><span>\uD83D\uDCE4</span>Dengan gambar</button>':'')+'</div><p class="shn">'+(bk&&navigator.share?'\u201CDengan gambar\u201D membuka menu bagikan HP berisi sampul dan teks. ':'')+'Instagram tidak mendukung kirim otomatis: teks akan disalin lalu Instagram dibuka, tinggal tempel di DM atau story.</p><button type="button" class="shx" data-x="1">Tutup</button></div>';
+ e.innerHTML='<div class="sp" role="dialog" aria-label="Bagikan"><h4>Bagikan</h4><button type="button" class="shc" data-c="1"><span>\uD83D\uDD17</span>Salin link saja</button><p class="shl">Bagikan ke</p><div class="sg">'+L.map(function(x){return'<a href="'+esc(x[2])+'" target="_blank" rel="noopener"><span>'+x[1]+'</span>'+x[0]+'</a>'}).join('')+'<button type="button" data-ig="1"><span>\uD83D\uDCF8</span>Instagram</button>'+(bk&&navigator.share?'<button type="button" data-n="1"><span>\uD83D\uDCE4</span>Dengan gambar</button>':'')+'</div><p class="shn">'+(bk&&navigator.share?'\u201CDengan gambar\u201D membuka menu bagikan HP: pilih gambar yang mau dikirim, teks ikut terkirim. ':'')+'Instagram tidak mendukung kirim otomatis: teks akan disalin lalu Instagram dibuka, tinggal tempel di DM atau story.</p><button type="button" class="shx" data-x="1">Tutup</button></div>';
  e.addEventListener('click',function(ev){var t=ev.target;if(t===e||(t.closest&&t.closest('[data-x]'))){shClose();return}
   if(t.closest&&t.closest('[data-ig]')){shCopy(msg,function(){window.open('https://www.instagram.com/direct/inbox/','_blank','noopener')},'Teks disalin, tempel di Instagram');return}
   if(t.closest&&t.closest('[data-c]')){shCopy(url,null,'Link disalin');return}
