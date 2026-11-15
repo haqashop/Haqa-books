@@ -933,7 +933,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return
 function ic(b){return'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+b+'</svg>'}
 function cdEnd(b){if(b.st==='ready'&&b.pu){var t=Date.parse(b.pu+'T23:59:59+07:00');return t>Date.now()?t:0}if(b.st!=='poon'||b.pid||!b.pe||b.ps==='PO Closed'||b.ps==='Belum Dibuka')return 0;var t=Date.parse(b.pe+'T23:59:59+07:00');return t>Date.now()?t:0}
 function cdTxt(ms,k,c){if(ms<=0)return k?'Harga normal berlaku':'PO ditutup';var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4),x=Math.floor(ms%6e4/1e3),p=function(n){return n<10?'0'+n:''+n};if(c)return'\u23F3 '+(d?d+'h ':'')+p(h)+':'+p(m)+':'+p(x);return'\u23F3 '+(k?'Harga spesial berakhir dalam ':'PO berakhir dalam ')+(d?d+' hari ':'')+p(h)+':'+p(m)+':'+p(x)}
-function cdHTML(b,c){var t=cdEnd(b);if(!t)return'';var ms=t-Date.now(),k=b.st==='ready';return'<p class="cdw"><span class="cd'+(ms<2592e5?' u':'')+'" data-end="'+t+'"'+(k?' data-k="1"':'')+(c?' data-c="1"':'')+'>'+cdTxt(ms,k,c)+'</span>'+(k&&b.pn?'<small class="cdn">'+esc(b.pn)+'</small>':'')+'</p>'}
+function cdHTML(b,c){if(fsWait(b)){var P=b.pid&&B[b.pid]?B[b.pid]:b;return'<p class="cdw"><span class="cd">\u23F3 Flashsale dimulai '+fsD(P.pb)+'</span>'+(P.pn?'<small class="cdn">'+esc(P.pn)+'</small>':'')+'</p>'}var t=cdEnd(b);if(!t)return'';var ms=t-Date.now(),k=b.st==='ready';return'<p class="cdw"><span class="cd'+(ms<2592e5?' u':'')+'" data-end="'+t+'"'+(k?' data-k="1"':'')+(c?' data-c="1"':'')+'>'+cdTxt(ms,k,c)+'</span>'+(k&&b.pn?'<small class="cdn">'+esc(b.pn)+'</small>':'')+'</p>'}
 setInterval(function(){document.querySelectorAll('.cd[data-end]').forEach(function(e){var ms=+e.dataset.end-Date.now();e.textContent=cdTxt(ms,e.dataset.k,e.dataset.c);e.classList.toggle('u',ms<2592e5)})},1000);
 var TGI='<svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="#26A5E4" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>';
 var VIDI='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>';
@@ -993,7 +993,7 @@ function cardHTML0(b,n){var a=badge(b),av=b.np?[['po','Promo']]:b.st==='ready'?[
 
 var TODAY=new Date(Date.now()+7*36e5).toISOString().slice(0,10);
 function dayDiff(a,b){return Math.round((Date.parse(a)-Date.parse(b))/864e5)}
-function applyDates(){B.forEach(function(b){if(b.pb&&b.vr&&TODAY<b.pb){b.hid=1;b.vr.forEach(function(v){B[v].hid=1})}});B.forEach(function(b){if(b.ob&&b.st==='poon'&&!b.pid){if(TODAY<b.ob)b.ps='Belum Dibuka';else if(b.ps==='Belum Dibuka')b.ps='Bisa Dipesan'}});
+function applyDates(){B.forEach(function(b){if(b.ob&&b.st==='poon'&&!b.pid){if(TODAY<b.ob)b.ps='Belum Dibuka';else if(b.ps==='Belum Dibuka')b.ps='Bisa Dipesan'}});
  B.forEach(function(b){if(b.pt&&b.pt.length){var t=null;b.pt.forEach(function(x){if(x[0]<=TODAY)t=x});if(t){b.pr=t[1];b.tr=t[2];if(b.sp&&b.sp<=b.pr)b.sp=0}}});
  B.forEach(function(b){if(b.st!=='poon'||b.pid||!b.pe)return;var d=dayDiff(b.pe,TODAY);
   if(d<0)b.ps='PO Closed';else if(b.ps!=='Belum Dibuka'&&b.ps!=='PO Closed')b.ps=d<=2?'Segera Tutup':'Bisa Dipesan'});
@@ -1028,7 +1028,9 @@ function favCount(){var n=Object.keys(likes).filter(function(k){return B[k]}).le
 function lkSync(i){var on=!!likes[i];document.querySelectorAll('button[data-a="lk"][data-i="'+i+'"]').forEach(function(x){x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);x.setAttribute('aria-label',on?'Batal suka':'Suka');var sp=x.querySelector('span');if(sp)sp.textContent=on?'Disukai':'Suka'});favCount()}
 
 /* ---------- harga, stok & batas jumlah ---------- */
-function purch(b){return !!b&&!isV(b)&&(b.st==='ready'||b.st==='po'||(b.st==='poon'&&b.ps!=='Belum Dibuka'&&b.ps!=='PO Closed'))}
+function fsD(s){var m=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],a=String(s).split('-');return +a[2]+' '+m[+a[1]-1]+' '+a[0]}
+function fsWait(b){var P=b&&b.pid&&B[b.pid]?B[b.pid]:b;return !!(P&&P.pb&&TODAY<P.pb)}
+function purch(b){return !!b&&!isV(b)&&!fsWait(b)&&(b.st==='ready'||b.st==='po'||(b.st==='poon'&&b.ps!=='Belum Dibuka'&&b.ps!=='PO Closed'))}
 function poClosed(b){return !!b&&b.st==='poon'&&b.ps==='PO Closed'}
 function phNext(b){if(!b||!b.ph)return 0;var k=b.ph.indexOf(b.i),op=0,up=0;b.ph.forEach(function(id,j){var x=B[id];if(id===b.i||!x||x.ps==='PO Closed')return;if(x.ps==='Belum Dibuka'){if(j>k&&!up)up=id}else if(!op)op=id});return op||up}
 function phHTML(b){var n=phNext(b);if(!n||!(poClosed(b)||b.ps==='Belum Dibuka'))return'';var x=B[n],up=x.ps==='Belum Dibuka';return'<p class="phn">'+esc(b.pl||'Fase ini')+(poClosed(b)?' ditutup. ':' belum dibuka. ')+'<button type="button" class="phb" data-a="goph" data-i="'+n+'">'+esc(x.pl||'Produk aktif')+(up?' segera dibuka':' masih berlaku')+' \u00B7 '+rp(x.pr)+' \u2192</button></p>'}
@@ -1317,7 +1319,7 @@ function selVar(pid,vid){var x=B[vid];if(x.vg){document.querySelectorAll('.vg').
 /* ---------- aksi produk: jumlah, beli, keranjang, tanya admin ---------- */
 function askLink(b,short){var P=b.pid?B[b.pid]:b,cl=poClosed(P);return'<a class="ask'+(cl?' pm':'')+'" target="_blank" rel="noopener" href="'+esc(waUrl(askMsg(b)))+'">'+ICON.chat+(cl?'Tanya Admin untuk pemesanan':(short?'Tanya Admin':'Tanya Admin tentang buku ini'))+'</a>'}
 function fillAct(i,el,short){var b=B[i],ask=askLink(b,short);
- if(!purch(b)){el.innerHTML=phHTML(b)+'<div class="ac">'+ask+'<button class="buy" disabled>'+(b.st==='poon'?(b.ps==='PO Closed'?'PO Closed':'Belum dibuka'):({habis:'Habis',closed:'PO Closed',kirim:'Dalam pengiriman'}[b.st]||'Tidak tersedia'))+'</button></div>';return}
+ if(!purch(b)){var FW=fsWait(b),PW=FW?(b.pid&&B[b.pid]?B[b.pid]:b):null;el.innerHTML=(FW?'<p class="phn">Flashsale dimulai '+fsD(PW.pb)+'.</p>':'')+phHTML(b)+'<div class="ac">'+ask+'<button class="buy" disabled>'+(FW?'Segera dimulai':b.st==='poon'?(b.ps==='PO Closed'?'PO Closed':'Belum dibuka'):({habis:'Habis',closed:'PO Closed',kirim:'Dalam pengiriman'}[b.st]||'Tidak tersedia'))+'</button></div>';return}
  el.innerHTML='<div class="ac">'+ask+'<a class="buy" href="checkout.html?buy='+i+'">'+ICON.bag+(B[i]&&B[i].st==='poon'?'Pesan Sekarang':'Beli Sekarang')+'</a><button type="button" class="add" aria-label="Tambah ke keranjang" title="Tambah ke keranjang" data-a="addc" data-i="'+i+'">'+addLbl(!!cart[i])+'</button></div>'}
 function initCards(){cs.forEach(function(c){var i=+c.dataset.i,b=B[i],a=c.querySelector('.act');if(!a||!b)return;
  if(isV(b)){a.innerHTML=lkHtml(i)+'<div class="ac"><button type="button" class="buy" data-a="fd" data-i="'+i+'">'+ICON.layers+(b.bb?'Susun bundling':'Pilih varian')+'</button>'+askLink(b,1)+'</div>';return}
