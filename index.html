@@ -1397,13 +1397,15 @@ function wizApply(){S.u=W.u;S.t=W.t;S.f='';S.q='';if(W.f!=='Bebas')S.f=W.f;
  $('su').value=S.u;$('sc').value=S.t;$('sf').value=S.f;$('q').value=S.q;if(S.f)openAdv(true);pg=1;close_();render();$('q').scrollIntoView({behavior:'smooth'})}
 
 /* ---------- daftar produk: filter, urut, halaman ---------- */
+function HQM(t,q){if(!q)return true;var w=q.split(/\s+/);for(var i=0;i<w.length;i++)if(w[i]&&t.indexOf(w[i])<0)return false;return true}
 function render(){var s=norm(S.q).trim(),ub=S.u?S.u.split('-').map(Number):null;
- var L=cs.filter(function(c){var d=c.dataset;return(!S.t||('|'+d.th+'|').indexOf('|'+S.t+'|')>-1)&&(!S.p||d.p===S.p)&&(!S.f||d.f===S.f||d.x.split('|').indexOf(S.f)>-1)&&(!S.cgn||catOf(B[+d.i])===S.cgn)&&(!(S.pmin||S.pmax)||(+d.pr>0&&+d.pr>=(S.pmin||0)&&+d.pr<=(S.pmax||800000)))&&(!S.st||(S.st==='promo'?d.pm==='1':S.st==='po'?(d.st==='po'&&d.pm!=='1'):S.st==='ready'?(d.st==='ready'&&!(B[+d.i]&&B[+d.i].np)):d.st===S.st))&&(!ub||(+d.lo<ub[1]&&+d.hi>ub[0]))&&d.s.indexOf(s)>-1});
+ var L=cs.filter(function(c){var d=c.dataset;return(!S.t||('|'+d.th+'|').indexOf('|'+S.t+'|')>-1)&&(!S.p||d.p===S.p)&&(!S.f||d.f===S.f||d.x.split('|').indexOf(S.f)>-1)&&(!S.cgn||catOf(B[+d.i])===S.cgn)&&(!(S.pmin||S.pmax)||(+d.pr>0&&+d.pr>=(S.pmin||0)&&+d.pr<=(S.pmax||800000)))&&(!S.st||(S.st==='promo'?d.pm==='1':S.st==='po'?(d.st==='po'&&d.pm!=='1'):S.st==='ready'?(d.st==='ready'&&!(B[+d.i]&&B[+d.i].np)):d.st===S.st))&&(!ub||(+d.lo<ub[1]&&+d.hi>ub[0]))&&HQM(d.s,s)});
  L.sort(function(a,b){var x=a.dataset,y=b.dataset,px=+x.pr||0,py=+y.pr||0;
   if(S.o==='lo'||S.o==='hi'){if(!px!==!py)return px?-1:1;return(S.o==='lo'?px-py:py-px)||x.i-y.i}
   if(S.o==='sv'){var vx=B[+x.i],vy=B[+y.i],sx=vx&&vx.sp>vx.pr&&vx.pr?vx.sp-vx.pr:0,sy=vy&&vy.sp>vy.pr&&vy.pr?vy.sp-vy.pr:0;return sy-sx||x.i-y.i}
   if(S.o==='az')return x.t.localeCompare(y.t,'id');
   if(S.st==='promo'){var bx=B[+x.i],by_=B[+y.i];if((bx.pf||0)!==(by_.pf||0))return(by_.pf||0)-(bx.pf||0);if(adult(bx)!==adult(by_))return adult(bx)?1:-1;if(pubRank(bx)!==pubRank(by_))return pubRank(bx)-pubRank(by_);if(pubRank(bx)===PUBORD.length&&bx.p!==by_.p)return bx.p<by_.p?-1:1}
+  if(s){var ax=norm(x.t).indexOf(s)>-1,ay=norm(y.t).indexOf(s)>-1;if(ax!==ay)return ax?-1:1}
   return(+x.o||0)-(+y.o||0)||x.i-y.i});
  window.HQL=L;var T=Math.max(1,Math.ceil(L.length/PS));if(pg>T)pg=T;var a=(pg-1)*PS,b=Math.min(a+PS,L.length);
  cs.forEach(function(c){c.classList.add('hide')});L.forEach(function(c,i){g.appendChild(c);c.classList.toggle('hide',i<a||i>=b)});
@@ -1633,6 +1635,9 @@ if(!seen())setTimeout(show,7000)})()</script><script>document.addEventListener("
 .hqg.o{background:none;color:var(--ac)}
 </style><script>/* ===== Bagikan daftar produk (PNG) ===== */
 (function(){
+/* indeks pencarian lengkap: judul, deskripsi, keunggulan, penulis, tema, dll. */
+(function(){function tx(b){return[b.t,b.p,b.f,b.a,b.c,b.tm,b.au,b.il,b.pm,b.d,b.n,b.vl,(b.cf||[]).join(' '),b.ld].filter(Boolean).join(' ')}
+ cs.forEach(function(c){var b=B[+c.dataset.i];if(!b)return;var t=tx(b);(b.vr||[]).forEach(function(k){if(B[k])t+=' '+tx(B[k])});c.dataset.s=norm(c.dataset.s+' '+t).replace(/\s+/g,' ')})})();
 var NS='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
 var HQ={files:[],urls:[],title:''},ST={ready:'Ready Stock',poon:'Pre Order',promo:'Promo',po:'Ready Stock Penerbit'};
 function ok(b){return b.st!=='habis'&&b.st!=='closed'&&!(b.st==='poon'&&b.ps==='PO Closed')}
