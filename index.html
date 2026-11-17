@@ -1405,7 +1405,7 @@ function render(){var s=norm(S.q).trim(),ub=S.u?S.u.split('-').map(Number):null;
   if(S.o==='az')return x.t.localeCompare(y.t,'id');
   if(S.st==='promo'){var bx=B[+x.i],by_=B[+y.i];if((bx.pf||0)!==(by_.pf||0))return(by_.pf||0)-(bx.pf||0);if(adult(bx)!==adult(by_))return adult(bx)?1:-1;if(pubRank(bx)!==pubRank(by_))return pubRank(bx)-pubRank(by_);if(pubRank(bx)===PUBORD.length&&bx.p!==by_.p)return bx.p<by_.p?-1:1}
   return(+x.o||0)-(+y.o||0)||x.i-y.i});
- var T=Math.max(1,Math.ceil(L.length/PS));if(pg>T)pg=T;var a=(pg-1)*PS,b=Math.min(a+PS,L.length);
+ window.HQL=L;var T=Math.max(1,Math.ceil(L.length/PS));if(pg>T)pg=T;var a=(pg-1)*PS,b=Math.min(a+PS,L.length);
  cs.forEach(function(c){c.classList.add('hide')});L.forEach(function(c,i){g.appendChild(c);c.classList.toggle('hide',i<a||i>=b)});
  $('cnt').textContent=L.length?(L.length+' produk'):'0 produk';var em=$('emp');em.hidden=!!L.length;em.textContent=S.cgn?'Belum ada produk '+S.cgn+'. Segera hadir.':'Tidak ada produk yang cocok. Coba ubah filter.';$('pg').textContent='Halaman '+pg+'/'+T;$('pc').textContent=pg+'/'+T;
  var P=[],i;for(i=1;i<=T;i++){if(i===1||i===T||Math.abs(i-pg)<=1||(pg<=3&&i<=4)||(pg>=T-2&&i>=T-3))P.push(i);else if(P[P.length-1]!=='\u2026')P.push('\u2026')}
@@ -1609,4 +1609,111 @@ function hide(){p.classList.remove('on');p.setAttribute('aria-hidden','true')}
 function busy(){return document.querySelector('.ov.on,.md')}
 function show(){if(busy()){if(++tries<4)setTimeout(show,5000);return}place();p.classList.add('on');p.setAttribute('aria-hidden','false')}
 document.getElementById('tgx').onclick=function(){hide();mark()};document.getElementById('tgj').onclick=function(){hide();mark()};
-if(!seen())setTimeout(show,7000)})()</script><script>document.addEventListener("click",function(e){var b=e.target.closest("[data-dm]");if(!b)return;var m=document.getElementById("dmore");if(!m)return;var open=m.hidden;m.hidden=!open;b.setAttribute("aria-expanded",String(open));b.firstChild.textContent=open?"Lihat Lebih Sedikit":"Lihat Lebih Lengkap";if(!open)b.scrollIntoView({block:"nearest"})})</script></body></html>
+if(!seen())setTimeout(show,7000)})()</script><script>document.addEventListener("click",function(e){var b=e.target.closest("[data-dm]");if(!b)return;var m=document.getElementById("dmore");if(!m)return;var open=m.hidden;m.hidden=!open;b.setAttribute("aria-expanded",String(open));b.firstChild.textContent=open?"Lihat Lebih Sedikit":"Lihat Lebih Lengkap";if(!open)b.scrollIntoView({block:"nearest"})})</script><style>/* bagikan daftar produk */
+.hqs,.hqk{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+#hqsh{height:32px;min-width:32px;padding:0 9px;gap:6px;border-radius:10px;border:1px solid var(--ln);background:var(--card);color:var(--ink);font:700 .78rem "DM Sans",sans-serif}
+#hqsh svg,.hqw .hqs svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#hqsh[hidden]{display:none}#hqsh{width:34px;height:34px;padding:0;margin:2px 8px 4px 0;border-radius:50%;border:1.5px solid var(--ac);color:var(--ac);font-weight:800;font-size:.76rem}.fxr{align-items:center}
+.hqw{display:flex;align-items:center;gap:10px;flex:none}
+.hqw .hqs{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ac);background:none;color:var(--ac);padding:0}
+.kc .ci{position:relative}
+.kc .hqk{position:absolute;right:-7px;bottom:-5px;width:22px;height:22px;border-radius:50%;background:var(--card);border:1px solid var(--ln);color:var(--ink)}
+.kc .hqk svg{width:12px;height:12px;stroke-width:2.2}
+.hqm{position:fixed;inset:0;z-index:80;background:rgba(10,15,25,.6);display:flex;align-items:flex-end;justify-content:center}
+.hqm[hidden]{display:none}
+.hqb{background:var(--card);color:var(--ink);width:100%;max-width:560px;max-height:92vh;border-radius:20px 20px 0 0;display:flex;flex-direction:column;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+@media(min-width:600px){.hqm{align-items:center}.hqb{border-radius:20px}}
+.hqh{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.hqh b{font:700 1rem/1.3 "DM Sans",sans-serif}.hqh small{display:block;color:var(--mut);font-weight:500;margin-top:2px}
+.hqx{flex:none;width:36px;height:36px;border-radius:50%;border:0;background:var(--ac2);color:var(--ink);font-size:1.3rem;cursor:pointer}
+.hqp{overflow-y:auto;display:grid;gap:10px;border-radius:12px;margin-bottom:12px}
+.hqp img{width:100%;height:auto;border:1px solid var(--ln);border-radius:10px;display:block}
+.hqa{display:flex;gap:10px}
+.hqg{flex:1;padding:12px 14px;border-radius:999px;border:1.5px solid var(--ac);background:var(--ac);color:var(--on);font:800 .92rem "DM Sans",sans-serif;cursor:pointer}
+.hqg.o{background:none;color:var(--ac)}
+</style><script>/* ===== Bagikan daftar produk (PNG) ===== */
+(function(){
+var NS='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
+var HQ={files:[],urls:[],title:''},ST={ready:'Ready Stock',poon:'Pre Order',promo:'Promo',po:'Ready Stock Penerbit'};
+function ok(b){return b.st!=='habis'&&b.st!=='closed'&&!(b.st==='poon'&&b.ps==='PO Closed')}
+function title(){var p=[],a;if(S.st)p.push(ST[S.st]||S.st);if(S.cgn)p.push(S.cgn);
+ if(S.u){a=AGES.filter(function(x){return x[0]===S.u})[0];if(a)p.push(S.u==='18-99'?a[1]:'Usia '+a[1])}
+ if(S.t)p.push('Tema '+S.t);if(S.p)p.push('Penerbit '+S.p);if(S.f)p.push(S.f);
+ if(S.pmin||S.pmax){var lo=S.pmin||0,hi=S.pmax||800000;p.push('Harga '+(hi>=800000?'mulai '+rp(lo):lo?rp(lo)+' – '+rp(hi):'s.d. '+rp(hi)))}
+ if(S.q)p.push('Pencarian \u201C'+S.q+'\u201D');return p.join(' \u00B7 ')||'Semua Produk'}
+function byO(a,b){return(+a.dataset.o||0)-(+b.dataset.o||0)}
+function cards(f){return cs.filter(f).sort(byO).map(function(c){return B[+c.dataset.i]})}
+function group(k){var M={};cs.forEach(function(c){M[c.dataset.i]=1});return ORDER.filter(function(b){if(!M[b.i])return false;
+ return k==='ready'?b.st==='ready'&&!b.np:k==='poon'?b.st==='poon'&&!poClosed(b)&&b.ps!=='Belum Dibuka':k==='promo'?!!b.promo:b.st==='po'&&!b.promo})}
+function load(src,cb,cors){var im=new Image();if(cors)im.crossOrigin='anonymous';im.onload=function(){cb(im)};im.onerror=function(){cors?load(src,cb,false):cb(null)};im.src=src}
+function pic(b){return new Promise(function(res){var f=b.images&&b.images[0];if(!f)return res(null);var t=[f,thumb(f)].filter(function(x,i,a){return a.indexOf(x)===i});
+ (function n(){var s=t.shift();if(!s)return res(null);load(s,function(im){im?res(im):n()},true)})()})}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function ell(c,t,w){while(c.measureText(t+'\u2026').width>w&&t.length>1)t=t.slice(0,-1);return t+'\u2026'}
+function fit(c,t,w){return c.measureText(t).width>w?ell(c,t,w):t}
+function wrap(c,t,w,max){var L=[],cur='';String(t).split(/\s+/).forEach(function(x){var tr=cur?cur+' '+x:x;if(!cur||c.measureText(tr).width<=w)cur=tr;else{L.push(cur);cur=x}});if(cur)L.push(cur);
+ var more=L.length>max;return L.slice(0,max).map(function(s,i){return(more&&i===max-1)||c.measureText(s).width>w?ell(c,s,w):s})}
+function pills(b){var a=[];if(b.st==='ready')a.push(['Ready Stock','#3D6B46']);else if(b.st==='po')a.push(['Ready Stock Penerbit','#2f6286']);
+ else if(b.st==='poon')a.push([b.ps==='Segera Tutup'?'Pre Order \u00B7 Segera Tutup':'Pre Order','#a86a12']);else if(b.st==='kirim')a.push(['Dalam Pengiriman','#6b7384']);
+ if(b.promo)a.push(['Promo','#b5432b']);return a}
+function card(c,b,im,x,y,CW,IH){
+ c.fillStyle='#FFFDFA';rr(c,x,y,CW,IH+170,18);c.fill();c.strokeStyle='#e8e0d2';c.lineWidth=2;c.stroke();
+ c.save();rr(c,x+6,y+6,CW-12,IH-6,14);c.clip();c.fillStyle='#fff';c.fillRect(x,y,CW,IH);
+ if(im){var s=Math.min((CW-12)/im.width,(IH-6)/im.height),w=im.width*s,h=im.height*s;c.drawImage(im,x+(CW-w)/2,y+6+(IH-6-h)/2,w,h)}
+ else{c.fillStyle='#e6efe6';c.fillRect(x,y,CW,IH);c.fillStyle='#3D6B46';c.font='800 96px "DM Sans",sans-serif';c.textAlign='center';c.fillText((b.t||'?').charAt(0).toUpperCase(),x+CW/2,y+IH/2+32);c.textAlign='left'}
+ c.restore();
+ var px=x+14;c.font='700 15px "DM Sans",sans-serif';c.textBaseline='middle';
+ pills(b).forEach(function(p){var w=c.measureText(p[0]).width+22;c.fillStyle=p[1];rr(c,px,y+14,w,28,14);c.fill();c.fillStyle='#fff';c.fillText(p[0],px+11,y+29);px+=w+6});
+ c.textBaseline='alphabetic';var tx=x+16,tw=CW-32,ty=y+IH+14;
+ c.fillStyle='#27334C';c.font='700 22px "DM Sans",sans-serif';wrap(c,b.t,tw,2).forEach(function(l,i){c.fillText(l,tx,ty+20+i*27)});
+ c.fillStyle='#7b7468';c.font='500 17px "DM Sans",sans-serif';
+ c.fillText(fit(c,[b.p,typesOf(b)[0]].filter(Boolean).join(' \u00B7 '),tw),tx,ty+78);
+ if(b.a)c.fillText(fit(c,b.a,tw),tx,ty+102);
+ c.fillStyle='#3D6B46';c.font='800 26px "DM Sans",sans-serif';
+ var pt=b.pr?(isV(b)?'Mulai ':'')+rp(b.pr):'Tanya admin';c.fillText(pt,tx,ty+138);
+ if(b.pr&&b.sp>b.pr){var w=c.measureText(pt).width;c.fillStyle='#7b7468';c.font='500 17px "DM Sans",sans-serif';var st=rp(b.sp);c.fillText(st,tx+w+10,ty+138);
+  c.strokeStyle='#7b7468';c.lineWidth=1.5;c.beginPath();c.moveTo(tx+w+10,ty+133);c.lineTo(tx+w+10+c.measureText(st).width,ty+133);c.stroke()}}
+async function pages(t,L){
+ await Promise.all(['700 22px "DM Sans"','600 40px Lora'].map(function(f){return document.fonts.load(f).catch(function(){})}));
+ var logo=await new Promise(function(r){load('images/logo.webp',r,true)});
+ var W=1080,PX=40,G=26,CW=316,IH=372,CH=IH+170,PER=12,HH=220,FH=120,n=Math.ceil(L.length/PER),out=[];
+ for(var p=0;p<n;p++){window.hqBusy('Menyiapkan gambar\u2026 '+(p+1)+'/'+n);
+  var part=L.slice(p*PER,p*PER+PER),ims=await Promise.all(part.map(pic)),rows=Math.ceil(part.length/3),H=HH+30+rows*CH+(rows-1)*G+30+FH;
+  var cv=document.createElement('canvas');cv.width=W;cv.height=H;var c=cv.getContext('2d');
+  c.fillStyle='#F7F1E7';c.fillRect(0,0,W,H);c.fillStyle='#3D6B46';c.fillRect(0,0,W,HH);
+  var lx=PX;if(logo){c.fillStyle='#fff';rr(c,PX,36,96,96,18);c.fill();var s=Math.min(80/logo.width,80/logo.height);c.drawImage(logo,PX+(96-logo.width*s)/2,36+(96-logo.height*s)/2,logo.width*s,logo.height*s);lx=PX+116}
+  c.fillStyle='#cfe3d2';c.font='800 24px "DM Sans",sans-serif';c.fillText('HAQA BOOKS',lx,60);
+  c.fillStyle='#fff';c.font='600 42px Lora,Georgia,serif';wrap(c,t,W-PX-lx,2).forEach(function(l,i){c.fillText(l,lx,112+i*50)});
+  c.fillStyle='#e6efe6';c.font='500 21px "DM Sans",sans-serif';c.fillText(L.length+' produk'+(n>1?' \u00B7 Halaman '+(p+1)+' dari '+n:''),lx,196);
+  part.forEach(function(b,i){card(c,b,ims[i],PX+(i%3)*(CW+G),HH+30+Math.floor(i/3)*(CH+G),CW,IH)});
+  var fy=H-FH;c.fillStyle='#27334C';c.fillRect(0,fy,W,FH);c.textAlign='center';c.fillStyle='#fff';c.font='700 23px "DM Sans",sans-serif';
+  c.fillText('Pesan via WhatsApp 0'+WA.slice(2)+'  \u00B7  haqabooks.my.id',W/2,fy+48);
+  c.fillStyle='#b9c2d3';c.font='500 18px "DM Sans",sans-serif';c.fillText('Harga & stok dapat berubah sewaktu-waktu \u00B7 Update '+fsD(TODAY),W/2,fy+84);
+  out.push(await new Promise(function(r){cv.toBlob(r,'image/png')}))}
+ return out}
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,50)||'produk'}
+function modal(){var m=$('hqm');if(m)return m;m=document.createElement('div');m.id='hqm';m.className='hqm';m.hidden=true;m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-labelledby','hqt');
+ m.innerHTML='<div class="hqb"><div class="hqh"><b id="hqt"></b><button type="button" class="hqx" aria-label="Tutup">\u00D7</button></div><div class="hqp" id="hqp"></div><div class="hqa"><button type="button" class="hqg" id="hqs">Bagikan</button><button type="button" class="hqg o" id="hqd">Simpan gambar</button></div></div>';
+ document.body.appendChild(m);m.addEventListener('click',function(e){if(e.target===m||e.target.className==='hqx')close()});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
+ $('hqs').onclick=function(){navigator.share({files:HQ.files,title:'HAQA Books \u2013 '+HQ.title,text:HQ.title+'\n'+baseUrl()}).catch(function(e){if(e&&e.name!=='AbortError')save()})};
+ $('hqd').onclick=save;return m}
+function close(){var m=$('hqm');if(m)m.hidden=true;HQ.urls.forEach(function(u){URL.revokeObjectURL(u)});HQ.urls=[];HQ.files=[];$('hqp').innerHTML=''}
+function save(){HQ.files.forEach(function(f,i){setTimeout(function(){var a=document.createElement('a');a.href=HQ.urls[i];a.download=f.name;document.body.appendChild(a);a.click();a.remove()},i*400)})}
+async function run(t,L){var A=L.filter(ok);L=A.length?A:L;if(!L.length){toast('Belum ada produk di daftar ini');return}
+ window.hqBusy('Menyiapkan gambar\u2026');
+ try{var bl=await pages(t,L),m=modal();HQ.title=t;HQ.urls=bl.map(function(b){return URL.createObjectURL(b)});
+  HQ.files=bl.map(function(b,i){return new File([b],'haqa-'+slug(t)+(bl.length>1?'-'+(i+1):'')+'.png',{type:'image/png'})});
+  $('hqt').innerHTML=esc(t)+'<small>'+L.length+' produk \u00B7 '+bl.length+' gambar PNG</small>';
+  $('hqp').innerHTML=HQ.urls.map(function(u,i){return'<img src="'+u+'" alt="Halaman '+(i+1)+' daftar produk '+esc(t)+'">'}).join('');
+  $('hqs').hidden=!(navigator.canShare&&navigator.canShare({files:HQ.files}));m.hidden=false;m.querySelector('.hqx').focus()}
+ catch(e){toast('Gagal membuat gambar. Coba lagi.')}finally{window.hqIdle()}}
+/* tombol di header daftar produk */
+/* tombol bagikan: di baris "Hapus semua filter", tampil saat ada filter/kategori aktif */
+var fx=$('fx');
+if(fx){var b=document.createElement('button');b.id='hqsh';b.type='button';b.className='hqs';b.hidden=true;b.setAttribute('aria-label','Bagikan daftar produk ini sebagai gambar');b.title='Bagikan daftar ini (PNG)';b.innerHTML=NS;fx.parentNode.insertBefore(b,fx);
+ var so=syncUI;syncUI=function(){so.apply(this,arguments);b.hidden=fx.hidden}; b.hidden=fx.hidden}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#hqsh');if(!t)return;e.preventDefault();e.stopPropagation();
+ run(title(),(window.HQL||[]).map(function(c){return B[+c.dataset.i]}))},true);
+})();
+</script></body></html>
