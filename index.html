@@ -1628,8 +1628,8 @@ if(!seen())setTimeout(show,7000)})()</script><script>document.addEventListener("
 .hqx{flex:none;width:36px;height:36px;border-radius:50%;border:0;background:var(--ac2);color:var(--ink);font-size:1.3rem;cursor:pointer}
 .hqp{overflow-y:auto;display:grid;gap:10px;border-radius:12px;margin-bottom:12px}
 .hqp img{width:100%;height:auto;border:1px solid var(--ln);border-radius:10px;display:block}
-.hqa{display:flex;gap:10px}
-.hqg{flex:1;padding:12px 14px;border-radius:999px;border:1.5px solid var(--ac);background:var(--ac);color:var(--on);font:800 .92rem "DM Sans",sans-serif;cursor:pointer}
+.hqa{display:flex;flex-wrap:wrap;gap:10px}
+.hqg{flex:1 1 40%;padding:12px 14px;border-radius:999px;border:1.5px solid var(--ac);background:var(--ac);color:var(--on);font:800 .92rem "DM Sans",sans-serif;cursor:pointer}
 .hqg.o{background:none;color:var(--ac)}
 </style><script>/* ===== Bagikan daftar produk (PNG) ===== */
 (function(){
@@ -1641,6 +1641,16 @@ function title(){var p=[],a;if(S.st)p.push(ST[S.st]||S.st);if(S.cgn)p.push(S.cgn
  if(S.t)p.push('Tema '+S.t);if(S.p)p.push('Penerbit '+S.p);if(S.f)p.push(S.f);
  if(S.pmin||S.pmax){var lo=S.pmin||0,hi=S.pmax||800000;p.push('Harga '+(hi>=800000?'mulai '+rp(lo):lo?rp(lo)+' – '+rp(hi):'s.d. '+rp(hi)))}
  if(S.q)p.push('Pencarian \u201C'+S.q+'\u201D');return p.join(' \u00B7 ')||'Semua Produk'}
+function link(){var q=[];['st','u','t','p','f','q'].forEach(function(k){if(S[k])q.push(k+'='+encodeURIComponent(S[k]))});
+ if(S.cgn)q.push('cg='+encodeURIComponent(S.cgn));if(S.pmin)q.push('pmin='+S.pmin);if(S.pmax&&S.pmax<800000)q.push('pmax='+S.pmax);
+ return baseUrl()+(q.length?'?'+q.join('&'):'')}
+function fromUrl(){var u=new URLSearchParams(location.search),any=0;
+ ['st','u','t','p','f','q'].forEach(function(k){var v=u.get(k);if(v){S[k]=v;any=1}});
+ if(u.get('cg')){S.cg=true;S.cgn=u.get('cg');any=1}
+ if(u.get('pmin')||u.get('pmax')){S.pmin=+u.get('pmin')||0;S.pmax=+u.get('pmax')||0;any=1;rngSync()}
+ if(!any)return;$('su').value=S.u;$('sc').value=S.t;$('sp').value=S.p;$('sf').value=S.f;$('q').value=S.q;
+ document.querySelectorAll('#nt button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===S.st)});
+ if(S.p||S.f)openAdv(true);pg=1;render();var h=$('ph2');if(h&&!location.hash)setTimeout(function(){h.scrollIntoView()},200)}
 function byO(a,b){return(+a.dataset.o||0)-(+b.dataset.o||0)}
 function cards(f){return cs.filter(f).sort(byO).map(function(c){return B[+c.dataset.i]})}
 function group(k){var M={};cs.forEach(function(c){M[c.dataset.i]=1});return ORDER.filter(function(b){if(!M[b.i])return false;
@@ -1693,27 +1703,32 @@ async function pages(t,L){
  return out}
 function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,50)||'produk'}
 function modal(){var m=$('hqm');if(m)return m;m=document.createElement('div');m.id='hqm';m.className='hqm';m.hidden=true;m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-labelledby','hqt');
- m.innerHTML='<div class="hqb"><div class="hqh"><b id="hqt"></b><button type="button" class="hqx" aria-label="Tutup">\u00D7</button></div><div class="hqp" id="hqp"></div><div class="hqa"><button type="button" class="hqg" id="hqs">Bagikan</button><button type="button" class="hqg o" id="hqd">Simpan gambar</button></div></div>';
+ m.innerHTML='<div class="hqb"><div class="hqh"><b id="hqt"></b><button type="button" class="hqx" aria-label="Tutup">\u00D7</button></div><div class="hqp" id="hqp"></div><div class="hqa"><button type="button" class="hqg" id="hqs">Bagikan gambar</button><button type="button" class="hqg" id="hql">Bagikan link</button><button type="button" class="hqg o" id="hqd">Simpan gambar</button></div></div>';
  document.body.appendChild(m);m.addEventListener('click',function(e){if(e.target===m||e.target.className==='hqx')close()});
  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
  $('hqs').onclick=function(){navigator.share({files:HQ.files,title:'HAQA Books \u2013 '+HQ.title,text:HQ.title+'\n'+baseUrl()}).catch(function(e){if(e&&e.name!=='AbortError')save()})};
- $('hqd').onclick=save;return m}
+ $('hqd').onclick=save;
+ $('hql').onclick=function(){var d={title:'HAQA Books \u2013 '+HQ.title,text:HQ.title,url:HQ.url};
+  function cp(){(navigator.clipboard?navigator.clipboard.writeText(HQ.url):Promise.reject()).then(function(){toast('Link disalin')},function(){window.prompt('Salin link ini:',HQ.url)})}
+  if(navigator.share)navigator.share(d).catch(function(e){if(e&&e.name!=='AbortError')cp()});else cp()};
+ return m}
 function close(){var m=$('hqm');if(m)m.hidden=true;HQ.urls.forEach(function(u){URL.revokeObjectURL(u)});HQ.urls=[];HQ.files=[];$('hqp').innerHTML=''}
 function save(){HQ.files.forEach(function(f,i){setTimeout(function(){var a=document.createElement('a');a.href=HQ.urls[i];a.download=f.name;document.body.appendChild(a);a.click();a.remove()},i*400)})}
-async function run(t,L){var A=L.filter(ok);L=A.length?A:L;if(!L.length){toast('Belum ada produk di daftar ini');return}
+async function run(t,L,url){var A=L.filter(ok);L=A.length?A:L;if(!L.length){toast('Belum ada produk di daftar ini');return}
  window.hqBusy('Menyiapkan gambar\u2026');
- try{var bl=await pages(t,L),m=modal();HQ.title=t;HQ.urls=bl.map(function(b){return URL.createObjectURL(b)});
+ try{var bl=await pages(t,L),m=modal();HQ.title=t;HQ.url=url||baseUrl();HQ.urls=bl.map(function(b){return URL.createObjectURL(b)});
   HQ.files=bl.map(function(b,i){return new File([b],'haqa-'+slug(t)+(bl.length>1?'-'+(i+1):'')+'.png',{type:'image/png'})});
   $('hqt').innerHTML=esc(t)+'<small>'+L.length+' produk \u00B7 '+bl.length+' gambar PNG</small>';
   $('hqp').innerHTML=HQ.urls.map(function(u,i){return'<img src="'+u+'" alt="Halaman '+(i+1)+' daftar produk '+esc(t)+'">'}).join('');
   $('hqs').hidden=!(navigator.canShare&&navigator.canShare({files:HQ.files}));m.hidden=false;m.querySelector('.hqx').focus()}
  catch(e){toast('Gagal membuat gambar. Coba lagi.')}finally{window.hqIdle()}}
 /* tombol di header daftar produk */
+fromUrl();
 /* tombol bagikan: di baris "Hapus semua filter", tampil saat ada filter/kategori aktif */
 var fx=$('fx');
 if(fx){var b=document.createElement('button');b.id='hqsh';b.type='button';b.className='hqs';b.hidden=true;b.setAttribute('aria-label','Bagikan daftar produk ini sebagai gambar');b.title='Bagikan daftar ini (PNG)';b.innerHTML=NS;fx.parentNode.insertBefore(b,fx);
  var so=syncUI;syncUI=function(){so.apply(this,arguments);b.hidden=fx.hidden}; b.hidden=fx.hidden}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#hqsh');if(!t)return;e.preventDefault();e.stopPropagation();
- run(title(),(window.HQL||[]).map(function(c){return B[+c.dataset.i]}))},true);
+ run(title(),(window.HQL||[]).map(function(c){return B[+c.dataset.i]}),link())},true);
 })();
 </script></body></html>
