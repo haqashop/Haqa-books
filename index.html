@@ -1476,7 +1476,7 @@ function buildBanner(){var el=$('bn');if(!el)return;
  var HP=[];if(window.HQP&&HQP.list){HQP.list.forEach(function(p){var st_=HQP.state(p),dd=Math.round((new Date(p.from+'T00:00:00+07:00')-new Date(TODAY+'T00:00:00+07:00'))/864e5);if(st_==='live'||(st_==='soon'&&dd<=14))HP.push(p)});HP=HP.slice(0,3)}
  function pcv(b,d){var i=b.images[0];return'<button type="button" class="bc" data-bk="'+b.i+'" aria-label="Lihat '+esc(b.t)+'"'+(d?' tabindex="-1" aria-hidden="true"':'')+'><img src="'+esc(thumb(i))+'" data-full="'+esc(i)+'" alt="" width="64" height="86" loading="lazy" decoding="async" onerror="if(this.dataset.full&&this.getAttribute(\'src\')!==this.dataset.full)this.src=this.dataset.full;else this.parentNode.hidden=true"></button>'}
  function pim(p){var a=[];p.ids.forEach(function(i){var b=B[i];if(b&&!b.hid&&b.st==='ready'&&b.images&&b.images[0]&&a.length<10)a.push(b)});if(a.length<2)return'';return'<div class="bsh" style="--n:'+a.length+'"><div class="bsh-t">'+a.map(function(b){return pcv(b,0)}).join('')+a.map(function(b){return pcv(b,1)}).join('')+'</div></div>'}
- function PS(x,k,n){return'<div class="bs p" role="group" aria-label="'+(k+1)+' dari '+n+'"><div class="bx"><span class="bk">'+esc(x.k)+'</span><strong class="bh pt">'+esc(x.t)+'</strong><p class="bp">'+esc(x.s)+'</p><div class="pcr"><span class="pcd">'+esc(x.code)+'</span><button type="button" class="bb" data-bp="'+esc(x.code)+'">Salin kode</button><button type="button" class="bb" data-bsh="'+esc(x.code)+'">Bagikan katalog</button></div><small class="pnt">Masukkan kode di checkout. Harga di katalog tidak berubah.</small></div>'+x.im+'</div>'}
+ function PS(x,k,n){return'<div class="bs p" role="group" aria-label="'+(k+1)+' dari '+n+'"><div class="bx"><span class="bk">'+esc(x.k)+'</span><strong class="bh pt">'+esc(x.t)+'</strong><p class="bp">'+esc(x.s)+'</p><div class="pcr"><span class="pcd">'+esc(x.code)+'</span><button type="button" class="bb" data-bp="'+esc(x.code)+'">Salin kode</button></div><small class="pnt">Order lewat web: tulis kode di checkout agar harga langsung terpotong. Order manual tidak perlu kode.</small></div>'+x.im+'<button type="button" class="bsx" data-bsh="'+esc(x.code)+'" aria-label="Bagikan promo '+esc(x.t)+'" title="Bagikan promo">'+ICON.share+'</button></div>'}
  HP.forEach(function(p){var live=HQP.state(p)==='live',f=HQP.date(p.from).replace(/ \d{4}$/,'');L.push({pm:1,k:(live?'Berlangsung · ':'Segera · ')+f+' – '+HQP.date(p.to).replace(/ \d{4}$/,''),t:p.name,s:p.tag+'. Diskon '+p.pct+'% untuk '+p.ids.length+' buku.',code:p.code,im:pim(p)})});
  if(pr.length)L.push({c:'a',k:'Promo',t:mx?'Hemat hingga '+mx+'%':'Promo spesial',s:pr.length+' buku dengan harga spesial.',b:'Lihat Promo',v:'promo',im:im(pr,ORDER.filter(function(b){return b.sp>b.pr&&b.pr}))});
  if(op.length){var d=ends[0]?new Date(ends[0]+'T00:00:00+07:00').toLocaleDateString('id-ID',{day:'numeric',month:'long'}):'';L.push({c:'b',k:'Pre-Order',t:op.length+' PO sedang dibuka',s:d?'PO terdekat tutup '+d+'.':'Pesan sebelum kuota tutup.',b:'Lihat Pre-Order',v:'poon',im:im(op)})}
@@ -1773,11 +1773,12 @@ details.pqd{border-top:1px solid var(--ln);padding:10px 0}details.pqd summary{fo
 .pqf{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .pqf button,.pqf select{flex:1 1 30%;padding:9px 10px;border-radius:10px;border:1.5px solid var(--ln);background:var(--bg);color:var(--ink);font:700 .85rem "DM Sans",sans-serif;cursor:pointer}
 .pqf button[aria-pressed=true]{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac2)}
-.pqf input[type=search],.pqf input[type=text]{flex:1 1 100%;padding:10px;border-radius:10px;border:1.5px solid var(--ln);background:var(--bg);color:var(--ink);font:500 .9rem "DM Sans",sans-serif}
+.pqf input[type=search],.pqf input[type=text],.pqf input[type=tel]{flex:1 1 100%;padding:10px;border-radius:10px;border:1.5px solid var(--ln);background:var(--bg);color:var(--ink);font:500 .9rem "DM Sans",sans-serif}
 .pqc{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-top:10px}.pqc label{font-size:.78rem;color:var(--mut);display:block}.pqc input[type=color]{width:100%;height:40px;padding:2px;border:1.5px solid var(--ln);border-radius:10px;background:var(--bg);cursor:pointer}
 .pqk{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.88rem}.pqk input{width:18px;height:18px}
 .pqa{display:flex;flex-wrap:wrap;gap:10px}
 .pqa button{flex:1 1 40%;padding:12px 14px;border-radius:999px;border:1.5px solid var(--ac);background:var(--ac);color:var(--on);font:800 .9rem "DM Sans",sans-serif;cursor:pointer}.pqa button.o{background:none;color:var(--ac)}
+.bsx{position:absolute;top:10px;right:10px;z-index:3;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.3);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}.bsx:hover,.bsx:focus-visible{background:rgba(0,0,0,.5)}.bsx .ic{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 <script>/* ===== Bagikan katalog promo (PNG/JPG): pilih buku, tema, warna, logo ===== */
 (function(){
@@ -1793,7 +1794,7 @@ var PRE={
 };
 var NM={hijau:'Hijau',navy:'Navy',biru:'Biru',ungu:'Ungu',oranye:'Oranye',gelap:'Gelap',krem:'Krem'};
 var K=['bg1','bg2','tx','acc','card','price','badge'],KL={bg1:'Latar atas',bg2:'Latar bawah',tx:'Warna teks',acc:'Aksen diskon',card:'Warna kartu',price:'Harga promo',badge:'Label persen'};
-var D={size:'feed',th:'hijau',c:null,logo:1,logoBg:1,logoSize:'m',sort:'hemat',foot:''},R={p:null,all:[],ex:[],page:0,q:''},IMC={},LOGO=null,tmr=null,tk=0,pvUrl=null;
+var D={size:'feed',th:'hijau',c:null,logo:0,logoBg:1,logoSize:'m',sort:'hemat',wa:'',ig:'',lk:''},R={p:null,all:[],ex:[],page:0,q:''},IMC={},LOGO=null,tmr=null,tk=0,pvUrl=null;
 try{var sv=JSON.parse(localStorage.getItem('hqps_set')||'null');if(sv)D=Object.assign(D,sv)}catch(e){}
 D.c=Object.assign({},PRE.hijau,D.c||{});
 function saveD(){try{localStorage.setItem('hqps_set',JSON.stringify(D))}catch(e){}}
@@ -1805,6 +1806,14 @@ var BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'
 function dt(s,y){var a=s.split('-');return(+a[2])+' '+BLN[+a[1]-1]+(y?' '+a[0]:'')}
 function range(p){return p.from.slice(0,4)===p.to.slice(0,4)?dt(p.from)+' \u2013 '+dt(p.to,1):dt(p.from,1)+' \u2013 '+dt(p.to,1)}
 function rpx(n){return'Rp'+Number(n).toLocaleString('id-ID')}
+function waN(v){var d=String(v||'').replace(/\D/g,'');if(!d)return'';if(d.charAt(0)==='0')d='62'+d.slice(1);else if(d.charAt(0)==='8')d='62'+d;return d}
+function waD(v){var n=waN(v);return n?'0'+n.slice(2):''}
+function igH(v){v=String(v||'').trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/[\/?#].*$/,'').replace(/^@+/,'').replace(/\s+/g,'');return v?'@'+v:''}
+function lkU(v){v=String(v||'').trim();return v?(/^https?:\/\//i.test(v)?v:'https://'+v):''}
+function lkD(v){return lkU(v).replace(/^https?:\/\/(www\.)?/i,'').replace(/\/$/,'')}
+function contactLine(){var a=[],w=waD(D.wa),i=igH(D.ig),l=lkD(D.lk);if(w)a.push('WhatsApp '+w);if(i)a.push('IG '+i);if(l)a.push(l);return a.join('  \u00B7  ')}
+function contactText(){var L=[],n=waN(D.wa),i=igH(D.ig),u=lkU(D.lk);if(n)L.push('WhatsApp: https://wa.me/'+n);if(i)L.push('Instagram: '+i);if(u)L.push('Link: '+u);return L.length?'Pesan / info:\n'+L.join('\n'):''}
+function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'promo'}
 function busy(t){if(window.hqBusy)window.hqBusy(t)}function idle(){if(window.hqIdle)window.hqIdle()}
 function load(src,cb,cors){var im=new Image();if(cors)im.crossOrigin='anonymous';im.onload=function(){cb(im)};im.onerror=function(){cors?load(src,cb,false):cb(null)};im.src=src}
 function pic(b){if(IMC[b.i])return IMC[b.i];return IMC[b.i]=new Promise(function(res){var f=b.images&&b.images[0];if(!f)return res(null);var t=[f,thumb(f)].filter(function(x,i,a){return a.indexOf(x)===i});(function n(){var s=t.shift();if(!s)return res(null);load(s,function(im){im?res(im):n()},true)})()})}
@@ -1825,15 +1834,13 @@ async function drawPage(pi,L){
  if(lg){var lw=Math.min(240,lg.width*lh/lg.height);if(lw<lg.width*lh/lg.height)lh=lw*lg.height/lg.width;var pad=D.logoBg?8:0;headH=Math.max(40,lh+pad*2);
   if(D.logoBg){rr(c,M,M,lw+pad*2,headH,14);c.fillStyle='#ffffff';c.fill()}c.drawImage(lg,M+pad,M+(headH-lh)/2,lw,lh);bx=M+lw+pad*2+16}
  else bx=M;
- c.textAlign='left';c.fillStyle=C.tx;c.font='800 26px "DM Sans",sans-serif';c.fillText('HAQA BOOKS',bx,M+headH/2+9);
- c.font='800 20px "DM Sans",sans-serif';var t='PROMO READY STOCK',tw=c.measureText(t).width+36,py=M+(headH-40)/2;rr(c,W-M-tw,py,tw,40,20);c.fillStyle=C.acc;c.fill();c.fillStyle=accTx;c.textAlign='center';c.fillText(t,W-M-tw/2,py+27);
+ 
+ c.font='800 20px "DM Sans",sans-serif';var t='PROMO READY STOCK',tw=c.measureText(t).width+36,py=M+(headH-40)/2;var px=lg?W-M-tw:M;rr(c,px,py,tw,40,20);c.fillStyle=C.acc;c.fill();c.fillStyle=accTx;c.textAlign='center';c.fillText(t,px+tw/2,py+27);
  c.font='700 54px Lora,Georgia,serif';var title=($('pq-ttl')&&$('pq-ttl').value.trim())||p.name,tl=wrap(c,title,W-2*M,2);c.textAlign='left';c.fillStyle=C.tx;
  var ty=M+headH+60;tl.forEach(function(l,i){c.fillText(l,M,ty+i*62)});
  var y=ty+(tl.length-1)*62+34;
  rr(c,M,y,250,64,18);c.fillStyle=C.acc;c.fill();c.fillStyle=accTx;c.textAlign='center';c.font='800 36px "DM Sans",sans-serif';c.fillText('DISKON '+p.pct+'%',M+125,y+44);
- var cw=280;rr(c,M+266,y,cw,64,18);c.globalAlpha=.14;c.fillStyle=C.tx;c.fill();c.globalAlpha=1;c.setLineDash([10,8]);c.lineWidth=3;c.strokeStyle=C.tx;c.stroke();c.setLineDash([]);
- c.fillStyle=C.tx;var cs=34;c.font='800 '+cs+'px "DM Sans",sans-serif';while(c.measureText(p.code).width>cw-30&&cs>18){cs-=2;c.font='800 '+cs+'px "DM Sans",sans-serif'}c.fillText(p.code,M+266+cw/2,y+43);
- c.textAlign='left';c.globalAlpha=.9;c.font='700 26px "DM Sans",sans-serif';c.fillText('Periode '+range(p),M+266+cw+22,y+27);c.font='500 22px "DM Sans",sans-serif';c.fillText('Kode dimasukkan di checkout',M+266+cw+22,y+56);c.globalAlpha=1;
+ c.textAlign='left';c.fillStyle=C.tx;c.globalAlpha=.85;c.font='500 22px "DM Sans",sans-serif';c.fillText('Periode promo',M+274,y+25);c.globalAlpha=1;c.font='800 30px "DM Sans",sans-serif';c.fillText(range(p),M+274,y+58);
  var top=y+64+26,foot=58,gx=20,gy=20,cols=3,cw3=(W-2*M-gx*(cols-1))/cols,rows=Z.rows,ch=(H-top-foot-M*.4-gy*(rows-1))/rows;
  part.forEach(function(x,i){var b=x.b,col=i%cols,row=Math.floor(i/cols),cx=M+col*(cw3+gx),yy=top+row*(ch+gy);
   rr(c,cx,yy,cw3,ch,22);c.fillStyle=C.card;c.fill();
@@ -1848,22 +1855,23 @@ async function drawPage(pi,L){
   var by=yy+ch-18;c.font='800 38px "DM Sans",sans-serif';c.fillStyle=C.price;c.fillText(rpx(x.pp),cx+14,by);
   if(x.sp){c.font='500 23px "DM Sans",sans-serif';c.fillStyle=soft;var st=rpx(x.sp),sw=c.measureText(st).width;c.fillText(st,cx+14,by-46);c.fillRect(cx+14,by-54,sw,2)}});
  c.textAlign='center';c.fillStyle=C.tx;c.globalAlpha=.9;c.font='500 22px "DM Sans",sans-serif';
- var ft=D.foot||('Pesan via WhatsApp 0'+WA.slice(2)+'  \u00B7  haqabooks.my.id');c.fillText(ft+(np>1?'   \u00B7   '+(pi+1)+'/'+np:''),W/2,H-M*.6-6);c.globalAlpha=1;
+ var ft=contactLine(),pg=np>1?(pi+1)+'/'+np:'',fl=ft?(pg?ft+'   \u00B7   '+pg:ft):pg,fs=28;c.font='700 '+fs+'px "DM Sans",sans-serif';while(fl&&c.measureText(fl).width>W-2*M&&fs>16){fs-=2;c.font='700 '+fs+'px "DM Sans",sans-serif'}c.globalAlpha=1;if(fl)c.fillText(fl,W/2,H-M*.6-6);
  return cv}
 function tob(cv,type,q){return new Promise(function(r){cv.toBlob(r,type,q)})}
-function textOut(){var p=R.p,L=items(),t='*PROMO READY STOCK: '+p.name+'*\n'+p.tag+'\n\nDiskon '+p.pct+'% dengan kode *'+p.code+'*\nPeriode: '+range(p)+'\n\nDaftar harga (harga coret \u279C harga promo):\n';
+function textOut(){var p=R.p,L=items(),t='*PROMO READY STOCK: '+p.name+'*\n'+p.tag+'\n\nDiskon '+p.pct+'%\nPeriode: '+range(p)+'\n\nDaftar harga (harga coret \u279C harga promo):\n';
  L.forEach(function(x,i){t+=(i+1)+'. '+x.t+'\n    '+(x.sp?'~'+rpx(x.sp)+'~ \u279C ':'')+'*'+rpx(x.pp)+'*\n'});
- return t+'\nCara pakai: pilih buku di katalog, lalu masukkan kode *'+p.code+'* di keranjang atau checkout.\n\nPesan: '+baseUrl()+'\nTanya-tanya: https://wa.me/'+WA}
+ var ct=contactText();return t+(ct?'\n'+ct:'')}
 function modal(){var m=$('pqm');if(m)return m;m=document.createElement('div');m.id='pqm';m.className='pqm';m.hidden=true;m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-labelledby','pq-t');
  var th=Object.keys(PRE).map(function(k){return'<button type="button" data-th="'+k+'" aria-pressed="false" style="background:linear-gradient(135deg,'+PRE[k].bg1+','+PRE[k].bg2+');color:'+PRE[k].tx+'">'+NM[k]+'</button>'}).join('');
  var co=K.map(function(k){return'<div><label for="pq-c-'+k+'">'+KL[k]+'</label><input type="color" id="pq-c-'+k+'" data-ck="'+k+'"></div>'}).join('');
  m.innerHTML='<div class="pqb"><div class="pqh"><b id="pq-t"></b><button type="button" class="pqx" aria-label="Tutup">\u00D7</button></div><div class="pqs">'
  +'<img class="pqi" id="pq-img" alt="Pratinjau katalog promo" hidden><p class="pqn" id="pq-note"></p><div class="pqg"><button type="button" id="pq-pv" aria-label="Halaman sebelumnya">\u2039</button><span id="pq-pn"></span><button type="button" id="pq-nx" aria-label="Halaman berikutnya">\u203A</button></div>'
  +'<details class="pqd" open><summary>Pilih buku (<span id="pq-cnt"></span>)</summary><div class="pqf"><input type="search" id="pq-q" placeholder="Cari judul\u2026" aria-label="Cari judul"><button type="button" id="pq-all">Pilih semua</button><button type="button" id="pq-none">Kosongkan</button><select id="pq-sort" aria-label="Urutan"><option value="hemat">Potongan terbesar</option><option value="az">Judul A\u2013Z</option><option value="murah">Harga termurah</option></select></div><div class="pql" id="pq-list"></div></details>'
- +'<details class="pqd"><summary>Tema, warna, dan logo</summary><div class="pqf" id="pq-th">'+th+'</div><div class="pqc">'+co+'</div>'
- +'<div class="pqk"><input type="checkbox" id="pq-lg"><label for="pq-lg">Tampilkan logo</label></div><div class="pqk"><input type="checkbox" id="pq-lgb"><label for="pq-lgb">Latar putih di belakang logo</label></div>'
+ +'<details class="pqd" open><summary>Kontak di bawah flyer</summary><div class="pqf"><input type="tel" inputmode="tel" id="pq-wa" placeholder="WhatsApp (mis. 081234567890)" aria-label="Nomor WhatsApp" autocomplete="off"><input type="text" id="pq-ig" placeholder="Instagram (mis. @tokoku)" aria-label="Instagram" autocapitalize="off" autocomplete="off"><input type="text" id="pq-lk" placeholder="Link toko / katalog (opsional)" aria-label="Link" autocapitalize="off" autocomplete="off"></div><p class="pqn">Isi yang ada saja, sisanya kosongkan. Tersimpan di perangkat ini, jadi tidak perlu isi ulang.</p></details>'
+  +'<details class="pqd"><summary>Tema, warna, dan logo</summary><div class="pqf" id="pq-th">'+th+'</div><div class="pqc">'+co+'</div>'
+ +'<div class="pqk"><input type="checkbox" id="pq-lg"><label for="pq-lg">Tampilkan logo HAQA Books</label></div><div class="pqk"><input type="checkbox" id="pq-lgb"><label for="pq-lgb">Latar putih di belakang logo</label></div>'
  +'<div class="pqf"><select id="pq-lgs" aria-label="Ukuran logo"><option value="s">Logo kecil</option><option value="m">Logo sedang</option><option value="l">Logo besar</option></select><select id="pq-size" aria-label="Ukuran gambar"><option value="feed">Feed 4:5 (6 buku)</option><option value="story">Story 9:16 (9 buku)</option></select></div>'
- +'<div class="pqf"><input type="text" id="pq-ttl" placeholder="Judul banner (kosong = nama promo)" aria-label="Judul banner"><input type="text" id="pq-ft" placeholder="Teks bawah (kosong = nomor WhatsApp dan alamat web)" aria-label="Teks bawah"></div>'
+ +'<div class="pqf"><input type="text" id="pq-ttl" placeholder="Judul banner (kosong = nama promo)" aria-label="Judul banner"></div>'
  +'<div class="pqf"><button type="button" id="pq-rs">Kembalikan tampilan awal</button></div></details>'
  +'</div><div class="pqa"><button type="button" id="pq-sh">Bagikan gambar</button><button type="button" class="o" id="pq-png">Simpan PNG</button><button type="button" class="o" id="pq-jpg">Simpan JPG</button><button type="button" class="o" id="pq-tx">Salin teks harga</button></div></div>';
  document.body.appendChild(m);
@@ -1873,18 +1881,18 @@ function modal(){var m=$('pqm');if(m)return m;m=document.createElement('div');m.
  m.querySelectorAll('input[data-ck]').forEach(function(i){i.addEventListener('input',function(){D.c[i.dataset.ck]=i.value;D.th='custom';saveD();m.querySelectorAll('#pq-th button').forEach(function(b){b.setAttribute('aria-pressed','false')});rerender()})});
  $('pq-lg').onchange=function(){D.logo=this.checked?1:0;saveD();rerender()};$('pq-lgb').onchange=function(){D.logoBg=this.checked?1:0;saveD();rerender()};
  $('pq-lgs').onchange=function(){D.logoSize=this.value;saveD();rerender()};$('pq-size').onchange=function(){D.size=this.value;R.page=0;saveD();rerender()};
- $('pq-ttl').addEventListener('input',rerender);$('pq-ft').addEventListener('input',function(){D.foot=this.value;saveD();rerender()});
+ $('pq-ttl').addEventListener('input',rerender);['wa','ig','lk'].forEach(function(k){$('pq-'+k).addEventListener('input',function(){D[k]=this.value;saveD();rerender()})});
  $('pq-sort').onchange=function(){D.sort=this.value;saveD();R.page=0;rerender()};
  $('pq-q').addEventListener('input',function(){R.q=this.value;list()});
  $('pq-all').onclick=function(){R.ex=[];saveX();list();R.page=0;rerender()};$('pq-none').onclick=function(){R.ex=R.all.map(function(b){return b.i});saveX();list();R.page=0;rerender()};
  $('pq-pv').onclick=function(){R.page--;rerender()};$('pq-nx').onclick=function(){R.page++;rerender()};
- $('pq-rs').onclick=function(){D.th='hijau';D.c=Object.assign({},PRE.hijau);D.logo=1;D.logoBg=1;D.logoSize='m';D.foot='';$('pq-ttl').value='';saveD();sync();rerender()};
+ $('pq-rs').onclick=function(){D.th='hijau';D.c=Object.assign({},PRE.hijau);D.logo=0;D.logoBg=1;D.logoSize='m';$('pq-ttl').value='';saveD();sync();rerender()};
  $('pq-sh').onclick=share;$('pq-png').onclick=function(){dl('png')};$('pq-jpg').onclick=function(){dl('jpg')};
  $('pq-tx').onclick=function(){var t=textOut();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('Teks harga disalin')},function(){window.prompt('Salin teks ini:',t)});else window.prompt('Salin teks ini:',t)};
  return m}
 function close(){var m=$('pqm');if(m)m.hidden=true;tk++;if(pvUrl){URL.revokeObjectURL(pvUrl);pvUrl=null}}
 function sync(){K.forEach(function(k){$('pq-c-'+k).value=D.c[k]});$('pq-th').querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.th===D.th)});
- $('pq-lg').checked=!!D.logo;$('pq-lgb').checked=!!D.logoBg;$('pq-lgs').value=D.logoSize;$('pq-size').value=D.size;$('pq-ft').value=D.foot;$('pq-sort').value=D.sort}
+ $('pq-lg').checked=!!D.logo;$('pq-lgb').checked=!!D.logoBg;$('pq-lgs').value=D.logoSize;$('pq-size').value=D.size;$('pq-wa').value=D.wa||'';$('pq-ig').value=D.ig||'';$('pq-lk').value=D.lk||'';$('pq-sort').value=D.sort}
 function list(){var q=(R.q||'').toLowerCase(),box=$('pq-list');box.textContent='';
  R.all.slice().sort(function(a,b){return a.t.localeCompare(b.t)}).forEach(function(b){if(q&&b.t.toLowerCase().indexOf(q)<0)return;
   var r=document.createElement('label');r.className='pqr';var c=document.createElement('input');c.type='checkbox';c.checked=R.ex.indexOf(b.i)<0;
@@ -1904,19 +1912,19 @@ function rerender(){clearTimeout(tmr);tmr=setTimeout(async function(){
   $('pq-note').textContent=L.length+' buku \u00B7 '+np+' gambar'}catch(e){$('pq-note').textContent='Gagal membuat pratinjau.'}
 },150)}
 async function build(ext){var L=items(),np=Math.ceil(L.length/per()),out=[],type=ext==='jpg'?'image/jpeg':'image/png';
- for(var i=0;i<np;i++){busy('Menyiapkan gambar\u2026 '+(i+1)+'/'+np);var b=await tob(await drawPage(i,L),type,.92);out.push(new File([b],'haqa-promo-'+R.p.code.toLowerCase()+'-'+(i+1)+'.'+ext,{type:type}))}return out}
+ for(var i=0;i<np;i++){busy('Menyiapkan gambar\u2026 '+(i+1)+'/'+np);var b=await tob(await drawPage(i,L),type,.92);out.push(new File([b],'promo-'+slug(R.p.name)+'-'+(i+1)+'.'+ext,{type:type}))}return out}
 function dlFiles(fs){fs.forEach(function(f,i){setTimeout(function(){var u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000)},i*400)})}
 async function dl(ext){if(!items().length){toast('Pilih minimal satu buku');return}try{dlFiles(await build(ext))}catch(e){toast('Gagal membuat gambar. Coba lagi.')}finally{idle()}}
 async function share(){if(!items().length){toast('Pilih minimal satu buku');return}
- try{var fs=await build('png'),p=R.p,txt='\uD83D\uDD25 '+p.name+'! Diskon '+p.pct+'% dengan kode '+p.code+'. Berlaku '+range(p)+'.\n'+baseUrl();idle();
-  if(navigator.canShare&&navigator.canShare({files:fs}))await navigator.share({files:fs,title:'HAQA Books \u2013 '+p.name,text:txt});else{dlFiles(fs);toast('Gambar disimpan ke perangkat')}}
+ try{var fs=await build('png'),p=R.p,txt='\uD83D\uDD25 '+p.name+'! Diskon '+p.pct+'%. Berlaku '+range(p)+'.'+(contactText()?'\n\n'+contactText():'');idle();
+  if(navigator.canShare&&navigator.canShare({files:fs}))await navigator.share({files:fs,title:p.name,text:txt});else{dlFiles(fs);toast('Gambar disimpan ke perangkat')}}
  catch(e){idle();if(e&&e.name!=='AbortError')toast('Gagal membagikan gambar. Coba Simpan PNG.')}}
 window.hqPromoShare=function(code){var p=window.HQP&&HQP.find(code);if(!p)return;R.p=p;R.page=0;R.q='';
  R.all=p.ids.map(function(i){return B[i]}).filter(function(b){return b&&!b.hid&&b.st==='ready'&&b.pr>0&&b.images&&b.images[0]});
  if(!R.all.length){toast('Belum ada buku ready untuk promo ini');return}
  try{R.ex=JSON.parse(localStorage.getItem('hqps_ex_'+p.code)||'[]')||[]}catch(e){R.ex=[]}
  R.ex=R.ex.filter(function(i){return R.all.some(function(b){return b.i===i})});
- var m=modal();$('pq-t').innerHTML=esc(p.name)+'<small>Kode '+esc(p.code)+' \u00B7 '+esc(range(p))+'</small>';$('pq-q').value='';$('pq-ttl').value='';sync();list();m.hidden=false;m.querySelector('.pqx').focus();
+ var m=modal();$('pq-t').innerHTML=esc(p.name)+'<small>Kode '+esc(p.code)+' (untuk order via web, tidak tampil di flyer) \u00B7 '+esc(range(p))+'</small>';$('pq-q').value='';$('pq-ttl').value='';sync();list();m.hidden=false;m.querySelector('.pqx').focus();
  if(!LOGO)load('images/logo.webp',function(im){LOGO=im;rerender()},true);rerender()};
 })();
 </script></body></html>
