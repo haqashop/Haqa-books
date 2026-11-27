@@ -1778,6 +1778,9 @@ details.pqd{border-top:1px solid var(--ln);padding:10px 0}details.pqd summary{fo
 .pqk{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.88rem}.pqk input{width:18px;height:18px}
 .pqa{display:flex;flex-wrap:wrap;gap:10px}
 .pqa button{flex:1 1 40%;padding:12px 14px;border-radius:999px;border:1.5px solid var(--ac);background:var(--ac);color:var(--on);font:800 .9rem "DM Sans",sans-serif;cursor:pointer}.pqa button.o{background:none;color:var(--ac)}
+.pqd [hidden],.pqa [hidden]{display:none!important}
+.pqup{flex:1 1 30%;padding:9px 10px;border-radius:10px;border:1.5px solid var(--ac);color:var(--ac);font:700 .85rem "DM Sans",sans-serif;text-align:center;cursor:pointer}
+.pqs2{display:grid;gap:4px;margin-top:10px}.pqs2 label{font-size:.78rem;color:var(--mut)}.pqs2 input[type=range]{width:100%}
 .bsx{position:absolute;top:10px;right:10px;z-index:3;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.3);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}.bsx:hover,.bsx:focus-visible{background:rgba(0,0,0,.5)}.bsx .ic{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 <script>/* ===== Bagikan katalog promo (PNG/JPG): pilih buku, tema, warna, logo ===== */
@@ -1794,7 +1797,7 @@ var PRE={
 };
 var NM={hijau:'Hijau',navy:'Navy',biru:'Biru',ungu:'Ungu',oranye:'Oranye',gelap:'Gelap',krem:'Krem'};
 var K=['bg1','bg2','tx','acc','card','price','badge'],KL={bg1:'Latar atas',bg2:'Latar bawah',tx:'Warna teks',acc:'Aksen diskon',card:'Warna kartu',price:'Harga promo',badge:'Label persen'};
-var D={size:'feed',th:'hijau',c:null,logo:0,logoBg:1,logoSize:'m',sort:'hemat',wa:'',ig:'',lk:''},R={p:null,all:[],ex:[],page:0,q:''},IMC={},LOGO=null,tmr=null,tk=0,pvUrl=null;
+var D={size:'feed',th:'hijau',c:null,ls:'none',logoBg:1,logoSize:'m',lbc:'#ffffff',lbo:100,lsh:'box',lrd:35,sort:'hemat',wa:'',ig:'',lk:''},R={p:null,all:[],ex:[],page:0,q:''},IMC={},LOGO=null,LOGOC=null,tmr=null,tk=0,pvUrl=null;
 try{var sv=JSON.parse(localStorage.getItem('hqps_set')||'null');if(sv)D=Object.assign(D,sv)}catch(e){}
 D.c=Object.assign({},PRE.hijau,D.c||{});
 function saveD(){try{localStorage.setItem('hqps_set',JSON.stringify(D))}catch(e){}}
@@ -1802,6 +1805,8 @@ function saveX(){try{localStorage.setItem('hqps_ex_'+R.p.code,JSON.stringify(R.e
 function lum(h){var n=parseInt(h.slice(1),16);return .299*(n>>16)+.587*((n>>8)&255)+.114*(n&255)}
 function ink(h){return lum(h)>150?'#1f2a24':'#ffffff'}
 function mix(a,b,t){var x=parseInt(a.slice(1),16),y=parseInt(b.slice(1),16),r=function(s){return Math.round(((x>>s)&255)*(1-t)+((y>>s)&255)*t)};return'#'+((1<<24)+(r(16)<<16)+(r(8)<<8)+r(0)).toString(16).slice(1)}
+/* aturan diskon tambahan member/reseller (hanya untuk teks salinan, tidak tampil di flyer) */
+var RS={one:10,many:15,n:3};
 var BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 function dt(s,y){var a=s.split('-');return(+a[2])+' '+BLN[+a[1]-1]+(y?' '+a[0]:'')}
 function range(p){return p.from.slice(0,4)===p.to.slice(0,4)?dt(p.from)+' \u2013 '+dt(p.to,1):dt(p.from,1)+' \u2013 '+dt(p.to,1)}
@@ -1830,9 +1835,13 @@ async function drawPage(pi,L){
  var g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,C.bg1);g.addColorStop(1,C.bg2);c.fillStyle=g;c.fillRect(0,0,W,H);
  c.globalAlpha=.07;c.fillStyle=C.tx;c.beginPath();c.arc(W-60,90,230,0,7);c.fill();c.beginPath();c.arc(40,H-120,260,0,7);c.fill();c.globalAlpha=1;
  var M=40;c.textBaseline='alphabetic';
- var lg=D.logo?LOGO:null,lh={s:44,m:64,l:92}[D.logoSize]||64,headH=40,bx=0;
- if(lg){var lw=Math.min(240,lg.width*lh/lg.height);if(lw<lg.width*lh/lg.height)lh=lw*lg.height/lg.width;var pad=D.logoBg?8:0;headH=Math.max(40,lh+pad*2);
-  if(D.logoBg){rr(c,M,M,lw+pad*2,headH,14);c.fillStyle='#ffffff';c.fill()}c.drawImage(lg,M+pad,M+(headH-lh)/2,lw,lh);bx=M+lw+pad*2+16}
+ var lg=D.ls==='own'?LOGOC:D.ls==='haqa'?LOGO:null,lh={s:44,m:64,l:92}[D.logoSize]||64,headH=40,bx=0;
+ if(lg){var lw=Math.min(240,lg.width*lh/lg.height);if(lw<lg.width*lh/lg.height)lh=lw*lg.height/lg.width;
+  var pad=D.logoBg?Math.round(Math.max(8,lh*.16)):0,bw=lw+pad*2,bh=lh+pad*2;
+  if(D.logoBg&&D.lsh==='circle'){var dd=Math.sqrt(lw*lw+lh*lh)+pad;if(dd>150){var kk=150/dd;lw*=kk;lh*=kk;dd=150}bw=bh=dd}
+  headH=Math.max(40,bh);
+  if(D.logoBg){var rad=D.lsh==='circle'?bw/2:Math.min(bw,bh)/2*(D.lrd/100);c.save();c.globalAlpha=Math.max(0,Math.min(1,D.lbo/100));rr(c,M,M,bw,bh,rad);c.fillStyle=D.lbc;c.fill();c.restore()}
+  c.drawImage(lg,M+(bw-lw)/2,M+(bh-lh)/2,lw,lh);bx=M+bw+16}
  else bx=M;
  
  c.font='800 20px "DM Sans",sans-serif';var t='PROMO READY STOCK',tw=c.measureText(t).width+36,py=M+(headH-40)/2;var px=lg?W-M-tw:M;rr(c,px,py,tw,40,20);c.fillStyle=C.acc;c.fill();c.fillStyle=accTx;c.textAlign='center';c.fillText(t,px+tw/2,py+27);
@@ -1857,6 +1866,13 @@ async function drawPage(pi,L){
  c.textAlign='center';c.fillStyle=C.tx;c.globalAlpha=.9;c.font='500 22px "DM Sans",sans-serif';
  var ft=contactLine(),pg=np>1?(pi+1)+'/'+np:'',fl=ft?(pg?ft+'   \u00B7   '+pg:ft):pg,fs=28;c.font='700 '+fs+'px "DM Sans",sans-serif';while(fl&&c.measureText(fl).width>W-2*M&&fs>16){fs-=2;c.font='700 '+fs+'px "DM Sans",sans-serif'}c.globalAlpha=1;if(fl)c.fillText(fl,W/2,H-M*.6-6);
  return cv}
+function ownLogo(f){var r=new FileReader();r.onload=function(){load(r.result,function(im){if(!im){toast('Logo tidak bisa dibaca');return}var sc=Math.min(1,400/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(im.width*sc));cv.height=Math.max(1,Math.round(im.height*sc));cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);var u=cv.toDataURL('image/png');try{localStorage.setItem('hqps_logo',u)}catch(e){}load(u,function(i2){LOGOC=i2||null;D.ls='own';saveD();sync();rerender()})})};r.onerror=function(){toast('Logo tidak bisa dibaca')};r.readAsDataURL(f)}
+function resellerText(){var p=R.p,a=Math.round(100000*(100-RS.one)/100),b=Math.round(100000*(100-RS.many)/100);
+ return '*INFO RESELLER / MEMBER: '+p.name+'*\nPeriode: '+range(p)+'\nKode promo: *'+p.code+'* (diskon '+p.pct+'%)\n\n'
+ +'*Harga & diskon*\n- Harga di flyer = harga untuk end customer.\n- Diskon tambahan untuk member/reseller, dihitung dari harga di flyer:\n   \u2022 Beli 1 buku: diskon '+RS.one+'%\n   \u2022 Beli '+RS.n+' buku atau lebih: diskon '+RS.many+'% (boleh campur judul)\n- Contoh: harga flyer Rp100.000 jadi '+rpx(a)+' (1 buku) atau '+rpx(b)+' per buku (beli '+RS.n+' atau lebih).\n\n'
+ +'*Order manual (chat)*\nTidak perlu kode. Kirim daftar judul dan jumlahnya ke admin: https://wa.me/'+WA+'\n\n'
+ +'*Order lewat web*\n1. Buka '+baseUrl()+'\n2. Aktifkan kode member di kolom "Sudah punya kode member?".\n3. Pilih buku yang ikut promo, masukkan ke keranjang.\n4. Di checkout, isi kode *'+p.code+'* di kolom "Punya kode promo?" lalu tekan Terapkan, supaya harga langsung terpotong.\n5. Cek total, isi alamat, lanjutkan pembayaran.\n\n'
+ +'Catatan: kode hanya berlaku '+range(p)+' untuk buku ready stock yang ikut promo. Kode ini khusus reseller/member, jangan dicantumkan ke end customer.'}
 function tob(cv,type,q){return new Promise(function(r){cv.toBlob(r,type,q)})}
 function textOut(){var p=R.p,L=items(),t='*PROMO READY STOCK: '+p.name+'*\n'+p.tag+'\n\nDiskon '+p.pct+'%\nPeriode: '+range(p)+'\n\nDaftar harga (harga coret \u279C harga promo):\n';
  L.forEach(function(x,i){t+=(i+1)+'. '+x.t+'\n    '+(x.sp?'~'+rpx(x.sp)+'~ \u279C ':'')+'*'+rpx(x.pp)+'*\n'});
@@ -1868,31 +1884,42 @@ function modal(){var m=$('pqm');if(m)return m;m=document.createElement('div');m.
  +'<img class="pqi" id="pq-img" alt="Pratinjau katalog promo" hidden><p class="pqn" id="pq-note"></p><div class="pqg"><button type="button" id="pq-pv" aria-label="Halaman sebelumnya">\u2039</button><span id="pq-pn"></span><button type="button" id="pq-nx" aria-label="Halaman berikutnya">\u203A</button></div>'
  +'<details class="pqd" open><summary>Pilih buku (<span id="pq-cnt"></span>)</summary><div class="pqf"><input type="search" id="pq-q" placeholder="Cari judul\u2026" aria-label="Cari judul"><button type="button" id="pq-all">Pilih semua</button><button type="button" id="pq-none">Kosongkan</button><select id="pq-sort" aria-label="Urutan"><option value="hemat">Potongan terbesar</option><option value="az">Judul A\u2013Z</option><option value="murah">Harga termurah</option></select></div><div class="pql" id="pq-list"></div></details>'
  +'<details class="pqd" open><summary>Kontak di bawah flyer</summary><div class="pqf"><input type="tel" inputmode="tel" id="pq-wa" placeholder="WhatsApp (mis. 081234567890)" aria-label="Nomor WhatsApp" autocomplete="off"><input type="text" id="pq-ig" placeholder="Instagram (mis. @tokoku)" aria-label="Instagram" autocapitalize="off" autocomplete="off"><input type="text" id="pq-lk" placeholder="Link toko / katalog (opsional)" aria-label="Link" autocapitalize="off" autocomplete="off"></div><p class="pqn">Isi yang ada saja, sisanya kosongkan. Tersimpan di perangkat ini, jadi tidak perlu isi ulang.</p></details>'
-  +'<details class="pqd"><summary>Tema, warna, dan logo</summary><div class="pqf" id="pq-th">'+th+'</div><div class="pqc">'+co+'</div>'
- +'<div class="pqk"><input type="checkbox" id="pq-lg"><label for="pq-lg">Tampilkan logo HAQA Books</label></div><div class="pqk"><input type="checkbox" id="pq-lgb"><label for="pq-lgb">Latar putih di belakang logo</label></div>'
- +'<div class="pqf"><select id="pq-lgs" aria-label="Ukuran logo"><option value="s">Logo kecil</option><option value="m">Logo sedang</option><option value="l">Logo besar</option></select><select id="pq-size" aria-label="Ukuran gambar"><option value="feed">Feed 4:5 (6 buku)</option><option value="story">Story 9:16 (9 buku)</option></select></div>'
+  +'<details class="pqd"><summary>Tema dan warna</summary><div class="pqf" id="pq-th">'+th+'</div><div class="pqc">'+co+'</div>'
+ +'<div class="pqf"><select id="pq-size" aria-label="Ukuran gambar"><option value="feed">Feed 4:5 (6 buku)</option><option value="story">Story 9:16 (9 buku)</option></select></div>'
  +'<div class="pqf"><input type="text" id="pq-ttl" placeholder="Judul banner (kosong = nama promo)" aria-label="Judul banner"></div>'
  +'<div class="pqf"><button type="button" id="pq-rs">Kembalikan tampilan awal</button></div></details>'
- +'</div><div class="pqa"><button type="button" id="pq-sh">Bagikan gambar</button><button type="button" class="o" id="pq-png">Simpan PNG</button><button type="button" class="o" id="pq-jpg">Simpan JPG</button><button type="button" class="o" id="pq-tx">Salin teks harga</button></div></div>';
+  +'<details class="pqd"><summary>Logo (opsional)</summary><div class="pqf"><select id="pq-ls" aria-label="Logo"><option value="none">Tanpa logo</option><option value="own">Logo sendiri</option><option value="haqa">Logo HAQA Books</option></select><select id="pq-lgs" aria-label="Ukuran logo"><option value="s">Logo kecil</option><option value="m">Logo sedang</option><option value="l">Logo besar</option></select></div><div class="pqf"><label class="pqup" for="pq-lgf">Unggah logo</label><input type="file" id="pq-lgf" accept="image/png,image/jpeg,image/webp" hidden><button type="button" id="pq-lgx">Hapus logo</button></div><p class="pqn" id="pq-lnote"></p>'
+  +'<div id="pq-lbx"><div class="pqf"><select id="pq-lbg" aria-label="Latar logo"><option value="0">Latar transparan</option><option value="1">Pakai latar</option></select><select id="pq-lsh" aria-label="Bentuk latar"><option value="box">Bentuk kotak</option><option value="circle">Bentuk bulat</option></select></div>'
+  +'<div id="pq-lbs"><div class="pqc"><div><label for="pq-lbc">Warna latar</label><input type="color" id="pq-lbc"></div></div><div class="pqs2" id="pq-lrdw"><label for="pq-lrd">Sudut kotak: <b id="pq-lrdv"></b></label><input type="range" id="pq-lrd" min="0" max="100" step="1"></div><div class="pqs2"><label for="pq-lbo">Opacity latar: <b id="pq-lbov"></b></label><input type="range" id="pq-lbo" min="0" max="100" step="5"></div></div></div></details>'
+ +'</div><div class="pqa"><button type="button" id="pq-sh">Bagikan gambar</button><button type="button" class="o" id="pq-png">Simpan PNG</button><button type="button" class="o" id="pq-jpg">Simpan JPG</button><button type="button" class="o" id="pq-tx">Salin teks harga</button><button type="button" class="o" id="pq-rt" hidden>Salin info reseller</button></div></div>';
  document.body.appendChild(m);
  m.addEventListener('click',function(e){if(e.target===m||e.target.className==='pqx')close()});
  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
  $('pq-th').addEventListener('click',function(e){var b=e.target.closest('button[data-th]');if(!b)return;D.th=b.dataset.th;D.c=Object.assign({},PRE[D.th]);saveD();sync();rerender()});
  m.querySelectorAll('input[data-ck]').forEach(function(i){i.addEventListener('input',function(){D.c[i.dataset.ck]=i.value;D.th='custom';saveD();m.querySelectorAll('#pq-th button').forEach(function(b){b.setAttribute('aria-pressed','false')});rerender()})});
- $('pq-lg').onchange=function(){D.logo=this.checked?1:0;saveD();rerender()};$('pq-lgb').onchange=function(){D.logoBg=this.checked?1:0;saveD();rerender()};
+ $('pq-ls').onchange=function(){D.ls=this.value;saveD();sync();rerender()};
+ $('pq-lbg').onchange=function(){D.logoBg=+this.value;saveD();sync();rerender()};$('pq-lsh').onchange=function(){D.lsh=this.value;saveD();sync();rerender()};
+ $('pq-lbc').addEventListener('input',function(){D.lbc=this.value;saveD();rerender()});
+ $('pq-lrd').addEventListener('input',function(){D.lrd=+this.value;$('pq-lrdv').textContent=this.value+'%';saveD();rerender()});
+ $('pq-lbo').addEventListener('input',function(){D.lbo=+this.value;$('pq-lbov').textContent=this.value+'%';saveD();rerender()});
+ $('pq-lgf').onchange=function(){var f=this.files&&this.files[0];this.value='';if(f)ownLogo(f)};
+ $('pq-lgx').onclick=function(){LOGOC=null;try{localStorage.removeItem('hqps_logo')}catch(e){}if(D.ls==='own')D.ls='none';saveD();sync();rerender()};
+ $('pq-rt').onclick=function(){var t=resellerText();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('Info reseller disalin')},function(){window.prompt('Salin teks ini:',t)});else window.prompt('Salin teks ini:',t)};
  $('pq-lgs').onchange=function(){D.logoSize=this.value;saveD();rerender()};$('pq-size').onchange=function(){D.size=this.value;R.page=0;saveD();rerender()};
  $('pq-ttl').addEventListener('input',rerender);['wa','ig','lk'].forEach(function(k){$('pq-'+k).addEventListener('input',function(){D[k]=this.value;saveD();rerender()})});
  $('pq-sort').onchange=function(){D.sort=this.value;saveD();R.page=0;rerender()};
  $('pq-q').addEventListener('input',function(){R.q=this.value;list()});
  $('pq-all').onclick=function(){R.ex=[];saveX();list();R.page=0;rerender()};$('pq-none').onclick=function(){R.ex=R.all.map(function(b){return b.i});saveX();list();R.page=0;rerender()};
  $('pq-pv').onclick=function(){R.page--;rerender()};$('pq-nx').onclick=function(){R.page++;rerender()};
- $('pq-rs').onclick=function(){D.th='hijau';D.c=Object.assign({},PRE.hijau);D.logo=0;D.logoBg=1;D.logoSize='m';$('pq-ttl').value='';saveD();sync();rerender()};
+ $('pq-rs').onclick=function(){D.th='hijau';D.c=Object.assign({},PRE.hijau);$('pq-ttl').value='';saveD();sync();rerender()};
  $('pq-sh').onclick=share;$('pq-png').onclick=function(){dl('png')};$('pq-jpg').onclick=function(){dl('jpg')};
  $('pq-tx').onclick=function(){var t=textOut();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('Teks harga disalin')},function(){window.prompt('Salin teks ini:',t)});else window.prompt('Salin teks ini:',t)};
  return m}
 function close(){var m=$('pqm');if(m)m.hidden=true;tk++;if(pvUrl){URL.revokeObjectURL(pvUrl);pvUrl=null}}
 function sync(){K.forEach(function(k){$('pq-c-'+k).value=D.c[k]});$('pq-th').querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.th===D.th)});
- $('pq-lg').checked=!!D.logo;$('pq-lgb').checked=!!D.logoBg;$('pq-lgs').value=D.logoSize;$('pq-size').value=D.size;$('pq-wa').value=D.wa||'';$('pq-ig').value=D.ig||'';$('pq-lk').value=D.lk||'';$('pq-sort').value=D.sort}
+ $('pq-ls').value=D.ls;$('pq-lgs').value=D.logoSize;$('pq-lbg').value=D.logoBg?'1':'0';$('pq-lsh').value=D.lsh;$('pq-lbc').value=D.lbc;$('pq-lrd').value=D.lrd;$('pq-lrdv').textContent=D.lrd+'%';$('pq-lbo').value=D.lbo;$('pq-lbov').textContent=D.lbo+'%';
+ var lon=D.ls!=='none';$('pq-lbx').hidden=!lon;$('pq-lbs').hidden=!(lon&&D.logoBg);$('pq-lrdw').hidden=!(lon&&D.logoBg&&D.lsh==='box');$('pq-lnote').textContent=D.ls==='own'?(LOGOC?'Logo sendiri tersimpan di perangkat ini.':'Belum ada logo. Tekan Unggah logo.'):'';
+ var rt=$('pq-rt');if(rt)rt.hidden=!(typeof isMem==='function'&&isMem());$('pq-size').value=D.size;$('pq-wa').value=D.wa||'';$('pq-ig').value=D.ig||'';$('pq-lk').value=D.lk||'';$('pq-sort').value=D.sort}
 function list(){var q=(R.q||'').toLowerCase(),box=$('pq-list');box.textContent='';
  R.all.slice().sort(function(a,b){return a.t.localeCompare(b.t)}).forEach(function(b){if(q&&b.t.toLowerCase().indexOf(q)<0)return;
   var r=document.createElement('label');r.className='pqr';var c=document.createElement('input');c.type='checkbox';c.checked=R.ex.indexOf(b.i)<0;
@@ -1925,6 +1952,7 @@ window.hqPromoShare=function(code){var p=window.HQP&&HQP.find(code);if(!p)return
  try{R.ex=JSON.parse(localStorage.getItem('hqps_ex_'+p.code)||'[]')||[]}catch(e){R.ex=[]}
  R.ex=R.ex.filter(function(i){return R.all.some(function(b){return b.i===i})});
  var m=modal();$('pq-t').innerHTML=esc(p.name)+'<small>Kode '+esc(p.code)+' (untuk order via web, tidak tampil di flyer) \u00B7 '+esc(range(p))+'</small>';$('pq-q').value='';$('pq-ttl').value='';sync();list();m.hidden=false;m.querySelector('.pqx').focus();
+ if(!LOGOC){var lu=null;try{lu=localStorage.getItem('hqps_logo')}catch(e){}if(lu)load(lu,function(im){if(im){LOGOC=im;sync();rerender()}})}
  if(!LOGO)load('images/logo.webp',function(im){LOGO=im;rerender()},true);rerender()};
 })();
 </script></body></html>
